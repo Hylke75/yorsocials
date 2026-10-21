@@ -1,0 +1,94 @@
+/*
+ * Design tokens — bron: design/design-tokens.json en design/handover/02_DESIGNSYSTEEM_EN_COMPONENTEN.md.
+ * Groen = identiteit, cyaan = interactie/accent. Geen extra concurrerende accentkleur toevoegen.
+ */
+:root {
+  /* Kleuren */
+  --color-bg: #090d0d;
+  --color-bg-deep: #050909;
+  --color-panel: #111918;
+  --color-panel-alt: #18211e;
+  --color-section-soft: #101716;
+  --color-brand-sage: #83a987;
+  --color-brand-sage-light: #a1cba1;
+  --color-accent: #04c8f2;
+  --color-accent-hover: #63e6ff;
+  --color-on-accent: #061417;
+  --color-text: #f5f5f0;
+  --color-text-soft: #d2dad6;
+  --color-text-muted: #a6b2ae;
+  --color-border: #2b3934;
+  --color-border-strong: #43524a;
+  --color-error: #ff8a80;
+  --color-error-bg: #2a1414;
+  --color-success-bg: #12301f;
+  --color-demo: #f3c969;
+
+  /* Typografie */
+  --font-display: var(--font-space-grotesk), 'Arial Narrow', Arial, sans-serif;
+  --font-body: var(--font-dm-sans), Arial, sans-serif;
+  --text-h1: clamp(53px, 8vw, 126px);
+  --text-h2: clamp(38px, 5.5vw, 75px);
+  --text-h3: 25px;
+  --text-lead: 18px;
+  --text-body: 16px;
+  --text-small: 13px;
+  --text-label: 12px;
+  --tracking-display: -0.06em;
+  --tracking-label: 0.18em;
+
+  /* Spacing (basis 8px) */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 40px;
+  --space-6: 48px;
+  --space-8: 64px;
+  --gutter: 46px;
+  --section-y: 100px;
+  --grid-gap: 16px;
+  --max-width: 1280px;
+  --header-height: 84px;
+
+  /* Vorm */
+  --radius-card: 18px;
+  --radius-media: 20px;
+  --radius-input: 9px;
+  --radius-pill: 999px;
+
+  /* Elevation */
+  --shadow-card: 0 10px 24px #0004;
+  --shadow-float: 0 26px 80px #0008;
+
+  /* Beweging */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --duration: 200ms;
+
+  /* Lagen */
+  --z-header: 30;
+  --z-overlay: 40;
+  --z-toast: 100;
+
+  /* Focus */
+  --focus-ring: 0 0 0 3px var(--color-bg), 0 0 0 5px var(--color-accent);
+
+  /* Breakpoints (ter referentie; CSS custom properties werken niet in media queries):
+     mobiel ≤ 740px, tablet 741–1199px, desktop ≥ 1200px */
+}
+
+@media (max-width: 1199px) {
+  :root {
+    --gutter: 24px;
+    --section-y: 84px;
+  }
+}
+
+@media (max-width: 740px) {
+  :root {
+    --gutter: 19px;
+    --section-y: 65px;
+    --header-height: 70px;
+    --text-lead: 17px;
+  }
+}

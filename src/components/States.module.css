@@ -1,0 +1,84 @@
+.state {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 36px;
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-card);
+  background: var(--color-panel);
+}
+
+.state h3 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.state p {
+  margin: 0;
+  color: var(--color-text-muted);
+  max-width: 560px;
+}
+
+.state svg {
+  color: var(--color-accent);
+}
+
+.error {
+  border-style: solid;
+  border-color: var(--color-error);
+  background: var(--color-error-bg);
+}
+
+.error svg {
+  color: var(--color-error);
+}
+
+.loading {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  /* vaste hoogte: geen layout shift */
+  min-height: 24px;
+}
+
+.spinner {
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.toast {
+  position: fixed;
+  z-index: var(--z-toast);
+  right: 24px;
+  bottom: 24px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  max-width: min(400px, calc(100vw - 48px));
+  padding: 16px 18px;
+  background: #1c3c32;
+  border: 1px solid var(--color-accent);
+  color: var(--color-text);
+  border-radius: 14px;
+  box-shadow: var(--shadow-float);
+}
+
+.toast p {
+  margin: 0;
+}
+
+.toastClose {
+  background: none;
+  border: 0;
+  padding: 4px;
+  min-width: 32px;
+  min-height: 32px;
+  cursor: pointer;
+  color: var(--color-text);
+}
