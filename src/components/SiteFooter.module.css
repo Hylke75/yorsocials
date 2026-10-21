@@ -79,3 +79,13 @@
     gap: 28px;
   }
 }
+
+.credit {
+  color: var(--color-text-soft);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.credit:hover {
+  color: var(--color-accent);
+}

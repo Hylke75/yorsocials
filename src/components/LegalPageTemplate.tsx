@@ -2,12 +2,10 @@ import type { ReactNode } from 'react';
 import type { LegalPage } from '@/content/types';
 import { Breadcrumbs } from './Breadcrumbs';
 import { HeroEditorial } from './HeroEditorial';
-import { Notice } from './Notice';
 import styles from './LegalPageTemplate.module.css';
 
-/** Juridische pagina. Zolang de status niet `published` is, staat er een duidelijke conceptmelding (en noindex). */
+/** Juridische pagina. Zolang de status niet `published` is, blijft de pagina noindex (zie de page-metadata). */
 export function LegalPageTemplate({ page, children }: { page: LegalPage; children?: ReactNode }) {
-  const isDraft = page.status !== 'published';
   return (
     <>
       <HeroEditorial
@@ -15,21 +13,14 @@ export function LegalPageTemplate({ page, children }: { page: LegalPage; childre
         eyebrow={page.eyebrow}
         heading={page.title}
         size="compact"
-        description={isDraft ? 'Concept — deze tekst is nog niet juridisch vastgesteld.' : undefined}
       />
       <section className="section">
         <div className={`container ${styles.legal}`}>
-          {isDraft && (
-            <Notice tone="demo">
-              <p>
-                <strong>Niet definitief.</strong> {page.intro}
-              </p>
-            </Notice>
+          {page.lastReviewed && (
+            <p className="muted" style={{ fontSize: 14 }}>
+              Versie {page.version} · laatst bijgewerkt op {page.lastReviewed}
+            </p>
           )}
-          <p className="muted" style={{ fontSize: 14 }}>
-            Versie {page.version}
-            {page.lastReviewed ? ` · laatst beoordeeld op ${page.lastReviewed}` : ' · nog niet beoordeeld'}
-          </p>
           {page.sections.map((s) => (
             <div key={s.heading}>
               <h2>{s.heading}</h2>

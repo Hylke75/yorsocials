@@ -79,6 +79,11 @@ export function SiteFooter() {
           <p>
             © {year} {site.legalEntity?.name ?? site.name}
             {getContentMode() === 'staging' && ' — stagingomgeving'}
+            {' · Website door '}
+            <a href="https://linkandlead.nl" className={styles.credit} target="_blank" rel="noopener">
+              Link &amp; Lead
+              <span className="visually-hidden"> (opent in nieuw venster)</span>
+            </a>
           </p>
           <ul className={styles.links} style={{ display: 'flex', gap: 18, flexWrap: 'wrap' }} aria-label="Juridisch">
             <li>
