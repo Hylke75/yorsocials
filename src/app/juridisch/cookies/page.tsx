@@ -9,16 +9,16 @@ const page = getLegalPage('cookies');
 const localMetadata: Metadata = buildMetadata({
   title: page.seo.title,
   description: page.seo.description,
-  path: '/cookies',
+  path: '/juridisch/cookies',
   noIndex: page.status !== 'published' || page.seo.noIndex,
 });
 
 export async function generateMetadata(): Promise<Metadata> {
-  return cmsMetadata('/cookies', localMetadata);
+  return cmsMetadata('/juridisch/cookies', localMetadata);
 }
 
 export default async function CookiesPage() {
-  const cmsView = await renderCmsPage('/cookies');
+  const cmsView = await renderCmsPage('/juridisch/cookies');
   if (cmsView) return cmsView;
 
   return <LegalPageTemplate page={page} />;

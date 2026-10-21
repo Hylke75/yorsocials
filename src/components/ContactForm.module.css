@@ -139,6 +139,15 @@ textarea.input {
   text-decoration: underline;
 }
 
+.footnote a {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+.footnote p {
+  margin: 0;
+}
+
 .footnote {
   font-size: 13px;
   color: var(--color-text-muted);

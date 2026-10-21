@@ -1,3 +1,6 @@
+> **Afgerond.** De CMS-bouwer heeft de veldenschema's geleverd en alle gebruikte bloktypes zijn gebouwd —
+> zie [CMS.md](CMS.md) voor de actuele stand. Dit document blijft staan als historie van het verzoek.
+
 # Blokken die de YorSocials-site gebruikt — verzoek om veldenschema's
 
 Aan: CMS-bouwer Link & Lead (via Hylke)

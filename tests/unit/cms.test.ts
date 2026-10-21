@@ -27,7 +27,7 @@ describe('CMS-parser', () => {
         naam: 'YorSocials',
         merk: { naam: 'YorSocials', logo: 'https://x/logo.png', socials: { instagram: 'https://instagram.com/yor', fout: 3 }, contact: { email: 'hallo@yor.nl' } },
         navigatie: { hoofd: [{ titel: 'Home', href: '/' }, { titel: '' }, 'kapot'], footer: [], juridisch: [], actie: { titel: 'Plan', href: '/contact' } },
-        redirects: [{ van: '/services/', naar: '/diensten', status: 301 }, { van: '', naar: '/x' }],
+        redirects: [{ van: '/diensten/', naar: '/diensten', status: 301 }, { van: '', naar: '/x' }],
       },
       paginas: [
         { slug: 'diensten/paid-social/', titel: 'Paid social', blokken: [{ type: 'header', bg: 'mist', content: { kop: 'Hoi' } }, { geen: 'type' }] },
@@ -35,10 +35,10 @@ describe('CMS-parser', () => {
       ],
       records: { cases: [{ titel: 'A' }, 'kapot'] },
     });
-    expect(c?.site.navigatie?.hoofd).toEqual([{ titel: 'Home', href: '/' }]);
+    expect(c?.site.navigatie?.hoofd).toEqual([{ titel: 'Home', href: '/', subs: [] }]);
     expect(c?.site.navigatie?.actie).toEqual({ titel: 'Plan', href: '/contact' });
     expect(c?.site.merk?.socials).toEqual({ instagram: 'https://instagram.com/yor' });
-    expect(c?.site.redirects).toEqual([{ van: '/services', naar: '/diensten', status: 301 }]);
+    expect(c?.site.redirects).toEqual([{ van: '/diensten', naar: '/diensten', status: 301 }]);
     expect(c?.paginas).toHaveLength(1);
     expect(c?.paginas[0]?.slug).toBe('/diensten/paid-social');
     expect(c?.paginas[0]?.blokken).toEqual([{ type: 'header', bg: 'mist', content: { kop: 'Hoi' } }]);

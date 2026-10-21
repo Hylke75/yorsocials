@@ -54,6 +54,8 @@ export interface SiteSettings {
   bookingUrl: string | null;
   /** Nieuwsbriefdienst (Mailento): openbaar aanmeld-endpoint + lijst-slug. Null = pop-up uit. */
   newsletter: { endpoint: string; slug: string } | null;
+  /** Site-ID in het Link & Lead-CMS (publiek). Formulierinzendingen gaan naar de CMS-leads. Null = uit. */
+  cmsSiteId: string | null;
   legalEntity: { name: string; kvk: string; address: string } | null;
   defaultSeo: Seo;
 }

@@ -1,4 +1,18 @@
-import type { CmsBlock, CmsBrand, CmsContent, CmsLink, CmsNavigation, CmsPage, CmsRedirect, CmsSite } from './types';
+import type {
+  CmsArticle,
+  CmsBlock,
+  CmsBrand,
+  CmsCase,
+  CmsContent,
+  CmsFooterColumn,
+  CmsLink,
+  CmsNavigation,
+  CmsNavItem,
+  CmsPage,
+  CmsRedirect,
+  CmsSite,
+  CmsTeamMember,
+} from './types';
 
 /*
  * Defensief lezen: het CMS mag velden weglaten of (nog) niet vullen. Niets hier gooit een fout;
@@ -31,9 +45,34 @@ function parseLink(v: unknown): CmsLink | null {
 
 const links = (v: unknown): CmsLink[] => arr(v).map(parseLink).filter((l): l is CmsLink => l !== null);
 
+function parseNavItem(v: unknown): CmsNavItem | null {
+  const o = obj(v);
+  const titel = str(o.titel).trim();
+  if (!titel) return null;
+  const href = strOrNull(o.href);
+  const subs = links(o.subs);
+  return href || subs.length ? { titel, href, subs } : null;
+}
+
+function parseFooterColumn(v: unknown): CmsFooterColumn | null {
+  const o = obj(v);
+  const kop = str(o.kop).trim();
+  const l = links(o.links);
+  return kop && l.length ? { kop, links: l } : null;
+}
+
 function parseNavigation(v: unknown): CmsNavigation | null {
   if (!isObj(v)) return null;
-  return { hoofd: links(v.hoofd), footer: links(v.footer), juridisch: links(v.juridisch), actie: parseLink(v.actie) };
+  return {
+    hoofd: arr(v.hoofd)
+      .map(parseNavItem)
+      .filter((x): x is CmsNavItem => x !== null),
+    footer: arr(v.footer)
+      .map(parseFooterColumn)
+      .filter((x): x is CmsFooterColumn => x !== null),
+    juridisch: links(v.juridisch),
+    actie: parseLink(v.actie),
+  };
 }
 
 function parseBrand(v: unknown): CmsBrand | null {
@@ -96,6 +135,50 @@ function parsePage(v: unknown): CmsPage | null {
       .map(parseBlock)
       .filter((b): b is CmsBlock => b !== null),
   };
+}
+
+const id = (o: Record<string, unknown>, i: number) => str(o.id) || String(i);
+
+export function parseTeamMembers(list: unknown): CmsTeamMember[] {
+  return arr(list)
+    .map(obj)
+    .filter((o) => str(o.naam).trim())
+    .map((o, i) => ({ id: id(o, i), naam: str(o.naam), functie: str(o.functie), tekst: str(o.tekst), foto: strOrNull(o.foto), linkedin: strOrNull(o.linkedin) }));
+}
+
+export function parseArticles(list: unknown): CmsArticle[] {
+  return arr(list)
+    .map(obj)
+    .filter((o) => str(o.slug).trim() && str(o.titel).trim())
+    .map((o, i) => ({
+      id: id(o, i),
+      slug: str(o.slug).replace(/^\/+|\/+$/g, ''),
+      titel: str(o.titel),
+      rubriek: str(o.rubriek),
+      antwoordblok: str(o.antwoordblok),
+      samenvatting: str(o.samenvatting),
+      hoofdtekst: str(o.hoofdtekst),
+      foto: strOrNull(o.foto),
+      gepubliceerd_op: strOrNull(o.gepubliceerd_op),
+      auteur: str(o.auteur),
+    }));
+}
+
+export function parseCases(list: unknown): CmsCase[] {
+  return arr(list)
+    .map(obj)
+    .filter((o) => str(o.klantnaam).trim() || str(o.uitdaging).trim())
+    .map((o, i) => ({
+      id: id(o, i),
+      klantnaam: str(o.klantnaam),
+      sector: str(o.sector),
+      uitdaging: str(o.uitdaging),
+      aanpak: str(o.aanpak),
+      resultaat_cijfer: str(o.resultaat_cijfer),
+      resultaat_periode: str(o.resultaat_periode),
+      citaat: str(o.citaat),
+      foto: strOrNull(o.foto),
+    }));
 }
 
 /** Zet een willekeurige API-respons om naar het contract. Geeft null als het geen geldige respons is. */

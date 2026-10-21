@@ -7,7 +7,7 @@ test('hoofdnavigatie leidt naar elke pagina en markeert de actieve pagina', asyn
   await page.goto('/');
   const nav = page.getByRole('navigation', { name: 'Hoofdnavigatie' });
   for (const [label, url] of [
-    ['Services', '/services'],
+    ['Services', '/diensten'],
     ['Cases', '/cases'],
     ['Over ons', '/over-ons'],
     ['Artikelen', '/artikelen'],
@@ -23,7 +23,7 @@ test('hoofdnavigatie leidt naar elke pagina en markeert de actieve pagina', asyn
 test('conversieroute: home → dienst → kennismaking → formulier', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('link', { name: 'Social strategie' }).first().click();
-  await expect(page).toHaveURL('/services/social-strategie');
+  await expect(page).toHaveURL('/diensten/social-strategie');
   await expect(page.getByRole('navigation', { name: 'Kruimelpad' })).toContainText('Services');
   await page.getByRole('link', { name: 'Stel een vraag' }).click();
   await expect(page).toHaveURL(/\/contact\?onderwerp=Social(%20|\+)strategie#formulier/);
@@ -31,7 +31,7 @@ test('conversieroute: home → dienst → kennismaking → formulier', async ({ 
 });
 
 test('skiplink is met het toetsenbord bereikbaar en springt naar de inhoud', async ({ page }) => {
-  await page.goto('/services');
+  await page.goto('/diensten');
   await page.keyboard.press('Tab');
   const skip = page.getByRole('link', { name: 'Direct naar inhoud' });
   await expect(skip).toBeFocused();

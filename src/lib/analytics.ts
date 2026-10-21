@@ -15,6 +15,7 @@ export type AnalyticsEvent =
   | 'form_submit_error'
   | 'booking_click'
   | 'newsletter_view'
+  | 'popup_view'
   | 'newsletter_signup_success'
   | 'newsletter_signup_error';
 

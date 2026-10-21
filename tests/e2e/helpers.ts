@@ -2,13 +2,13 @@ import type { BrowserContext, Page } from '@playwright/test';
 
 export const ALL_ROUTES = [
   '/',
-  '/services',
-  '/services/social-strategie',
-  '/services/content-creatie',
-  '/services/video-reels',
-  '/services/paid-social',
-  '/services/community-management',
-  '/services/analyse-optimalisatie',
+  '/diensten',
+  '/diensten/social-strategie',
+  '/diensten/content-creatie',
+  '/diensten/video-reels',
+  '/diensten/paid-social',
+  '/diensten/community-management',
+  '/diensten/analyse-optimalisatie',
   '/cases',
   '/cases/voorbeeld-horeca-lokaal-zichtbaar',
   '/over-ons',
@@ -16,8 +16,8 @@ export const ALL_ROUTES = [
   '/artikelen/zo-bouw-je-een-reels-format',
   '/contact',
   '/faq',
-  '/privacy',
-  '/cookies',
+  '/juridisch/privacy',
+  '/juridisch/cookies',
 ];
 
 /** Onderdrukt de nieuwsbrief-pop-up in tests die er niet over gaan. */

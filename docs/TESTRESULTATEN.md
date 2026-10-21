@@ -7,9 +7,11 @@ Node 22, Chromium (Playwright 1.56).
 |---|---|---|
 | TypeScript strict | `npm run typecheck` | ✅ geen fouten |
 | ESLint (Next core-web-vitals + TS) | `npm run lint` | ✅ geen fouten of waarschuwingen |
-| Unit-tests (Vitest) | `npm test` | ✅ 49/49 geslaagd (6 bestanden) |
-| Productiebuild | `npm run build` | ✅ 44 statische pagina's/assets + 1 API-route |
-| E2E desktop (1440×900) + mobiel (Pixel 7) | `npm run test:e2e` | ✅ 92/92 geslaagd |
+| Unit-tests (Vitest) | `npm test` | ✅ 78/78 geslaagd (13 bestanden) |
+| Productiebuild | `npm run build` | ✅ 46 statische pagina's/assets + API-routes (contact, lead, revalidate) |
+| E2E desktop (1440×900) + mobiel (Pixel 7) + screenshots | `npm run test:e2e` | ✅ 118/118 geslaagd |
+| E2E in CMS-modus (nep-CMS) | `npm run test:e2e:cms` | ✅ 19/19 geslaagd: alle CMS-pagina's (één H1, geen consolefouten, axe WCAG 2.2 AA), navigatie/footer/merk, kruimelpad, records (cases + filter, team, artikel), redirect, formulierbouwer (fouten, voorinvullen, fout/succes), pop-ups (trigger, scope, slide-in) |
+| CMS-storing | handmatig | ✅ Met het CMS onbereikbaar na het verversingsvenster blijven alle pagina's 200 met de laatste CMS-inhoud; de storing wordt gelogd |
 | Productiemodus-build | `NEXT_PUBLIC_CONTENT_MODE=production npm run build` | ✅ demo-cases/-artikelen en `/styleguide` geven 404, overzichten tonen lege toestand, sitemap bevat alleen indexeerbare pagina's |
 | Screenshots 375 / 768 / 1440 | `npm run screenshots` | ✅ 18 screenshots in `docs/screenshots/` (met Pexels-stockfoto’s) |
 

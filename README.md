@@ -3,7 +3,9 @@
 Productieversie van de publieke YorSocials-website, gebouwd volgens het overdrachtspakket in
 [`design/handover/`](design/handover/) (functioneel ontwerp, designsysteem, bouwopdracht en paginamatrix).
 
-**Stack:** Next.js 16 (App Router, statische generatie) · TypeScript strict · CSS Modules + design tokens ·
+**Content:** beheerd in het Link & Lead-CMS (headless, zie [`docs/CMS.md`](docs/CMS.md)); zonder `CMS_TOKEN` toont de site de ingebouwde inhoud.
+
+**Stack:** Next.js 16 (App Router, statische generatie + ISR) · TypeScript strict · CSS Modules + design tokens ·
 lokaal gehoste fonts · Vitest · Playwright + axe-core.
 
 > **Status: staging.** De site bevat voorbeeldcontent (demo-cases en -artikelen) die nog niet geverifieerd
@@ -26,7 +28,10 @@ npm run dev                  # http://localhost:3000
 | `npm test` | Unit-tests (Vitest): validatie, filterlogica, routing, CMS-parser, webhook, contentintegriteit |
 | `npm run test:e2e` | E2E (Playwright, desktop + mobiel, incl. axe WCAG-checks). Vereist eerst `npm run build` |
 | `npm run screenshots` | Screenshots op 375/768/1440 px naar `docs/screenshots/` |
-| `npm run content:export` | Exporteert seedcontent als CMS-documenten (`content-export/seed.ndjson`) |
+| `npm run test:e2e:cms` | E2E in CMS-modus: bouwt de site tegen een nep-CMS en test pagina's, navigatie, records, formulieren, pop-ups en redirects |
+| `npm run cms:push` | Eerste vulling van het Link & Lead-CMS met alle pagina's en blokken (`CMS_TOKEN` vereist; `-- --dry-run` voor alleen de export) |
+| `npm run cms:mock` | Nep-CMS op poort 4010 voor lokaal testen |
+| `npm run content:export` | Exporteert seedcontent als NDJSON (`content-export/seed.ndjson`) |
 | `npm run check` | typecheck + lint + unit-tests + build |
 
 ## Contentmodi
@@ -81,8 +86,8 @@ tests/unit, tests/e2e     Vitest- en Playwright-tests
   Zonder geconfigureerde bestemming antwoordt de API eerlijk met 503 (“niet verzonden”) — nooit een nep-succes.
 - **Cookieloos.** Er is geen cookiemelding: de site plaatst alleen een functionele cookie (nieuwsbrief-pop-up
   gesloten) en gebruikt optioneel Plausible (zonder cookies) via `NEXT_PUBLIC_PLAUSIBLE_DOMAIN`.
-- **Nieuwsbrief-pop-up.** Verschijnt 3 seconden na het laden, niet op
-  `/privacy` en `/cookies`, en wordt na sluiten 30 dagen / na aanmelden een jaar niet meer getoond. Aanmeldingen gaan vanuit
+- **Pop-ups.** Beheerd in het CMS (soort, tekst, trigger, pagina's, frequentie). Zonder CMS: de nieuwsbrief-pop-up verschijnt 3 seconden na het laden, niet op
+  de juridische pagina's, en wordt na sluiten 30 dagen / na aanmelden een jaar niet meer getoond. Aanmeldingen gaan vanuit
   de browser rechtstreeks naar Mailento (`siteSettings.newsletter`: endpoint + slug `yorsocials-nieuwsbrief`), met
   honeypot, invultijd (`duur_ms`) en utm-herkomst. Mailento stuurt een bevestigingsmail (double opt-in).
 - **Componentenbibliotheek.** `/styleguide` (alleen staging) toont alle componenten met varianten en toestanden,

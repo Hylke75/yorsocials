@@ -59,7 +59,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ status: 'error', code: 'rejected', message: 'Je bericht kon niet worden verwerkt.' }, { status: 400 });
   }
 
-  const result = await deliverContact(input);
+  const result = await deliverContact(input, process.env, {
+    startedAt: Number(body.startedAt) || undefined,
+    page: typeof body.page === 'string' ? body.page.slice(0, 200) : undefined,
+  });
   if (result.ok) {
     return NextResponse.json({ status: 'sent', reference: result.id }, { status: 200 });
   }

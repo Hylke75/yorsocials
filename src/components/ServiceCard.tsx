@@ -16,7 +16,7 @@ export function ServiceCard({ service, headingLevel = 'h3' }: { service: Service
         <span className={styles.num}>{fillTemplate(g.serviceNumberLabel, { number: service.number })}</span>
         <Icon name={service.icon} size={36} className={styles.icon} />
         <H className={styles.title}>
-          <Link href={`/services/${service.slug}`} className={styles.link}>
+          <Link href={`/diensten/${service.slug}`} className={styles.link}>
             {service.title}
           </Link>
         </H>

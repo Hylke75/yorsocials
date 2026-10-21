@@ -40,10 +40,24 @@ Na vaststelling: in `legalPages` (`src/content/data/site.ts`) `status: 'publishe
 
 | Beslissing | Huidige stand | Actie |
 |---|---|---|
-| CMS | Link & Lead-CMS (headless) aangemaakt; read-API werkt maar is nog leeg. Alle sitetekst staat gestructureerd in `src/content/data/` (zie [CMS.md](CMS.md)). | Contentmodel in het CMS inrichten en `src/content/repository.ts` laten lezen uit `linkandlead.nl/api/cms/content`. |
-| Bestemming contactformulier | Ondersteund: webhook (CRM/automation, met HMAC-handtekening) of e-mail via Resend. Niet geconfigureerd. | Bestemming kiezen en env-variabelen zetten. **Blokkerend.** |
+| CMS | Koppeling met het Link & Lead-CMS is af: pagina's, navigatie, merk, records, pop-ups, redirects en leads (zie [CMS.md](CMS.md)). | Zie de CMS-checklist hieronder. |
+| Bestemming contactformulier | Leads gaan naar het CMS (Leads); optioneel ook webhook of Resend. | Controleren dat leads in `/admin` binnenkomen. |
 | Nieuwsbriefdienst | Gekoppeld aan Mailento (lijst `yorsocials-nieuwsbrief`, double opt-in). | Mailento opnemen in de privacyverklaring als verwerker (verwerkersovereenkomst). |
 | Analytics | Cookieloos via Plausible ondersteund (geen cookiemelding nodig). Niet geconfigureerd. | Plausible-domein instellen als `NEXT_PUBLIC_PLAUSIBLE_DOMAIN`, of geen analytics. |
 | Hosting | Vercel (project `yorsocials`, team Hylke's projects). | Na merge productiebranch op `main` zetten; www.yorsocials.nl koppelen. |
 | Domein | `NEXT_PUBLIC_SITE_URL` voorbeeld `https://www.yorsocials.nl` (niet bevestigd). | Bevestigen. |
 | Contentredacteur en beheerproces | Onbekend. | Beleggen. |
+
+## CMS-checklist (eenmalig)
+
+1. In `/admin/platform` een **nieuw API-token** voor YorSocials genereren (het eerder gedeelde token is
+   ingetrokken) en in Vercel zetten als `CMS_TOKEN` (Production + Preview). Daarna opnieuw deployen.
+2. Eerste vulling: `CMS_TOKEN=cms_… npm run cms:push` (15 pagina's, 77 blokken). Daarna alleen nog in `/admin` bewerken.
+3. **Navigatie** invullen: hoofdmenu (Home, Services → `/diensten`, Cases, Over ons, Artikelen, Contact),
+   footerkolommen, juridische links (Privacy → `/juridisch/privacy`, Cookies → `/juridisch/cookies`) en de
+   actieknop (Plan een kennismaking → `/contact`).
+4. **Merk** invullen: logo (licht, voor de donkere achtergrond), tagline, contactgegevens, KvK, LinkedIn.
+5. **Pop-ups**: een pop-up van soort *Nieuwsbrief* aanmaken (bijv. modal, na 3 seconden, alle pagina's,
+   30 dagen pauze). Zolang het CMS gekoppeld is en hier niets actief staat, toont de site géén pop-up.
+6. **Records**: echte teamleden, cases en artikelen (met toestemming) toevoegen.
+7. Optioneel: webhook naar `https://<domein>/api/revalidate` met een geheim, en dat geheim als `CMS_WEBHOOK_SECRET` in Vercel.

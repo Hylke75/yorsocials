@@ -13,21 +13,21 @@ import { plainText } from '@/lib/text';
 
 const content = getPages().services;
 
-const localMetadata: Metadata = buildMetadata({ ...content.seo, path: '/services' });
+const localMetadata: Metadata = buildMetadata({ ...content.seo, path: '/diensten' });
 
 export async function generateMetadata(): Promise<Metadata> {
-  return cmsMetadata('/services', localMetadata);
+  return cmsMetadata('/diensten', localMetadata);
 }
 
 export default async function ServicesPage() {
-  const cmsView = await renderCmsPage('/services');
+  const cmsView = await renderCmsPage('/diensten');
   if (cmsView) return cmsView;
 
   const { hero } = content;
   return (
     <>
       <HeroEditorial
-        before={<Breadcrumbs items={[{ name: plainText(content.seo.title), href: '/services' }]} />}
+        before={<Breadcrumbs items={[{ name: plainText(content.seo.title), href: '/diensten' }]} />}
         eyebrow={hero.eyebrow}
         heading={hero.heading}
         description={hero.description}

@@ -65,6 +65,7 @@ test('voorkomt dubbele inzending', async ({ page }) => {
 });
 
 test('echte API zonder gekoppelde bestemming geeft een eerlijke fout (geen nep-succes)', async ({ page }) => {
+  test.skip(Boolean(process.env.E2E_BASE_URL), 'Tegen een live omgeving zou dit een echte lead aanmaken.');
   await page.goto('/contact');
   await fillValid(page);
   await page.waitForTimeout(2700); // invultijd boven de antispamdrempel

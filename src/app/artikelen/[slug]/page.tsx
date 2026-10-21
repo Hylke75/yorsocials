@@ -14,31 +14,53 @@ import { ServiceCard } from '@/components/ServiceCard';
 import { getArticle, getArticles, getPages, getRelatedArticles, getRelatedServices, getSiteSettings } from '@/content/repository';
 import { fillTemplate } from '@/lib/text';
 import { formatDate } from '@/lib/format';
+import { CmsArticleView } from '@/cms/CmsArticle';
+import { getCmsContent } from '@/cms/client';
+import { parseArticles } from '@/cms/parse';
+import { cmsMetadata, renderCmsPage } from '@/cms/render';
 import { absoluteUrl, buildMetadata } from '@/lib/seo';
 
 type Props = { params: Promise<{ slug: string }> };
 
-export const dynamicParams = false;
+export const dynamicParams = true;
+export const revalidate = 60;
 
-export function generateStaticParams() {
-  return getArticles().map((a) => ({ slug: a.slug }));
+async function cmsArticles() {
+  return parseArticles((await getCmsContent())?.records.artikelen);
+}
+
+export async function generateStaticParams() {
+  const cmsPages = (await getCmsContent())?.paginas.filter((p) => p.slug.startsWith('/artikelen/')).map((p) => p.slug.slice('/artikelen/'.length)) ?? [];
+  const slugs = [...getArticles().map((a) => a.slug), ...cmsPages, ...(await cmsArticles()).map((a) => a.slug)];
+  return [...new Set(slugs)].map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const a = getArticle((await params).slug);
-  if (!a) return {};
-  return buildMetadata({
+  const slug = (await params).slug;
+  const record = (await cmsArticles()).find((a) => a.slug === slug);
+  const a = getArticle(slug);
+  const local: Metadata = record
+    ? buildMetadata({ title: record.titel, description: record.samenvatting, path: `/artikelen/${slug}`, type: 'article', publishedTime: record.gepubliceerd_op })
+    : a
+      ? buildMetadata({
     title: a.seo.title,
     description: a.seo.description,
     path: `/artikelen/${a.slug}`,
     noIndex: a.seo.noIndex,
     type: 'article',
     publishedTime: a.publishedAt,
-  });
+  })
+      : {};
+  return cmsMetadata(`/artikelen/${slug}`, local);
 }
 
 export default async function ArticleDetailPage({ params }: Props) {
-  const article = getArticle((await params).slug);
+  const slug = (await params).slug;
+  const cmsView = await renderCmsPage(`/artikelen/${slug}`);
+  if (cmsView) return cmsView;
+  const record = (await cmsArticles()).find((a) => a.slug === slug);
+  if (record) return <CmsArticleView article={record} />;
+  const article = getArticle(slug);
   if (!article) notFound();
   const related = getRelatedArticles(article, 3);
   const services = getRelatedServices(article.relatedServices);

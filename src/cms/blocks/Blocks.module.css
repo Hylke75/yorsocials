@@ -1,0 +1,161 @@
+.prose {
+  max-width: 780px;
+  font-size: 18px;
+  line-height: 1.8;
+  color: #c9d4ce;
+}
+
+.prose a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.prose ul {
+  padding-left: 1.3em;
+}
+
+.prose strong {
+  color: var(--color-text);
+}
+
+.updated {
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+
+.usps {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+  color: var(--color-text-soft);
+}
+
+.usps li {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.usps svg {
+  color: var(--color-brand-sage-light);
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr));
+  gap: var(--grid-gap);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.items {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr));
+  gap: var(--grid-gap);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  background: var(--color-panel);
+  overflow: hidden;
+}
+
+.itemBody {
+  padding: 24px;
+}
+
+.itemBody p {
+  color: var(--color-text-muted);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.itemImage {
+  aspect-ratio: 4 / 3;
+  position: relative;
+}
+
+.icon {
+  color: var(--color-accent);
+  margin-bottom: 16px;
+}
+
+.points {
+  list-style: none;
+  padding: 0;
+  margin: 24px 0;
+  display: grid;
+  gap: 12px;
+}
+
+.points li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.points svg {
+  color: var(--color-brand-sage-light);
+  margin-top: 3px;
+  flex: none;
+}
+
+.reverse > :first-child {
+  order: 2;
+}
+
+.metaList {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+
+.caseMeta {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.caseMeta dt {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+  color: var(--color-brand-sage-light);
+}
+
+.caseMeta dd {
+  margin: 2px 0 0;
+  color: var(--color-text-soft);
+}
+
+@media (max-width: 1199px) {
+  .cards,
+  .items {
+    grid-template-columns: repeat(min(var(--cols, 3), 2), minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 740px) {
+  .cards,
+  .items {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .reverse > :first-child {
+    order: 0;
+  }
+}

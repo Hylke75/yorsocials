@@ -7,7 +7,7 @@ export const NEWSLETTER_DELAY_MS = 3000;
 export const NEWSLETTER_DISMISS_SECONDS = 60 * 60 * 24 * 30;
 export const NEWSLETTER_SUBSCRIBED_SECONDS = 60 * 60 * 24 * 365;
 /** Hier tonen we de pop-up niet (juridische pagina's en intern). */
-export const NEWSLETTER_EXCLUDED_PATHS = ['/privacy', '/cookies', '/styleguide'];
+export const NEWSLETTER_EXCLUDED_PATHS = ['/juridisch/privacy', '/juridisch/cookies', '/styleguide'];
 const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'] as const;
 const UTM_STORAGE_KEY = 'ys_utm';
 

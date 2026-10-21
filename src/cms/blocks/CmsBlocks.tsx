@@ -3,11 +3,14 @@ import { BLOCK_COMPONENTS, isRenderable } from './registry';
 
 /** Rendert de blokken van een CMS-pagina in volgorde; onbekende bloktypes worden overgeslagen. */
 export function CmsBlocks({ page }: { page: CmsPage }) {
+  const firstHeader = page.blokken.findIndex((b) => b.type === 'header');
   return (
     <>
       {page.blokken.map((block, index) => {
         const Component = BLOCK_COMPONENTS[block.type];
-        return Component ? <Component key={`${block.type}-${index}`} block={block} index={index} /> : null;
+        return Component ? (
+          <Component key={`${block.type}-${index}`} block={block} page={page} index={index} isFirstHeader={index === firstHeader} />
+        ) : null;
       })}
     </>
   );

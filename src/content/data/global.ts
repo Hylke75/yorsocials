@@ -8,7 +8,7 @@ import type { GlobalContent } from '../types';
 export const globalContent: GlobalContent = {
   navigation: [
     { href: '/', label: 'Home' },
-    { href: '/services', label: 'Services' },
+    { href: '/diensten', label: 'Services' },
     { href: '/cases', label: 'Cases' },
     { href: '/over-ons', label: 'Over ons' },
     { href: '/artikelen', label: 'Artikelen' },
@@ -29,8 +29,8 @@ export const globalContent: GlobalContent = {
     ctaHeading: 'Samen iets maken?',
     extraLinks: [{ href: '/faq', label: 'FAQ' }],
     legalLinks: [
-      { href: '/privacy', label: 'Privacy' },
-      { href: '/cookies', label: 'Cookies' },
+      { href: '/juridisch/privacy', label: 'Privacy' },
+      { href: '/juridisch/cookies', label: 'Cookies' },
     ],
     stagingSuffix: ' — stagingomgeving',
     credit: { prefix: 'Website door', name: 'Link & Lead', url: 'https://linkandlead.nl' },

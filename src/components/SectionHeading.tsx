@@ -16,9 +16,11 @@ export function SectionHeading({ eyebrow, heading, description, alignment = 'spl
   return (
     <div className={[styles.head, alignment === 'center' && styles.center].filter(Boolean).join(' ')}>
       <div>
-        <div className={styles.eyebrowWrap}>
-          <p className="eyebrow">{eyebrow}</p>
-        </div>
+        {eyebrow && (
+          <div className={styles.eyebrowWrap}>
+            <p className="eyebrow">{eyebrow}</p>
+          </div>
+        )}
         <Tag id={id} className="h2">
           {typeof heading === 'string' ? <AccentText text={heading} /> : heading}
         </Tag>

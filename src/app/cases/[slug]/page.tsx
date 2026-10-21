@@ -14,25 +14,33 @@ import { ServiceCard } from '@/components/ServiceCard';
 import { CaseViewTracker } from '@/components/ViewTracker';
 import { getCase, getCases, getDisplayClientName, getPages, getRelatedServices, getSectorLabel } from '@/content/repository';
 import { AccentText } from '@/components/AccentText';
+import { cmsMetadata, renderCmsPage } from '@/cms/render';
+import { getCmsContent } from '@/cms/client';
 import { buildMetadata } from '@/lib/seo';
 import styles from './page.module.css';
 
 type Props = { params: Promise<{ slug: string }> };
 
-export const dynamicParams = false;
+export const dynamicParams = true;
+export const revalidate = 60;
 
-export function generateStaticParams() {
-  return getCases().map((c) => ({ slug: c.slug }));
+export async function generateStaticParams() {
+  const cms = (await getCmsContent())?.paginas.filter((p) => p.slug.startsWith('/cases/')).map((p) => p.slug.slice('/cases/'.length)) ?? [];
+  return [...new Set([...getCases().map((c) => c.slug), ...cms])].map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const item = getCase((await params).slug);
-  if (!item) return {};
-  return buildMetadata({ title: item.seo.title, description: item.seo.description, path: `/cases/${item.slug}`, noIndex: item.seo.noIndex });
+  const slug = (await params).slug;
+  const item = getCase(slug);
+  const local = item ? buildMetadata({ title: item.seo.title, description: item.seo.description, path: `/cases/${item.slug}`, noIndex: item.seo.noIndex }) : {};
+  return cmsMetadata(`/cases/${slug}`, local);
 }
 
 export default async function CaseDetailPage({ params }: Props) {
-  const item = getCase((await params).slug);
+  const slug = (await params).slug;
+  const cmsView = await renderCmsPage(`/cases/${slug}`);
+  if (cmsView) return cmsView;
+  const item = getCase(slug);
   if (!item) notFound();
   const client = getDisplayClientName(item);
   const related = getRelatedServices(item.relatedServices);

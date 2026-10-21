@@ -17,8 +17,10 @@ export const revalidate = 60;
 export async function generateStaticParams() {
   const content = await getCmsContent();
   const own = new Set<string>(STATIC_ROUTES);
+  // Deze voorvoegsels hebben een eigen dynamische route (die zelf CMS-first rendert).
+  const ownPrefixes = ['/diensten/', '/cases/', '/artikelen/'];
   return (content?.paginas ?? [])
-    .filter((p) => p.slug !== '/' && !own.has(p.slug) && hasRenderableBlocks(p))
+    .filter((p) => p.slug !== '/' && !own.has(p.slug) && !ownPrefixes.some((x) => p.slug.startsWith(x)) && hasRenderableBlocks(p))
     .map((p) => ({ slug: p.slug.slice(1).split('/') }));
 }
 

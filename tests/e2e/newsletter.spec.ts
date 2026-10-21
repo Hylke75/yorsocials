@@ -17,7 +17,7 @@ test('er is geen cookiemelding; de pop-up verschijnt direct na 3 seconden', asyn
 });
 
 test('sluiten met Escape onthoudt de keuze', async ({ page }) => {
-  await page.goto('/services');
+  await page.goto('/diensten');
   const popup = page.getByRole('dialog', { name: /Blijf op de hoogte/ });
   await expect(popup).toBeVisible({ timeout: 5000 });
   await page.keyboard.press('Escape');
@@ -87,7 +87,7 @@ test('"te_vaak" (429) toont een eerlijke melding', async ({ page }) => {
 });
 
 test('niet op de juridische pagina’s', async ({ page }) => {
-  await page.goto('/privacy');
+  await page.goto('/juridisch/privacy');
   await page.waitForTimeout(3600);
   await expect(page.getByRole('dialog', { name: /Blijf op de hoogte/ })).toBeHidden();
 });

@@ -31,7 +31,7 @@ test('onbekende URL geeft 404 met teruglinks', async ({ page }) => {
 });
 
 test('onbekende dienst geeft 404', async ({ page }) => {
-  expect((await page.goto('/services/bestaat-niet'))?.status()).toBe(404);
+  expect((await page.goto('/diensten/bestaat-niet'))?.status()).toBe(404);
 });
 
 test('alle interne links op de homepage werken', async ({ page, request }) => {

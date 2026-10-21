@@ -48,7 +48,7 @@ export default async function HomePage() {
         actions={
           <>
             <BookingCTA placement="home-hero" />
-            <ButtonLink href={cases.length > 0 ? '/cases' : '/services'} variant="secondary" icon="play" placement="home-hero-secundair">
+            <ButtonLink href={cases.length > 0 ? '/cases' : '/diensten'} variant="secondary" icon="play" placement="home-hero-secundair">
               {cases.length > 0 ? content.heroSecondaryCasesLabel : content.heroSecondaryServicesLabel}
             </ButtonLink>
           </>
@@ -65,7 +65,7 @@ export default async function HomePage() {
             ))}
           </div>
           <div className="actions" style={{ marginTop: 28 }}>
-            <ButtonLink href="/services" placement="home-services">
+            <ButtonLink href="/diensten" placement="home-services">
               {fillTemplate(content.allServicesLabel, { count: services.length })}
             </ButtonLink>
           </div>

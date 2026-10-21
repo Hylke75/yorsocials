@@ -15,25 +15,36 @@ import { ServiceDetailIntro } from '@/components/ServiceDetailIntro';
 import { ServiceViewTracker } from '@/components/ViewTracker';
 import { getArticlesForService, getOtherServices, getPages, getService, getServices } from '@/content/repository';
 import { AccentText } from '@/components/AccentText';
+import { cmsMetadata, renderCmsPage } from '@/cms/render';
+import { getCmsContent } from '@/cms/client';
 import { buildMetadata } from '@/lib/seo';
 import styles from './page.module.css';
 
 type Props = { params: Promise<{ slug: string }> };
 
-export const dynamicParams = false;
+// Nieuwe dienstpagina's uit het CMS verschijnen zonder rebuild (ISR).
+export const dynamicParams = true;
+export const revalidate = 60;
 
-export function generateStaticParams() {
-  return getServices().map((s) => ({ slug: s.slug }));
+export async function generateStaticParams() {
+  const cms = (await getCmsContent())?.paginas.filter((p) => p.slug.startsWith('/diensten/')).map((p) => p.slug.slice('/diensten/'.length)) ?? [];
+  return [...new Set([...getServices().map((s) => s.slug), ...cms])].map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const service = getService((await params).slug);
-  if (!service) return {};
-  return buildMetadata({ title: service.seo.title, description: service.seo.description, path: `/services/${service.slug}`, noIndex: service.seo.noIndex });
+  const slug = (await params).slug;
+  const service = getService(slug);
+  const local = service
+    ? buildMetadata({ title: service.seo.title, description: service.seo.description, path: `/diensten/${service.slug}`, noIndex: service.seo.noIndex })
+    : {};
+  return cmsMetadata(`/diensten/${slug}`, local);
 }
 
 export default async function ServiceDetailPage({ params }: Props) {
-  const service = getService((await params).slug);
+  const slug = (await params).slug;
+  const cmsView = await renderCmsPage(`/diensten/${slug}`);
+  if (cmsView) return cmsView;
+  const service = getService(slug);
   if (!service) notFound();
   const others = getOtherServices(service.slug, 3);
   const articles = getArticlesForService(service.slug).slice(0, 3);
@@ -48,8 +59,8 @@ export default async function ServiceDetailPage({ params }: Props) {
         before={
           <Breadcrumbs
             items={[
-              { name: getPages().services.seo.title, href: '/services' },
-              { name: service.title, href: `/services/${service.slug}` },
+              { name: getPages().services.seo.title, href: '/diensten' },
+              { name: service.title, href: `/diensten/${service.slug}` },
             ]}
           />
         }

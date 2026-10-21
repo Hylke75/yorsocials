@@ -93,7 +93,7 @@ export default function StyleguidePage() {
       </Specimen>
 
       <Specimen name="Breadcrumbs" props="items: { name, href }[]">
-        <Breadcrumbs items={[{ name: 'Services', href: '/services' }, { name: 'Social strategie', href: '/services/social-strategie' }]} />
+        <Breadcrumbs items={[{ name: 'Services', href: '/diensten' }, { name: 'Social strategie', href: '/diensten/social-strategie' }]} />
       </Specimen>
 
       <Specimen name="SectionHeading" props="eyebrow, heading, description, alignment">
@@ -191,7 +191,7 @@ export default function StyleguidePage() {
 
 
       <p className="muted" style={{ marginTop: 32 }}>
-        ContactForm, SiteHeader, MobileNav, SiteFooter, HeroEditorial, CTASection en NewsletterPopup zijn live te zien op de pagina’s zelf (bijv. /contact).
+        ContactForm, SiteHeader, MobileNav, SiteFooter, HeroEditorial, CTASection en SitePopup zijn live te zien op de pagina’s zelf (bijv. /contact).
       </p>
     </div>
   );

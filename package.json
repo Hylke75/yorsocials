@@ -14,7 +14,10 @@
     "test:e2e": "playwright test",
     "screenshots": "playwright test --project=screenshots",
     "check": "npm run typecheck && npm run lint && npm run test && npm run build",
-    "content:export": "tsx scripts/export-seed.ts"
+    "content:export": "tsx scripts/export-seed.ts",
+    "cms:push": "tsx scripts/cms-push.ts",
+    "test:e2e:cms": "playwright test -c playwright.cms.config.ts",
+    "cms:mock": "tsx scripts/mock-cms.ts"
   },
   "engines": {
     "node": "22.x"

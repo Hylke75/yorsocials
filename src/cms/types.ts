@@ -25,9 +25,22 @@ export interface CmsLink {
   href: string;
 }
 
+/** Hoofdmenu-item: met eigen link, of een uitklap-ouder met sublinks. */
+export interface CmsNavItem {
+  titel: string;
+  href: string | null;
+  subs: CmsLink[];
+}
+
+export interface CmsFooterColumn {
+  kop: string;
+  links: CmsLink[];
+}
+
 export interface CmsNavigation {
-  hoofd: CmsLink[];
-  footer: CmsLink[];
+  hoofd: CmsNavItem[];
+  /** Footer in kolommen (kop + links). */
+  footer: CmsFooterColumn[];
   juridisch: CmsLink[];
   actie: CmsLink | null;
 }
@@ -39,6 +52,7 @@ export interface CmsBrand {
   logo_kleur: string | null;
   favicon: string | null;
   socials: Record<string, string>;
+  /** bedrijf, juridisch, email, telefoon, adres, postcode_plaats, kvk, btw, reactietijd */
   contact: Record<string, string>;
   tagline: string | null;
   slogan: string | null;
@@ -62,6 +76,41 @@ export interface CmsSite {
   navigatie: CmsNavigation | null;
   /** binnenkort */
   redirects: CmsRedirect[];
+}
+
+/** Records uit de ingebouwde collecties (alleen publiceerbare kolommen). */
+export interface CmsTeamMember {
+  id: string;
+  naam: string;
+  functie: string;
+  tekst: string;
+  foto: string | null;
+  linkedin: string | null;
+}
+
+export interface CmsArticle {
+  id: string;
+  slug: string;
+  titel: string;
+  rubriek: string;
+  antwoordblok: string;
+  samenvatting: string;
+  hoofdtekst: string;
+  foto: string | null;
+  gepubliceerd_op: string | null;
+  auteur: string;
+}
+
+export interface CmsCase {
+  id: string;
+  klantnaam: string;
+  sector: string;
+  uitdaging: string;
+  aanpak: string;
+  resultaat_cijfer: string;
+  resultaat_periode: string;
+  citaat: string;
+  foto: string | null;
 }
 
 export interface CmsContent {

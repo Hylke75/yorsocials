@@ -1,9 +1,11 @@
 import 'server-only';
 import { createHmac, randomUUID } from 'node:crypto';
+import { getSiteSettings } from '@/content/repository';
+import { sendCmsLead } from './cmsLead';
 import { escapeHtml, type ContactInput } from './validation';
 
 export type DeliveryResult =
-  | { ok: true; id: string; channel: 'webhook' | 'email' }
+  | { ok: true; id: string; channel: 'cms' | 'webhook' | 'email' }
   | { ok: false; id: string; reason: 'not_configured' | 'failed' };
 
 interface Attempt {
@@ -31,11 +33,37 @@ function log(event: string, data: Record<string, unknown>) {
 }
 
 export function isDeliveryConfigured(env: NodeJS.ProcessEnv = process.env): boolean {
-  return Boolean(env.CONTACT_WEBHOOK_URL || (env.RESEND_API_KEY && env.CONTACT_TO_EMAIL && env.CONTACT_FROM_EMAIL));
+  return Boolean((env.CMS_LEADS_DISABLED !== '1' && getSiteSettings().cmsSiteId) || env.CONTACT_WEBHOOK_URL || (env.RESEND_API_KEY && env.CONTACT_TO_EMAIL && env.CONTACT_FROM_EMAIL));
 }
 
-export async function deliverContact(input: ContactInput, env: NodeJS.ProcessEnv = process.env): Promise<DeliveryResult> {
+/**
+ * Levert een aanvraag af. Volgorde: CMS-leads (als de site een CMS-site-ID heeft) → webhook → e-mail.
+ */
+export async function deliverContact(
+  input: ContactInput,
+  env: NodeJS.ProcessEnv = process.env,
+  meta: { startedAt?: number; page?: string } = {},
+): Promise<DeliveryResult> {
   const id = randomUUID();
+
+  // CMS_LEADS_DISABLED=1 (tests) voorkomt dat er echte leads in het CMS terechtkomen.
+  const siteId = env.CMS_LEADS_DISABLED === '1' ? null : getSiteSettings().cmsSiteId;
+  if (siteId) {
+    const res = await sendCmsLead(
+      siteId,
+      {
+        soort: 'contact',
+        naam: input.name,
+        bedrijf: input.company || undefined,
+        email: input.email,
+        vraag: `Onderwerp: ${input.topic}\n\n${input.message}`,
+        bron_pagina: meta.page ?? '/contact',
+      },
+      meta.startedAt ?? Date.now() - 60_000,
+    );
+    log(res.ok ? 'delivered' : 'delivery_failed', { id, channel: 'cms', topic: input.topic, ...(res.ok ? {} : { status: res.status }) });
+    return res.ok ? { ok: true, id, channel: 'cms' } : { ok: false, id, reason: 'failed' };
+  }
   const payload = {
     id,
     receivedAt: new Date().toISOString(),

@@ -21,8 +21,8 @@ describe('nieuwsbrief', () => {
   it('toont de pop-up niet na sluiten of op uitgesloten pagina’s', () => {
     expect(shouldShowNewsletter('/', '')).toBe(true);
     expect(shouldShowNewsletter('/', 'a=1; ys_newsletter=dismissed')).toBe(false);
-    expect(shouldShowNewsletter('/privacy', '')).toBe(false);
-    expect(shouldShowNewsletter('/cookies', '')).toBe(false);
+    expect(shouldShowNewsletter('/juridisch/privacy', '')).toBe(false);
+    expect(shouldShowNewsletter('/juridisch/cookies', '')).toBe(false);
   });
 
   it('haalt alleen utm-parameters uit de URL', () => {

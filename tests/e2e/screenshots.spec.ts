@@ -1,7 +1,7 @@
 import { test } from '@playwright/test';
 import { dismissConsent } from './helpers';
 
-const PAGES = ['/', '/services', '/services/video-reels', '/cases', '/over-ons', '/contact'];
+const PAGES = ['/', '/diensten', '/diensten/video-reels', '/cases', '/over-ons', '/contact'];
 const WIDTHS = [375, 768, 1440];
 
 // Genereert docs/screenshots/*.jpg voor visuele vergelijking met design/referenties.

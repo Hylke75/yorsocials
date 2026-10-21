@@ -7,6 +7,10 @@ import {
   ChartColumn,
   Check,
   ChevronRight,
+  Clock,
+  Link2,
+  List,
+  Shield,
   CirclePlay,
   Compass,
   Handshake,
@@ -56,6 +60,10 @@ const icons = {
   plus: Plus,
   search: Search,
   close: X,
+  clock: Clock,
+  link: Link2,
+  list: List,
+  shield: Shield,
   alert: TriangleAlert,
 } satisfies Record<IconName | string, LucideIcon>;
 

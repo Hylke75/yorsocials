@@ -278,7 +278,7 @@ export function ContactForm({ content: t, endpoint = '/api/contact' }: { content
         <div className={styles.checkbox}>
           <input id="privacy" name="privacy" type="checkbox" required aria-invalid={Boolean(errors.privacy)} aria-describedby={describedBy('privacy')} />
           <label htmlFor="privacy">
-            {t.privacyLabel} <Link href="/privacy">{t.privacyLinkLabel}</Link>.{' '}
+            {t.privacyLabel} <Link href="/juridisch/privacy">{t.privacyLinkLabel}</Link>.{' '}
             <span aria-hidden="true">*</span>
           </label>
         </div>

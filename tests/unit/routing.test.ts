@@ -13,12 +13,12 @@ const REQUIRED_SERVICE_SLUGS = [
 
 describe('routes', () => {
   it('bevat alle verplichte statische routes uit het functioneel ontwerp', () => {
-    expect(STATIC_ROUTES).toEqual(expect.arrayContaining(['/', '/services', '/cases', '/over-ons', '/artikelen', '/contact', '/faq', '/privacy', '/cookies']));
+    expect(STATIC_ROUTES).toEqual(expect.arrayContaining(['/', '/diensten', '/cases', '/over-ons', '/artikelen', '/contact', '/faq', '/juridisch/privacy', '/juridisch/cookies']));
   });
 
   it('heeft precies de zes gevraagde dienstdetailpagina’s', () => {
     expect(getServices().map((s) => s.slug)).toEqual(REQUIRED_SERVICE_SLUGS);
-    for (const slug of REQUIRED_SERVICE_SLUGS) expect(getAllRoutes('production')).toContain(`/services/${slug}`);
+    for (const slug of REQUIRED_SERVICE_SLUGS) expect(getAllRoutes('production')).toContain(`/diensten/${slug}`);
   });
 
   it('toont demo-cases en -artikelen alleen in staging', () => {
@@ -50,8 +50,8 @@ describe('routes', () => {
 
   it('bepaalt de actieve navigatie-item correct', () => {
     expect(isActivePath('/', '/')).toBe(true);
-    expect(isActivePath('/services/paid-social', '/services')).toBe(true);
-    expect(isActivePath('/services', '/')).toBe(false);
-    expect(isActivePath('/servicesx', '/services')).toBe(false);
+    expect(isActivePath('/diensten/paid-social', '/diensten')).toBe(true);
+    expect(isActivePath('/diensten', '/')).toBe(false);
+    expect(isActivePath('/dienstenx', '/diensten')).toBe(false);
   });
 });

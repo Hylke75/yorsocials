@@ -14,6 +14,7 @@ export const siteSettings: SiteSettings = {
   email: null,
   phone: null,
   bookingUrl: null,
+  cmsSiteId: '4c6177cb-9c9b-4a18-8e90-4fe29c4410f1',
   newsletter: {
     endpoint: 'https://gfnxbkketubsevavlegj.supabase.co/functions/v1/aanmelden',
     slug: 'yorsocials-nieuwsbrief',
@@ -125,6 +126,7 @@ export const legalPages: LegalPage[] = [
         heading: 'Functionele cookies',
         body: [
           'Als je de nieuwsbrief-pop-up sluit of je aanmeldt, onthouden we dat in een functionele cookie (ys_newsletter), zodat je de pop-up niet steeds opnieuw ziet. Deze cookie bevat geen persoonsgegevens en is 30 dagen (na sluiten) of een jaar (na aanmelden) geldig.',
+          'Voor andere pop-ups (bijvoorbeeld een aankondiging) onthouden we in de lokale opslag van je browser hoe vaak en wanneer je ze hebt gezien (ys_popup_sessie, ys_popup_paginas, ys_popup_pauze). Ook dat bevat geen persoonsgegevens en verlaat je browser niet.',
         ],
       },
       {

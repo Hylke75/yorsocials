@@ -17,11 +17,15 @@ interface HeroEditorialProps {
   /** Extra inhoud onder de beschrijving (bijv. demobadge of breadcrumbs). */
   children?: ReactNode;
   before?: ReactNode;
+  /** Alleen de eerste hero van een pagina is de H1. */
+  headingLevel?: 'h1' | 'h2';
 }
 
-export function HeroEditorial({ eyebrow, heading, description, image, actions, annotation, size = 'large', children, before }: HeroEditorialProps) {
+export function HeroEditorial({ eyebrow, heading, description, image, actions, annotation, size = 'large', children, before, headingLevel = 'h1' }: HeroEditorialProps) {
+  const H = headingLevel;
+  const headingId = headingLevel === 'h1' ? 'page-title' : undefined;
   return (
-    <section className={[styles.hero, size === 'compact' && styles.compact].filter(Boolean).join(' ')} aria-labelledby="page-title">
+    <section className={[styles.hero, size === 'compact' && styles.compact].filter(Boolean).join(' ')} aria-labelledby={headingId}>
       {image && (
         <MediaImage asset={image} fill priority sizes="(max-width: 740px) 100vw, 65vw" className={styles.media} imageClassName={styles.mediaImg} decorative />
       )}
@@ -29,9 +33,9 @@ export function HeroEditorial({ eyebrow, heading, description, image, actions, a
         <div className={styles.content}>
           {before}
           <p className="eyebrow">{eyebrow}</p>
-          <h1 id="page-title" className="h1">
+          <H id={headingId} className="h1">
             {typeof heading === 'string' ? <AccentText text={heading} /> : heading}
-          </h1>
+          </H>
           {description && <p className={styles.description}>{description}</p>}
           {children}
           {actions && <div className="actions">{actions}</div>}

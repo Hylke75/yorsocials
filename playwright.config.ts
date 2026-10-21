@@ -11,7 +11,7 @@ export default defineConfig({
   reporter: [['list'], ['html', { open: 'never' }]],
   use: { baseURL, trace: 'retain-on-failure' },
   projects: [
-    { name: 'desktop', use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } }, testIgnore: /screenshots\.spec/ },
+    { name: 'desktop', use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } }, testIgnore: /(screenshots|cms)\.spec/ },
     { name: 'mobile', use: { ...devices['Pixel 7'] }, testMatch: /(mobile|smoke)\.spec\.ts/ },
     { name: 'screenshots', use: { ...devices['Desktop Chrome'] }, testMatch: /screenshots\.spec\.ts/ },
   ],
@@ -19,6 +19,8 @@ export default defineConfig({
     ? undefined
     : {
         command: `npm run start -- -p ${PORT}`,
+        // Nooit echte leads naar het CMS sturen vanuit tests.
+        env: { CMS_LEADS_DISABLED: '1' },
         url: baseURL,
         reuseExistingServer: !process.env.CI,
         timeout: 120_000,

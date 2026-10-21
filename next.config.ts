@@ -17,7 +17,7 @@ const csp = [
   "default-src 'self'",
   `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''}${analyticsScript}`,
   "style-src 'self' 'unsafe-inline'",
-  `img-src 'self' blob: data: https://${CMS_MEDIA_HOST}`,
+  `img-src 'self' blob: data: https://${CMS_MEDIA_HOST} https://yorsocials.vercel.app https://www.yorsocials.nl`,
   "font-src 'self'",
   `connect-src 'self'${newsletterConnect}${analyticsConnect}`,
   "object-src 'none'",
@@ -42,7 +42,21 @@ const nextConfig: NextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
     qualities: [60, 75],
-    remotePatterns: [{ protocol: 'https', hostname: CMS_MEDIA_HOST, pathname: '/storage/v1/object/public/media/**' }],
+    remotePatterns: [
+      { protocol: 'https', hostname: CMS_MEDIA_HOST, pathname: '/storage/v1/object/public/media/**' },
+      // Beelden die de site zelf host en die als absolute URL in het CMS staan.
+      { protocol: 'https', hostname: 'yorsocials.vercel.app', pathname: '/images/**' },
+      { protocol: 'https', hostname: 'www.yorsocials.nl', pathname: '/images/**' },
+    ],
+  },
+  // Oude URL's → de slugs van het CMS-contentmodel (diensten en juridische pagina's).
+  async redirects() {
+    return [
+      { source: '/services', destination: '/diensten', permanent: true },
+      { source: '/services/:slug', destination: '/diensten/:slug', permanent: true },
+      { source: '/privacy', destination: '/juridisch/privacy', permanent: true },
+      { source: '/cookies', destination: '/juridisch/cookies', permanent: true },
+    ];
   },
   async headers() {
     return [{ source: '/(.*)', headers: securityHeaders }];

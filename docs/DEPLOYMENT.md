@@ -4,7 +4,7 @@
 
 - Node.js ≥ 20.9 (getest met 22)
 - Een host die Next.js met een Node-server draait (Vercel, Netlify, een container/VM met `npm start`, …).
-  De site is grotendeels statisch; alleen `POST /api/contact` draait server-side.
+  De pagina's worden statisch gegenereerd en elke 60 s ververst met de CMS-inhoud (ISR); de API-routes draaien server-side.
 
 ## Omgevingsvariabelen
 
@@ -17,9 +17,14 @@ Zie [`.env.example`](../.env.example).
 | `CONTACT_WEBHOOK_URL` | één van beide | POST JSON naar CRM/automation. Verwacht 2xx. Retry bij 5xx/429/netwerkfout. |
 | `CONTACT_WEBHOOK_SECRET` | aanbevolen | HMAC-SHA256 van de body in header `x-yorsocials-signature`. |
 | `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL` | één van beide | E-maillevering via Resend; afzenderdomein moet geverifieerd zijn. |
-| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | nee | GA4; laadt alleen na analytics-toestemming en opent de CSP voor Google-domeinen. |
+| `CMS_TOKEN` | ja (voor CMS) | API-token van de YorSocials-site in het Link & Lead-CMS (`cms_…`). **Geheim: alleen als Vercel-variabele, nooit committen.** Leeg → ingebouwde inhoud. |
+| `CMS_URL` | nee | Standaard `https://linkandlead.nl`. |
+| `CMS_WEBHOOK_SECRET` | aanbevolen | Geheim van de CMS-webhook naar `/api/revalidate`; zonder dit is een wijziging binnen 60 s zichtbaar. |
+| `CMS_LEADS_DISABLED` | nee | `1` = geen leads naar het CMS sturen (tests/lokaal). |
+| `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` | nee | Cookieloze statistieken via Plausible. |
 
-Zonder contactbestemming retourneert `/api/contact` een 503 en ziet de bezoeker dat het bericht **niet** is verzonden.
+Leads gaan eerst naar het CMS (site-id in `src/content/data/site.ts`), daarna naar webhook/Resend als die zijn ingesteld.
+Zonder enige bestemming retourneert `/api/contact` een 503 en ziet de bezoeker dat het bericht **niet** is verzonden.
 
 ## Stappen
 
