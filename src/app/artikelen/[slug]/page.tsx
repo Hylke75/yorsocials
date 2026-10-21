@@ -11,7 +11,8 @@ import { JsonLd } from '@/components/JsonLd';
 import { Notice } from '@/components/Notice';
 import { SectionHeading } from '@/components/SectionHeading';
 import { ServiceCard } from '@/components/ServiceCard';
-import { getArticle, getArticles, getRelatedArticles, getRelatedServices, getSiteSettings } from '@/content/repository';
+import { getArticle, getArticles, getPages, getRelatedArticles, getRelatedServices, getSiteSettings } from '@/content/repository';
+import { fillTemplate } from '@/lib/text';
 import { formatDate } from '@/lib/format';
 import { absoluteUrl, buildMetadata } from '@/lib/seo';
 
@@ -42,6 +43,7 @@ export default async function ArticleDetailPage({ params }: Props) {
   const related = getRelatedArticles(article, 3);
   const services = getRelatedServices(article.relatedServices);
   const site = getSiteSettings();
+  const t = getPages().articleDetail;
 
   return (
     <>
@@ -64,7 +66,7 @@ export default async function ArticleDetailPage({ params }: Props) {
         before={
           <Breadcrumbs
             items={[
-              { name: 'Artikelen', href: '/artikelen' },
+              { name: getPages().articles.seo.title, href: '/artikelen' },
               { name: article.title, href: `/artikelen/${article.slug}` },
             ]}
           />
@@ -76,11 +78,11 @@ export default async function ArticleDetailPage({ params }: Props) {
         size="compact"
       >
         <p className="muted" style={{ fontSize: 14 }}>
-          {article.author ? `Door ${article.author.name}, ${article.author.role}` : 'Auteur nog toe te voegen'}
+          {article.author ? fillTemplate(t.byline, { name: article.author.name, role: article.author.role }) : t.noAuthor}
           {' · '}
-          {article.publishedAt ? <time dateTime={article.publishedAt}>{formatDate(article.publishedAt)}</time> : 'Nog niet gepubliceerd'}
+          {article.publishedAt ? <time dateTime={article.publishedAt}>{formatDate(article.publishedAt)}</time> : t.notPublished}
         </p>
-        {article.status === 'demo' && <DemoBadge>Voorbeeldartikel</DemoBadge>}
+        {article.status === 'demo' && <DemoBadge>{t.demoBadge}</DemoBadge>}
       </HeroEditorial>
 
       <section className="section" aria-label="Artikel">
@@ -88,14 +90,14 @@ export default async function ArticleDetailPage({ params }: Props) {
           <article>
             {article.status === 'demo' && (
               <Notice tone="demo">
-                <p>Voorbeeldartikel voor de ontwerpfase. Voor publicatie redactioneel beoordelen, auteur en datum toevoegen en bronnen vermelden.</p>
+                <p>{t.demoNotice}</p>
               </Notice>
             )}
             <ArticleContent blocks={article.body} />
           </article>
           <div className="actions" style={{ marginTop: 40 }}>
             <ButtonLink href="/artikelen" variant="secondary" icon="arrowLeft" iconPosition="start" placement="artikel-terug">
-              Alle artikelen
+              {t.backLabel}
             </ButtonLink>
           </div>
         </div>
@@ -104,7 +106,7 @@ export default async function ArticleDetailPage({ params }: Props) {
       {services.length > 0 && (
         <section className="section section--soft" aria-labelledby="artikel-diensten">
           <div className="container">
-            <SectionHeading id="artikel-diensten" eyebrow="Relevante diensten" heading={<>Hulp nodig <span className="accent-green">hierbij?</span></>} />
+            <SectionHeading id="artikel-diensten" {...t.services} />
             <div className="grid grid--3">
               {services.map((s) => (
                 <ServiceCard key={s.slug} service={s} />
@@ -117,7 +119,7 @@ export default async function ArticleDetailPage({ params }: Props) {
       {related.length > 0 && (
         <section className="section" aria-labelledby="artikel-gerelateerd">
           <div className="container">
-            <SectionHeading id="artikel-gerelateerd" eyebrow="Lees ook" heading={<>Meer <span className="accent-green">inzichten.</span></>} />
+            <SectionHeading id="artikel-gerelateerd" {...t.related} />
             <div className="grid grid--3">
               {related.map((a) => (
                 <ArticleCard key={a.slug} article={a} />
@@ -127,7 +129,7 @@ export default async function ArticleDetailPage({ params }: Props) {
         </section>
       )}
 
-      <CTASection placement={`artikel-${article.slug}`} />
+      <CTASection content={t.cta} placement={`artikel-${article.slug}`} />
     </>
   );
 }

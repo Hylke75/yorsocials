@@ -1,32 +1,31 @@
 import type { Metadata } from 'next';
 import { ButtonLink } from '@/components/Button';
 import { HeroEditorial } from '@/components/HeroEditorial';
-import { media } from '@/content/data/media';
+import { getPages } from '@/content/repository';
+
+const content = getPages().notFound;
 
 export const metadata: Metadata = {
-  title: 'Pagina niet gevonden',
+  title: content.title,
   robots: { index: false, follow: true },
 };
 
 export default function NotFound() {
+  const { hero } = content;
   return (
     <HeroEditorial
-      eyebrow="Deze pagina bestaat niet"
-      heading={
-        <>
-          Oops. <span className="accent-green">404.</span>
-        </>
-      }
-      description="De pagina die je zoekt is niet (meer) beschikbaar. Gelukkig is de weg naar een goed idee nooit ver."
-      image={media.hero}
+      eyebrow={hero.eyebrow}
+      heading={hero.heading}
+      description={hero.description}
+      image={hero.image}
       size="compact"
       actions={
         <>
           <ButtonLink href="/" icon="arrowLeft" iconPosition="start" placement="404-home">
-            Terug naar home
+            {content.homeLabel}
           </ButtonLink>
           <ButtonLink href="/contact" variant="secondary" placement="404-contact">
-            Neem contact op
+            {content.contactLabel}
           </ButtonLink>
         </>
       }

@@ -7,7 +7,7 @@ import { NewsletterPopup } from '@/components/NewsletterPopup';
 import { SiteFooter } from '@/components/SiteFooter';
 import { SiteHeader } from '@/components/SiteHeader';
 import { StagingBanner } from '@/components/StagingBanner';
-import { getSiteSettings } from '@/content/repository';
+import { getGlobalContent, getSiteSettings } from '@/content/repository';
 import { getContentMode, getSiteUrl } from '@/lib/env';
 import { organizationJsonLd } from '@/lib/seo';
 import './globals.css';
@@ -34,6 +34,7 @@ const dmSans = localFont({
 });
 
 const site = getSiteSettings();
+const globalContent = getGlobalContent();
 
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
@@ -57,14 +58,16 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <a href="#inhoud" className="skip-link">
           Direct naar inhoud
         </a>
-        <ConsentProvider>
+        <ConsentProvider texts={{ banner: globalContent.consentBanner, preferences: globalContent.consentPreferences }}>
           <StagingBanner />
           <SiteHeader />
           <main id="inhoud" tabIndex={-1}>
             {children}
           </main>
           <SiteFooter />
-          {site.newsletter && <NewsletterPopup endpoint={site.newsletter.endpoint} slug={site.newsletter.slug} />}
+          {site.newsletter && (
+            <NewsletterPopup endpoint={site.newsletter.endpoint} slug={site.newsletter.slug} content={globalContent.newsletter} />
+          )}
         </ConsentProvider>
         <JsonLd data={organizationJsonLd()} />
       </body>

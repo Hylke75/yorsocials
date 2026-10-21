@@ -1,19 +1,13 @@
+import { globalContent } from '@/content/data/global';
+
 /**
  * Validatie van het contactformulier. Wordt zowel client- als server-side gebruikt,
  * zodat foutmeldingen overal gelijk zijn. De server vertrouwt nooit alleen op de client.
  */
 
-export const CONTACT_TOPICS = [
-  'Social strategie',
-  'Content creatie',
-  'Video & Reels',
-  'Paid social',
-  'Community management',
-  'Analyse & optimalisatie',
-  'Anders',
-] as const;
+/** Onderwerpen komen uit de contentlaag, zodat client en server dezelfde lijst gebruiken. */
+export const CONTACT_TOPICS: readonly string[] = globalContent.contactForm.topics;
 
-export type ContactTopic = (typeof CONTACT_TOPICS)[number];
 
 export interface ContactInput {
   name: string;
@@ -76,7 +70,7 @@ export function validateContact(input: ContactInput): ContactErrors {
     errors.company = `De bedrijfsnaam mag maximaal ${LIMITS.company} tekens bevatten.`;
 
   if (!input.topic) errors.topic = 'Kies waarmee we je kunnen helpen.';
-  else if (!(CONTACT_TOPICS as readonly string[]).includes(input.topic)) errors.topic = 'Kies een onderwerp uit de lijst.';
+  else if (!CONTACT_TOPICS.includes(input.topic)) errors.topic = 'Kies een onderwerp uit de lijst.';
 
   if (!input.message) errors.message = 'Vertel kort over je plannen.';
   else if (input.message.length < LIMITS.messageMin)

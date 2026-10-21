@@ -1,3 +1,4 @@
+import { getGlobalContent } from '@/content/repository';
 import { getContentMode } from '@/lib/env';
 
 /** Zichtbare markering dat de site demo-/placeholdercontent bevat (alleen staging). */
@@ -16,8 +17,7 @@ export function StagingBanner() {
         borderBottom: '1px solid #4a3d18',
       }}
     >
-      <strong>Staging:</strong> deze site bevat voorbeeldcontent (demo-cases en -artikelen) die nog niet geverifieerd is. Niet publiceren
-      zonder akkoord van de opdrachtgever.
+      {getGlobalContent().stagingBanner}
     </div>
   );
 }

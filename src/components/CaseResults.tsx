@@ -6,12 +6,12 @@ import styles from './Blocks.module.css';
  * Toont uitsluitend goedgekeurde resultaten met bron en meetperiode.
  * Zonder geverifieerde cijfers: een eerlijke melding in plaats van verzonnen statistieken.
  */
-export function CaseResults({ results }: { results: CaseResult[] }) {
+export function CaseResults({ results, emptyText }: { results: CaseResult[]; emptyText: string }) {
   const approved = results.filter((r) => r.approved && r.source && r.period);
   if (approved.length === 0) {
     return (
       <Notice>
-        <p>Voor deze case zijn (nog) geen geverifieerde resultaten gepubliceerd. Cijfers worden alleen getoond met bron, meetperiode en akkoord van de klant.</p>
+        <p>{emptyText}</p>
       </Notice>
     );
   }

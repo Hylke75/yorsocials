@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getApprovedResults, getDisplayClientName, getSectorLabel } from '@/content/repository';
+import { getApprovedResults, getDisplayClientName, getGlobalContent, getSectorLabel } from '@/content/repository';
 import type { CaseStudy } from '@/content/types';
 import { DemoBadge } from './DemoBadge';
 import { Icon } from './Icon';
@@ -9,13 +9,14 @@ import styles from './Card.module.css';
 export function CaseCard({ item }: { item: CaseStudy }) {
   const client = getDisplayClientName(item);
   const metrics = getApprovedResults(item).slice(0, 2);
+  const g = getGlobalContent();
   return (
     <article className={styles.card}>
       <MediaImage asset={item.heroImage} decorative sizes="(max-width: 740px) 100vw, 50vw" className={styles.photo} labelPlaceholder={false} />
       <div className={styles.body}>
         <div className={styles.meta}>
           <span className={styles.tag}>{getSectorLabel(item.sector)}</span>
-          {item.status === 'demo' && <DemoBadge>Voorbeeldcase</DemoBadge>}
+          {item.status === 'demo' && <DemoBadge>{g.demoBadge}</DemoBadge>}
         </div>
         {client && <p className={styles.num}>{client}</p>}
         <h3 className={styles.title}>
@@ -38,7 +39,7 @@ export function CaseCard({ item }: { item: CaseStudy }) {
           </ul>
         )}
         <span className={styles.more} aria-hidden="true">
-          Bekijk case <Icon name="arrowUpRight" size={16} />
+          {g.cardLinks.caseStudy} <Icon name="arrowUpRight" size={16} />
         </span>
       </div>
     </article>

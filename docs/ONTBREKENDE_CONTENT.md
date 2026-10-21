@@ -13,7 +13,7 @@ Overzicht van alles wat nog door YorSocials (of een bevoegde partij) moet worden
 | Cases | 3–6 echte cases met schriftelijke toestemming, context, doel, aanpak, beeldmateriaal met toestemming, resultaten met bron + meetperiode, eventueel quote met akkoord. Huidige 4 cases zijn demo. | `src/content/data/cases.ts` | Nee (pagina toont een nette lege toestand) |
 | Artikelen | Redactioneel gecontroleerde artikelen met auteur en publicatiedatum. Huidige 3 zijn voorbeelden. | `src/content/data/articles.ts` | Nee |
 | Team | Echte teamleden: naam, rol, portret, bio, publicatietoestemming. | `team` in `src/content/data/site.ts` | Nee (sectie verborgen zonder team) |
-| Merkverhaal | Echte ontstaansgeschiedenis voor Over ons (nu conceptcopy). | `src/app/over-ons/page.tsx` | Aanbevolen |
+| Merkverhaal | Echte ontstaansgeschiedenis voor Over ons (nu conceptcopy). | `about.story` in `src/content/data/pages.ts` | Aanbevolen |
 | FAQ | Antwoorden zijn neutraal geformuleerd; laten bevestigen. | `faqs` in `src/content/data/site.ts` | Aanbevolen |
 
 ## Bedrijfsgegevens
@@ -40,7 +40,7 @@ Na vaststelling: in `legalPages` (`src/content/data/site.ts`) `status: 'publishe
 
 | Beslissing | Huidige stand | Actie |
 |---|---|---|
-| CMS | Getypte seedbestanden; contentmodel klaar voor CMS (zie [CMS.md](CMS.md)). | Kies Sanity/Directus/anders; koppel `src/content/repository.ts`. |
+| CMS | Link & Lead-CMS (headless) aangemaakt; read-API werkt maar is nog leeg. Alle sitetekst staat gestructureerd in `src/content/data/` (zie [CMS.md](CMS.md)). | Contentmodel in het CMS inrichten en `src/content/repository.ts` laten lezen uit `linkandlead.nl/api/cms/content`. |
 | Bestemming contactformulier | Ondersteund: webhook (CRM/automation, met HMAC-handtekening) of e-mail via Resend. Niet geconfigureerd. | Bestemming kiezen en env-variabelen zetten. **Blokkerend.** |
 | Nieuwsbriefdienst | Gekoppeld aan Mailento (lijst `yorsocials-nieuwsbrief`, double opt-in). | Mailento opnemen in de privacyverklaring als verwerker (verwerkersovereenkomst). |
 | Analytics | GA4 ondersteund, laadt alleen na toestemming. Niet geconfigureerd. | Leverancier kiezen (of geen). Bij een andere leverancier: loader + CSP aanpassen. |

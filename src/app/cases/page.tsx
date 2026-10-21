@@ -8,53 +8,43 @@ import { CTASection } from '@/components/CTASection';
 import { EmptyState } from '@/components/EmptyState';
 import { HeroEditorial } from '@/components/HeroEditorial';
 import { Notice } from '@/components/Notice';
-import { media } from '@/content/data/media';
-import { getCases, getSectors } from '@/content/repository';
+import { getCases, getPages, getSectors } from '@/content/repository';
 import { buildMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = buildMetadata({
-  title: 'Cases',
-  description: 'Bekijk hoe YorSocials merken helpt met strategie, content en campagnes. Filter op sector.',
-  path: '/cases',
-});
+const content = getPages().cases;
+
+export const metadata: Metadata = buildMetadata({ ...content.seo, path: '/cases' });
 
 export default function CasesPage() {
   const cases = getCases();
   const items = cases.map((c) => ({ slug: c.slug, sector: c.sector, card: <CaseCard item={c} /> }));
   const cta = <BookingCTA placement="cases-leeg" variant="secondary" />;
+  const { hero } = content;
 
   return (
     <>
       <HeroEditorial
-        before={<Breadcrumbs items={[{ name: 'Cases', href: '/cases' }]} />}
-        eyebrow="Ons werk"
-        heading={
-          <>
-            Onze <span className="accent-green">cases.</span>
-          </>
-        }
-        description="Werk dat het merkverhaal versterkt en de juiste mensen bereikt. We publiceren alleen cases met toestemming van de klant en controleerbare resultaten."
-        image={media.fitness}
+        before={<Breadcrumbs items={[{ name: content.seo.title, href: '/cases' }]} />}
+        eyebrow={hero.eyebrow}
+        heading={hero.heading}
+        description={hero.description}
+        image={hero.image}
         size="compact"
-        annotation={['Van content', 'naar resultaat.']}
+        annotation={hero.annotation}
       />
 
       <section className="section" aria-labelledby="alle-cases">
         <div className="container">
           <h2 id="alle-cases" className="visually-hidden">
-            Alle cases
+            {content.seo.title}
           </h2>
           {cases.some((c) => c.status === 'demo') && (
             <Notice tone="demo">
-              <p>Conceptportfolio: dit zijn voorbeeldcases zonder echte klanten of resultaten. Merknamen, cijfers en quotes worden pas toegevoegd na toestemming en verificatie.</p>
+              <p>{content.demoNotice}</p>
             </Notice>
           )}
           {cases.length === 0 ? (
-            <EmptyState
-              title="Binnenkort: onze cases"
-              description="We werken aan een selectie cases die we met toestemming van onze klanten kunnen delen. Benieuwd wat we voor jouw merk kunnen doen?"
-              action={cta}
-            />
+            <EmptyState title={content.empty.title} description={content.empty.description} action={cta} />
           ) : (
             <Suspense
               fallback={
@@ -67,16 +57,23 @@ export default function CasesPage() {
                 </ul>
               }
             >
-              <CaseFilter items={items} sectors={getSectors()} emptyAction={cta} />
+              <CaseFilter
+                items={items}
+                sectors={getSectors()}
+                emptyAction={cta}
+                labels={{
+                  filterLabel: content.filterLabel,
+                  allLabel: content.filterAllLabel,
+                  emptyTitle: content.filterEmptyTitle,
+                  emptyDescription: content.filterEmptyDescription,
+                }}
+              />
             </Suspense>
           )}
         </div>
       </section>
 
-      <CTASection
-        placement="cases"
-        eyebrow="Klaar om jouw verhaal te schrijven?"
-      />
+      <CTASection content={content.cta} placement="cases" />
     </>
   );
 }

@@ -1,31 +1,31 @@
 'use client';
 
 import Link from 'next/link';
+import type { GlobalContent } from '@/content/types';
 import { Button } from '../Button';
 import { useConsent } from './ConsentProvider';
 import styles from './Consent.module.css';
 
 /** Eerste-bezoekmelding. Accepteren en weigeren zijn even prominent (geen dark patterns). */
-export function ConsentBanner() {
+export function ConsentBanner({ content: t }: { content: GlobalContent['consentBanner'] }) {
   const { acceptAll, rejectAll, openPreferences } = useConsent();
   return (
     <section className={styles.banner} aria-labelledby="consent-title" data-testid="consent-banner">
       <div>
-        <h2 id="consent-title">Cookies op deze website</h2>
+        <h2 id="consent-title">{t.title}</h2>
         <p>
-          We gebruiken alleen noodzakelijke cookies, tenzij je toestemming geeft voor analytische cookies om de site te verbeteren. Lees meer in ons{' '}
-          <Link href="/cookies">cookiebeleid</Link>.
+          {t.text} <Link href="/cookies">{t.policyLinkLabel}</Link>.
         </p>
       </div>
       <div className={styles.buttons}>
         <Button size="small" variant="secondary" icon={null} onClick={rejectAll}>
-          Alleen noodzakelijk
+          {t.rejectLabel}
         </Button>
         <Button size="small" variant="secondary" icon={null} onClick={acceptAll}>
-          Alles accepteren
+          {t.acceptLabel}
         </Button>
         <button type="button" className={styles.linkButton} onClick={openPreferences}>
-          Instellingen
+          {t.settingsLabel}
         </button>
       </div>
     </section>

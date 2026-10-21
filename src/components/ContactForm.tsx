@@ -13,6 +13,8 @@ import {
   type ContactErrors,
   type ContactField,
 } from '@/lib/validation';
+import type { GlobalContent } from '@/content/types';
+import { AccentText } from './AccentText';
 import { Button } from './Button';
 import { ErrorState } from './ErrorState';
 import { Icon } from './Icon';
@@ -25,24 +27,17 @@ type Status =
   | { kind: 'error'; title: string; message: string };
 
 const FIELD_ORDER: ContactField[] = ['name', 'email', 'company', 'topic', 'message', 'privacy'];
-const FIELD_LABELS: Record<ContactField, string> = {
-  name: 'Naam',
-  email: 'E-mailadres',
-  company: 'Bedrijfsnaam',
-  topic: 'Onderwerp',
-  message: 'Bericht',
-  privacy: 'Privacytoestemming',
-};
+
 
 /**
  * Contactformulier met client- én servervalidatie, honeypot + invultijd als antispam,
  * dubbele-verzendbeveiliging en eerlijke succes-/foutstatussen. Er wordt nooit
  * "verzonden" getoond als de server dat niet heeft bevestigd.
  */
-export function ContactForm({ endpoint = '/api/contact' }: { endpoint?: string }) {
+export function ContactForm({ content: t, endpoint = '/api/contact' }: { content: GlobalContent['contactForm']; endpoint?: string }) {
   const params = useSearchParams();
   const presetTopic = params.get('onderwerp');
-  const initialTopic = presetTopic && (CONTACT_TOPICS as readonly string[]).includes(presetTopic) ? presetTopic : '';
+  const initialTopic = presetTopic && CONTACT_TOPICS.includes(presetTopic) ? presetTopic : '';
 
   const [errors, setErrors] = useState<ContactErrors>({});
   const [status, setStatus] = useState<Status>({ kind: 'idle' });
@@ -159,14 +154,22 @@ export function ContactForm({ endpoint = '/api/contact' }: { endpoint?: string }
       <div className={styles.success} ref={resultRef} tabIndex={-1} role="status" data-testid="contact-success">
         <Icon name="check" size={32} />
         <h2 className="h3" style={{ marginTop: 14 }}>
-          Bedankt, je bericht is verzonden.
+          {t.successTitle}
         </h2>
-        <p>We hebben je aanvraag ontvangen en nemen zo snel mogelijk contact met je op via het opgegeven e-mailadres.</p>
+        <p>{t.successText}</p>
         {status.reference && <p className="muted">Referentie: {status.reference}</p>}
       </div>
     );
   }
 
+  const FIELD_LABELS: Record<ContactField, string> = {
+    name: t.nameLabel,
+    email: t.emailLabel,
+    company: t.companyLabel,
+    topic: t.topicLabel,
+    message: t.messageLabel,
+    privacy: t.privacyLinkLabel,
+  };
   const errorList = FIELD_ORDER.filter((f) => errors[f]);
   const describedBy = (f: ContactField, hint?: string) =>
     [hint, errors[f] ? `${f}-error` : null].filter(Boolean).join(' ') || undefined;
@@ -180,9 +183,9 @@ export function ContactForm({ endpoint = '/api/contact' }: { endpoint?: string }
 
   return (
     <form ref={formRef} className={styles.form} noValidate onSubmit={onSubmit} onInput={onFirstInput} aria-labelledby="form-title" id="formulier">
-      <p className="eyebrow">Stuur een bericht</p>
+      <p className="eyebrow">{t.eyebrow}</p>
       <h2 id="form-title">
-        Laat hier je <span className="accent-green">gegevens achter.</span>
+        <AccentText text={t.heading} />
       </h2>
 
       {showSummary && errorList.length > 0 && (
@@ -217,14 +220,14 @@ export function ContactForm({ endpoint = '/api/contact' }: { endpoint?: string }
       <div className={styles.row}>
         <div className={styles.field}>
           <label className={styles.label} htmlFor="name">
-            Naam <span aria-hidden="true">*</span>
+            {t.nameLabel} <span aria-hidden="true">*</span>
           </label>
           <input id="name" name="name" className={styles.input} autoComplete="name" required maxLength={LIMITS.name} aria-invalid={Boolean(errors.name)} aria-describedby={describedBy('name')} onBlur={() => onBlur('name')} />
           {fieldError('name')}
         </div>
         <div className={styles.field}>
           <label className={styles.label} htmlFor="email">
-            E-mailadres <span aria-hidden="true">*</span>
+            {t.emailLabel} <span aria-hidden="true">*</span>
           </label>
           <input id="email" name="email" type="email" inputMode="email" className={styles.input} autoComplete="email" required maxLength={LIMITS.email} aria-invalid={Boolean(errors.email)} aria-describedby={describedBy('email')} onBlur={() => onBlur('email')} />
           {fieldError('email')}
@@ -233,7 +236,7 @@ export function ContactForm({ endpoint = '/api/contact' }: { endpoint?: string }
 
       <div className={styles.field}>
         <label className={styles.label} htmlFor="company">
-          Bedrijfsnaam <span className={styles.optional}>(optioneel)</span>
+          {t.companyLabel} <span className={styles.optional}>(optioneel)</span>
         </label>
         <input id="company" name="company" className={styles.input} autoComplete="organization" maxLength={LIMITS.company} aria-invalid={Boolean(errors.company)} aria-describedby={describedBy('company')} />
         {fieldError('company')}
@@ -241,13 +244,13 @@ export function ContactForm({ endpoint = '/api/contact' }: { endpoint?: string }
 
       <div className={styles.field}>
         <label className={styles.label} htmlFor="topic">
-          Waarmee kunnen we helpen? <span aria-hidden="true">*</span>
+          {t.topicLabel} <span aria-hidden="true">*</span>
         </label>
         <select id="topic" name="topic" className={styles.input} required defaultValue={initialTopic} aria-invalid={Boolean(errors.topic)} aria-describedby={describedBy('topic')} onBlur={() => onBlur('topic')}>
-          <option value="">Kies een onderwerp</option>
-          {CONTACT_TOPICS.map((t) => (
-            <option key={t} value={t}>
-              {t}
+          <option value="">{t.topicPlaceholder}</option>
+          {CONTACT_TOPICS.map((topic) => (
+            <option key={topic} value={topic}>
+              {topic}
             </option>
           ))}
         </select>
@@ -256,11 +259,11 @@ export function ContactForm({ endpoint = '/api/contact' }: { endpoint?: string }
 
       <div className={styles.field}>
         <label className={styles.label} htmlFor="message">
-          Vertel kort over je plannen <span aria-hidden="true">*</span>
+          {t.messageLabel} <span aria-hidden="true">*</span>
         </label>
         <textarea id="message" name="message" className={styles.input} required minLength={LIMITS.messageMin} maxLength={LIMITS.message} aria-invalid={Boolean(errors.message)} aria-describedby={describedBy('message', 'message-hint')} onBlur={() => onBlur('message')} />
         <p id="message-hint" className={styles.footnote} style={{ marginTop: 6 }}>
-          Minimaal {LIMITS.messageMin} tekens. Deel geen gevoelige persoonsgegevens.
+          {t.messageHint}
         </p>
         {fieldError('message')}
       </div>
@@ -275,7 +278,7 @@ export function ContactForm({ endpoint = '/api/contact' }: { endpoint?: string }
         <div className={styles.checkbox}>
           <input id="privacy" name="privacy" type="checkbox" required aria-invalid={Boolean(errors.privacy)} aria-describedby={describedBy('privacy')} />
           <label htmlFor="privacy">
-            Ik ga akkoord met het verwerken van mijn gegevens voor deze aanvraag, zoals beschreven in de <Link href="/privacy">privacyverklaring</Link>.{' '}
+            {t.privacyLabel} <Link href="/privacy">{t.privacyLinkLabel}</Link>.{' '}
             <span aria-hidden="true">*</span>
           </label>
         </div>
@@ -283,9 +286,9 @@ export function ContactForm({ endpoint = '/api/contact' }: { endpoint?: string }
       </div>
 
       <Button type="submit" fullWidth disabled={status.kind === 'submitting'} aria-disabled={status.kind === 'submitting'} icon={status.kind === 'submitting' ? 'loader' : 'arrowRight'}>
-        {status.kind === 'submitting' ? 'Bezig met verzenden…' : status.kind === 'error' ? 'Opnieuw proberen' : 'Verstuur bericht'}
+        {status.kind === 'submitting' ? 'Bezig met verzenden…' : status.kind === 'error' ? t.retryLabel : t.submitLabel}
       </Button>
-      <p className={styles.footnote}>Velden met * zijn verplicht.</p>
+      <p className={styles.footnote}>{t.footnote}</p>
       <p className="visually-hidden" role="status" aria-live="polite">
         {status.kind === 'submitting' ? 'Bezig met verzenden' : ''}
       </p>

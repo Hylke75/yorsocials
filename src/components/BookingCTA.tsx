@@ -1,4 +1,4 @@
-import { getSiteSettings } from '@/content/repository';
+import { getGlobalContent, getSiteSettings } from '@/content/repository';
 import { ButtonLink } from './Button';
 
 interface BookingCTAProps {
@@ -13,7 +13,7 @@ interface BookingCTAProps {
  * "Plan een kennismaking". Zolang er geen bevestigde boekingslink is (siteSettings.bookingUrl),
  * verwijst de knop naar het contactformulier in plaats van naar een niet-bestaande agenda.
  */
-export function BookingCTA({ placement, label = 'Plan een kennismaking', variant = 'primary', size, className }: BookingCTAProps) {
+export function BookingCTA({ placement, label = getGlobalContent().bookingLabel, variant = 'primary', size, className }: BookingCTAProps) {
   const { bookingUrl } = getSiteSettings();
   if (bookingUrl) {
     return (

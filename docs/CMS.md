@@ -15,6 +15,29 @@ De CMS-keuze is nog niet bevestigd (bouwopdracht: “bijv. Sanity/Directus; keuz
 Omdat navigatie, sitemap, `generateStaticParams`, gerelateerde kaarten en de footer allemaal via de repository
 lopen, verdwijnt een verwijderde of gedepubliceerde case automatisch overal (functioneel ontwerp §6).
 
+## Wat is beheerbaar (stand na stap 1)
+
+Alle zichtbare redactionele tekst komt uit `src/content/data/` — er staat geen paginatekst meer in de
+paginacode. Een unit-test (`tests/unit/noHardcodedCopy.test.ts`) bewaakt dat dat zo blijft.
+
+| Bestand | Inhoud |
+|---|---|
+| `pages.ts` | Per pagina/template: SEO-titel en -omschrijving, hero (eyebrow, kop, intro, beeld, handgeschreven accent), alle sectiekoppen en -intro's, knopteksten, demo-/lege-toestandteksten en het afsluitende CTA-blok. |
+| `global.ts` | Navigatie, afspraak-/berichtknoppen, ticker, kaartlinks, footer (koppen, links, credit), stagingbalk, cookiemelding en -voorkeuren, nieuwsbrief-pop-up, contactformulier (labels, onderwerpen, succesmelding). |
+| `services.ts` | Diensten en de algemene werkwijze. |
+| `cases.ts` | Cases en sectoren (filter). |
+| `articles.ts` | Artikelen (rich text). |
+| `site.ts` | Site-instellingen (contact, socials, afspraaklink, nieuwsbrief, juridische entiteit, standaard-SEO), team, waarden, FAQ, privacy- en cookieteksten. |
+| `media.ts` | Beeldbibliotheek met alt-tekst, focal point en bron. |
+
+**Koppen** gebruiken een mini-opmaak: `*tekst*` = groene accentkleur, een regeleinde = nieuwe regel.
+Bijvoorbeeld `Social die opvalt.\n*Content die blijft.*`. **Plaatshouders** zoals `{count}`, `{sector}`,
+`{name}` worden door de site ingevuld.
+
+**Bewust in de code gebleven:** validatie- en foutmeldingen van formulieren, teksten die alleen voor
+schermlezers zijn (bijv. "opent in nieuw venster", skiplink), het "Placeholder"-label op beelden in staging,
+de interne styleguide en structurele keuzes (welke secties in welke volgorde staan, kleuren, iconenset).
+
 ## Statussen
 
 | Status | Betekenis | Staging | Productie |
@@ -27,7 +50,7 @@ lopen, verdwijnt een verwijderde of gedepubliceerde case automatisch overal (fun
 
 1. Maak in het CMS schema's die 1-op-1 overeenkomen met `src/content/types.ts`.
 2. Importeer de seedcontent: `npm run content:export` schrijft `content-export/seed.ndjson`
-   (één document per regel met `_id` en `_type`). Voor Sanity: `sanity dataset import content-export/seed.ndjson production`.
+   (één document per regel met `_id` en `_type`, inclusief `pageContent.*` per pagina en `globalContent`). Voor Sanity: `sanity dataset import content-export/seed.ndjson production`.
    Voor Directus: lees het NDJSON-bestand in met een klein importscript per collectie.
 3. Vervang de functies in `src/content/repository.ts` door async fetchers die dezelfde types teruggeven, en maak
    de aanroepende pagina's `async` (ze zijn al server components).

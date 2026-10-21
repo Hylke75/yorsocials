@@ -9,12 +9,19 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { articles } from '../src/content/data/articles';
 import { cases, sectors } from '../src/content/data/cases';
 import { services } from '../src/content/data/services';
-import { faqs, legalPages, siteSettings, team } from '../src/content/data/site';
+import { globalContent } from '../src/content/data/global';
+import { pages } from '../src/content/data/pages';
+import { workProcess } from '../src/content/data/services';
+import { faqs, legalPages, siteSettings, team, values } from '../src/content/data/site';
 
 type Doc = { _id: string; _type: string } & Record<string, unknown>;
 
 const docs: Doc[] = [
   { _id: 'siteSettings', _type: 'siteSettings', ...siteSettings },
+  { _id: 'globalContent', _type: 'globalContent', ...globalContent },
+  ...Object.entries(pages).map(([key, page]) => ({ _id: `pageContent.${key}`, _type: 'pageContent', template: key, ...page })),
+  { _id: 'values', _type: 'values', items: values },
+  { _id: 'workProcess', _type: 'workProcess', steps: workProcess },
   ...sectors.map((s) => ({ _id: `sector.${s.id}`, _type: 'sector', ...s })),
   ...services.map((s) => ({ _id: `service.${s.slug}`, _type: 'service', ...s })),
   ...cases.map((c) => ({ _id: `case.${c.slug}`, _type: 'case', ...c })),

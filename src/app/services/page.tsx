@@ -6,48 +6,33 @@ import { HeroEditorial } from '@/components/HeroEditorial';
 import { ProcessTimeline } from '@/components/ProcessTimeline';
 import { SectionHeading } from '@/components/SectionHeading';
 import { ServiceCard } from '@/components/ServiceCard';
-import { media } from '@/content/data/media';
-import { getServices, getWorkProcess } from '@/content/repository';
+import { getPages, getServices, getWorkProcess } from '@/content/repository';
 import { buildMetadata } from '@/lib/seo';
+import { plainText } from '@/lib/text';
 
-export const metadata: Metadata = buildMetadata({
-  title: 'Services',
-  description: 'Social strategie, content creatie, video & Reels, paid social, community management en analyse: de services van YorSocials.',
-  path: '/services',
-});
+const content = getPages().services;
+
+export const metadata: Metadata = buildMetadata({ ...content.seo, path: '/services' });
 
 export default function ServicesPage() {
-  const services = getServices();
+  const { hero } = content;
   return (
     <>
       <HeroEditorial
-        before={<Breadcrumbs items={[{ name: 'Services', href: '/services' }]} />}
-        eyebrow="Wat we doen"
-        heading={
-          <>
-            Onze <span className="accent-green">services.</span>
-          </>
-        }
-        description="Van strategie en productie tot campagnes en optimalisatie. We zetten de juiste disciplines in om jouw merk verder te brengen — alles onder één dak."
-        image={media.hero}
-        annotation={['Strategie. Content.', 'Groei.']}
+        before={<Breadcrumbs items={[{ name: plainText(content.seo.title), href: '/services' }]} />}
+        eyebrow={hero.eyebrow}
+        heading={hero.heading}
+        description={hero.description}
+        image={hero.image}
+        annotation={hero.annotation}
         actions={<BookingCTA placement="services-hero" />}
       />
 
       <section className="section" aria-labelledby="services-overzicht">
         <div className="container">
-          <SectionHeading
-            id="services-overzicht"
-            eyebrow="Onze expertises"
-            heading={
-              <>
-                Creatieve oplossingen voor <span className="accent-green">jouw groei.</span>
-              </>
-            }
-            description="Kies één dienst of combineer er meerdere. Elke dienst is uit te breiden naarmate je merk groeit."
-          />
+          <SectionHeading id="services-overzicht" {...content.overview} />
           <div className="grid grid--3">
-            {services.map((s) => (
+            {getServices().map((s) => (
               <ServiceCard key={s.slug} service={s} />
             ))}
           </div>
@@ -56,29 +41,12 @@ export default function ServicesPage() {
 
       <section className="section section--soft" aria-labelledby="services-werkwijze">
         <div className="container">
-          <SectionHeading
-            id="services-werkwijze"
-            eyebrow="Zo werkt YorSocials"
-            heading={
-              <>
-                Van idee naar <span className="accent-green">impact.</span>
-              </>
-            }
-            description="Een helder proces, een sterk resultaat. Zo gaan we samen aan de slag."
-          />
+          <SectionHeading id="services-werkwijze" {...content.process} />
           <ProcessTimeline steps={getWorkProcess()} showImages />
         </div>
       </section>
 
-      <CTASection
-        placement="services"
-        heading={
-          <>
-            Plan een <span className="accent-green">kennismaking.</span>
-          </>
-        }
-        body="Ontdek wat we voor jouw merk kunnen betekenen. In een vrijblijvende kennismaking bespreken we je doelen, kansen en een passende aanpak."
-      />
+      <CTASection content={content.cta} placement="services" />
     </>
   );
 }

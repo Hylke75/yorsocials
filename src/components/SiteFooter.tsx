@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getServices, getSiteSettings } from '@/content/repository';
+import { getGlobalContent, getServices, getSiteSettings } from '@/content/repository';
 import { getContentMode } from '@/lib/env';
 import { NAV_LINKS } from '@/lib/routes';
 import { BookingCTA } from './BookingCTA';
@@ -13,6 +13,7 @@ export function SiteFooter() {
   const site = getSiteSettings();
   const socials = site.socialLinks.filter((s) => s.verified);
   const year = new Date().getFullYear();
+  const f = getGlobalContent().footer;
   return (
     <footer className={styles.footer}>
       <div className="container">
@@ -36,20 +37,22 @@ export function SiteFooter() {
             )}
           </div>
           <nav aria-label="Footernavigatie">
-            <h2 className={styles.heading}>Navigatie</h2>
+            <h2 className={styles.heading}>{f.navigationHeading}</h2>
             <ul className={styles.links}>
               {NAV_LINKS.map((l) => (
                 <li key={l.href}>
                   <Link href={l.href}>{l.label}</Link>
                 </li>
               ))}
-              <li>
-                <Link href="/faq">FAQ</Link>
-              </li>
+              {f.extraLinks.map((l) => (
+                <li key={l.href}>
+                  <Link href={l.href}>{l.label}</Link>
+                </li>
+              ))}
             </ul>
           </nav>
           <nav aria-label="Diensten">
-            <h2 className={styles.heading}>Services</h2>
+            <h2 className={styles.heading}>{f.servicesHeading}</h2>
             <ul className={styles.links}>
               {getServices().map((s) => (
                 <li key={s.slug}>
@@ -59,7 +62,7 @@ export function SiteFooter() {
             </ul>
           </nav>
           <div>
-            <h2 className={styles.heading}>Samen iets maken?</h2>
+            <h2 className={styles.heading}>{f.ctaHeading}</h2>
             <BookingCTA placement="footer" size="small" />
             {socials.length > 0 && (
               <ul className={styles.links} style={{ marginTop: 16 }} aria-label="Social media">
@@ -78,22 +81,25 @@ export function SiteFooter() {
         <div className={styles.bottom}>
           <p>
             © {year} {site.legalEntity?.name ?? site.name}
-            {getContentMode() === 'staging' && ' — stagingomgeving'}
-            {' · Website door '}
-            <a href="https://linkandlead.nl" className={styles.credit} target="_blank" rel="noopener">
-              Link &amp; Lead
-              <span className="visually-hidden"> (opent in nieuw venster)</span>
-            </a>
+            {getContentMode() === 'staging' && f.stagingSuffix}
+            {f.credit && (
+              <>
+                {` · ${f.credit.prefix} `}
+                <a href={f.credit.url} className={styles.credit} target="_blank" rel="noopener">
+                  {f.credit.name}
+                  <span className="visually-hidden"> (opent in nieuw venster)</span>
+                </a>
+              </>
+            )}
           </p>
           <ul className={styles.links} style={{ display: 'flex', gap: 18, flexWrap: 'wrap' }} aria-label="Juridisch">
+            {f.legalLinks.map((l) => (
+              <li key={l.href}>
+                <Link href={l.href}>{l.label}</Link>
+              </li>
+            ))}
             <li>
-              <Link href="/privacy">Privacy</Link>
-            </li>
-            <li>
-              <Link href="/cookies">Cookies</Link>
-            </li>
-            <li>
-              <CookieSettingsButton className={styles.linkButton} />
+              <CookieSettingsButton className={styles.linkButton}>{f.cookieSettingsLabel}</CookieSettingsButton>
             </li>
           </ul>
         </div>

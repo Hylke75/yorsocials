@@ -210,3 +210,212 @@ export interface MissingContentItem {
   item: string;
   blocking: boolean;
 }
+
+/* ------------------------------------------------------------------------------------------
+ * Paginateksten en terugkerende interfaceteksten.
+ *
+ * Koppen ondersteunen een mini-opmaak: `*tekst*` = accentkleur (groen), een regeleinde (\n)
+ * = nieuwe regel. Zo kan een redacteur de huisstijl-koppen zonder HTML beheren.
+ * ---------------------------------------------------------------------------------------- */
+
+export interface HeroContent {
+  eyebrow: string;
+  heading: string;
+  description?: string;
+  image?: MediaAsset;
+  /** Handgeschreven accent naast de hero (optioneel, puur decoratief). */
+  annotation?: string[];
+}
+
+export interface SectionContent {
+  eyebrow: string;
+  heading: string;
+  description?: string;
+}
+
+export interface CtaContent {
+  eyebrow: string;
+  heading: string;
+  body: string;
+}
+
+export interface EmptyStateContent {
+  title: string;
+  description: string;
+}
+
+export interface StepContent {
+  icon: IconName;
+  title: string;
+  copy: string;
+}
+
+export interface PagesContent {
+  home: {
+    seo: Seo;
+    hero: HeroContent;
+    heroSecondaryCasesLabel: string;
+    heroSecondaryServicesLabel: string;
+    services: SectionContent;
+    /** `{count}` wordt vervangen door het aantal diensten. */
+    allServicesLabel: string;
+    approach: SectionContent & { text: string; image: MediaAsset; buttonLabel: string };
+    process: SectionContent;
+    cases: SectionContent;
+    casesDemoNotice: string;
+    allCasesLabel: string;
+    cta: CtaContent;
+  };
+  services: { seo: Seo; hero: HeroContent; overview: SectionContent; process: SectionContent; cta: CtaContent };
+  serviceDetail: {
+    askQuestionLabel: string;
+    problem: SectionContent;
+    offer: SectionContent & { text: string; buttonLabel: string };
+    process: SectionContent;
+    faq: SectionContent & { allQuestionsLabel: string };
+    articles: SectionContent;
+    otherServices: SectionContent;
+    cta: CtaContent;
+  };
+  cases: {
+    seo: Seo;
+    hero: HeroContent;
+    demoNotice: string;
+    empty: EmptyStateContent;
+    filterLabel: string;
+    filterAllLabel: string;
+    /** `{sector}` wordt vervangen door de sectornaam. */
+    filterEmptyTitle: string;
+    filterEmptyDescription: string;
+    cta: CtaContent;
+  };
+  caseDetail: {
+    demoBadge: string;
+    demoNotice: string;
+    contextEyebrow: string;
+    contextHeading: string;
+    objectiveEyebrow: string;
+    objectiveHeading: string;
+    approach: SectionContent;
+    outputsHeading: string;
+    gallery: SectionContent;
+    results: SectionContent;
+    resultsEmpty: string;
+    relatedServices: SectionContent;
+    backLabel: string;
+    cta: CtaContent;
+  };
+  about: {
+    seo: Seo;
+    hero: HeroContent;
+    story: SectionContent & { text: string; image: MediaAsset };
+    storyDraftNotice: string;
+    values: SectionContent;
+    process: SectionContent;
+    team: SectionContent;
+    teamEmptyNotice: string;
+    cta: CtaContent;
+  };
+  articles: { seo: Seo; hero: HeroContent; demoNotice: string; empty: EmptyStateContent; categoriesLabel: string; cta: CtaContent };
+  articleDetail: {
+    demoBadge: string;
+    demoNotice: string;
+    /** `{name}` en `{role}` worden vervangen. */
+    byline: string;
+    noAuthor: string;
+    notPublished: string;
+    backLabel: string;
+    services: SectionContent;
+    related: SectionContent;
+    cta: CtaContent;
+  };
+  contact: {
+    seo: Seo;
+    hero: HeroContent;
+    intro: SectionContent & { text: string };
+    missingContactNotice: string;
+    emailLabel: string;
+    phoneLabel: string;
+    booking: { title: string; textWithUrl: string; textWithoutUrl: string; buttonLabel: string };
+    expectations: SectionContent;
+    steps: StepContent[];
+  };
+  faq: { seo: Seo; hero: HeroContent; empty: EmptyStateContent; cta: CtaContent };
+  notFound: { title: string; hero: HeroContent; homeLabel: string; contactLabel: string };
+}
+
+export interface GlobalContent {
+  navigation: { href: string; label: string }[];
+  bookingLabel: string;
+  messageLabel: string;
+  ticker: string[];
+  cardLinks: { service: string; caseStudy: string; article: string };
+  /** `{number}` wordt vervangen door het dienstnummer. */
+  serviceNumberLabel: string;
+  demoBadge: string;
+  stagingBanner: string;
+  ctaAnnotation: string[];
+  footer: {
+    navigationHeading: string;
+    servicesHeading: string;
+    ctaHeading: string;
+    extraLinks: { href: string; label: string }[];
+    legalLinks: { href: string; label: string }[];
+    cookieSettingsLabel: string;
+    stagingSuffix: string;
+    credit: { prefix: string; name: string; url: string } | null;
+  };
+  consentBanner: { title: string; text: string; policyLinkLabel: string; acceptLabel: string; rejectLabel: string; settingsLabel: string };
+  consentPreferences: {
+    title: string;
+    /** Kop boven het formulier op /cookies. */
+    pageHeading: string;
+    necessaryLabel: string;
+    necessaryDescription: string;
+    analyticsLabel: string;
+    analyticsDescription: string;
+    marketingLabel: string;
+    marketingDescription: string;
+    saveLabel: string;
+    savedMessage: string;
+    loadingMessage: string;
+    noChoiceMessage: string;
+    /** `{status}` = toegestaan/geweigerd, `{date}` = moment van opslaan. */
+    currentChoiceMessage: string;
+    allowedWord: string;
+    deniedWord: string;
+  };
+  newsletter: {
+    eyebrow: string;
+    heading: string;
+    text: string;
+    emailLabel: string;
+    firstNameLabel: string;
+    consentLabel: string;
+    privacyLinkLabel: string;
+    submitLabel: string;
+    declineLabel: string;
+    successHeading: string;
+    successText: string;
+    closeLabel: string;
+  };
+  contactForm: {
+    eyebrow: string;
+    heading: string;
+    nameLabel: string;
+    emailLabel: string;
+    companyLabel: string;
+    topicLabel: string;
+    topicPlaceholder: string;
+    topics: string[];
+    messageLabel: string;
+    messageHint: string;
+    privacyLabel: string;
+    privacyLinkLabel: string;
+    submitLabel: string;
+    retryLabel: string;
+    footnote: string;
+    successTitle: string;
+    successText: string;
+  };
+}

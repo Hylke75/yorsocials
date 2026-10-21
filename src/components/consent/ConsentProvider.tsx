@@ -12,6 +12,7 @@ import {
   serializeConsent,
   type ConsentState,
 } from '@/lib/consent';
+import type { GlobalContent } from '@/content/types';
 import { ConsentBanner } from './ConsentBanner';
 import { ConsentDialog } from './ConsentDialog';
 
@@ -22,6 +23,12 @@ interface ConsentContextValue {
   acceptAll: () => void;
   rejectAll: () => void;
   openPreferences: () => void;
+  texts: ConsentTexts;
+}
+
+export interface ConsentTexts {
+  banner: GlobalContent['consentBanner'];
+  preferences: GlobalContent['consentPreferences'];
 }
 
 const ConsentContext = createContext<ConsentContextValue | null>(null);
@@ -49,7 +56,7 @@ function clearAnalyticsCookies() {
  * Consentmanager: geen analytics vóór geldige opt-in; toestemming is te wijzigen en in te trekken.
  * De keuze (met versie en tijdstip) staat in een first-party cookie.
  */
-export function ConsentProvider({ children }: { children: ReactNode }) {
+export function ConsentProvider({ children, texts }: { children: ReactNode; texts: ConsentTexts }) {
   const [consent, setConsent] = useState<ConsentState | null | undefined>(undefined);
   const [dialogOpen, setDialogOpen] = useState(false);
   const pathname = usePathname();
@@ -105,14 +112,15 @@ export function ConsentProvider({ children }: { children: ReactNode }) {
       acceptAll: () => save({ analytics: true, marketing: false }),
       rejectAll: () => save({ analytics: false, marketing: false }),
       openPreferences: () => setDialogOpen(true),
+      texts,
     }),
-    [consent, save],
+    [consent, save, texts],
   );
 
   return (
     <ConsentContext.Provider value={value}>
       {children}
-      {consent === null && !dialogOpen && <ConsentBanner />}
+      {consent === null && !dialogOpen && <ConsentBanner content={texts.banner} />}
       <ConsentDialog open={dialogOpen} onClose={() => setDialogOpen(false)} />
       {analyticsAllowed && GA_ID && (
         <>

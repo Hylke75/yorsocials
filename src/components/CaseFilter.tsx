@@ -5,6 +5,7 @@ import { useMemo, type ReactNode } from 'react';
 import type { Sector } from '@/content/types';
 import { track } from '@/lib/analytics';
 import { ALL_SECTORS, parseSectorParam, sectorHref } from '@/lib/caseFilter';
+import { fillTemplate } from '@/lib/text';
 import { EmptyState } from './EmptyState';
 import styles from './CaseFilter.module.css';
 
@@ -19,17 +20,18 @@ interface CaseFilterProps {
   items: FilterableItem[];
   sectors: Sector[];
   emptyAction?: ReactNode;
+  labels: { filterLabel: string; allLabel: string; emptyTitle: string; emptyDescription: string };
 }
 
 /** Sectorfilter met de keuze in de URL (?sector=…), zodat filters deelbaar en terug-navigeerbaar zijn. */
-export function CaseFilter({ items, sectors, emptyAction }: CaseFilterProps) {
+export function CaseFilter({ items, sectors, emptyAction, labels }: CaseFilterProps) {
   const params = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
   const active = parseSectorParam(params.get('sector'), sectors);
 
   const visible = useMemo(() => (active === ALL_SECTORS ? items : items.filter((i) => i.sector === active)), [items, active]);
-  const options = [{ id: ALL_SECTORS, label: 'Alle cases' }, ...sectors];
+  const options = [{ id: ALL_SECTORS, label: labels.allLabel }, ...sectors];
   const activeLabel = options.find((o) => o.id === active)?.label ?? '';
 
   function select(id: string) {
@@ -40,7 +42,7 @@ export function CaseFilter({ items, sectors, emptyAction }: CaseFilterProps) {
   return (
     <div>
       <p className="eyebrow" id="filter-label">
-        Filter op sector
+        {labels.filterLabel}
       </p>
       <div className={styles.filters} role="group" aria-labelledby="filter-label">
         {options.map((o) => (
@@ -63,8 +65,8 @@ export function CaseFilter({ items, sectors, emptyAction }: CaseFilterProps) {
         </ul>
       ) : (
         <EmptyState
-          title={`Nog geen cases in ${activeLabel}`}
-          description="We voegen hier cases toe zodra ze met toestemming van de klant gepubliceerd kunnen worden. Benieuwd wat we voor jouw merk kunnen doen?"
+          title={fillTemplate(labels.emptyTitle, { sector: activeLabel })}
+          description={labels.emptyDescription}
           action={emptyAction}
         />
       )}

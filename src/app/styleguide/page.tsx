@@ -25,7 +25,7 @@ import { ServiceDetailIntro } from '@/components/ServiceDetailIntro';
 import { ToastDemo } from '@/components/styleguide/ToastDemo';
 import { ValuesGrid } from '@/components/ValuesGrid';
 import { media } from '@/content/data/media';
-import { getArticles, getCases, getFaqs, getSectors, getServices, getValues, getWorkProcess } from '@/content/repository';
+import { getArticles, getCases, getFaqs, getGlobalContent, getPages, getSectors, getServices, getValues, getWorkProcess } from '@/content/repository';
 import { getContentMode } from '@/lib/env';
 import { tokens } from '@/styles/tokens';
 
@@ -116,7 +116,7 @@ export default function StyleguidePage() {
         <Notice tone="demo">
           <p>Demo-/placeholdermelding.</p>
         </Notice>
-        <DemoBadge />
+        <DemoBadge>{getGlobalContent().demoBadge}</DemoBadge>
       </Specimen>
 
       <Specimen name="MarqueeTicker" props="items[] · stopt bij prefers-reduced-motion">
@@ -137,18 +137,21 @@ export default function StyleguidePage() {
 
       <Specimen name="CaseCard / CaseFilter" props="items, sectors · URL ?sector= · lege toestand bij Personal brand">
         <Suspense fallback={<LoadingIndicator />}>
-          <CaseFilter items={cases.map((c) => ({ slug: c.slug, sector: c.sector, card: <CaseCard item={c} /> }))} sectors={getSectors()} />
+          <CaseFilter items={cases.map((c) => ({ slug: c.slug, sector: c.sector, card: <CaseCard item={c} /> }))} sectors={getSectors()}
+            labels={{ filterLabel: getPages().cases.filterLabel, allLabel: getPages().cases.filterAllLabel, emptyTitle: getPages().cases.filterEmptyTitle, emptyDescription: getPages().cases.filterEmptyDescription }}
+          />
         </Suspense>
       </Specimen>
 
       <Specimen name="CaseResults (StatBlock)" props="results[] · alleen approved + bron + periode">
-        <CaseResults results={[]} />
+        <CaseResults results={[]} emptyText={getPages().caseDetail.resultsEmpty} />
         <p className="muted" style={{ margin: '20px 0 8px' }}>Variant met goedgekeurde resultaten (FICTIEVE voorbeeldwaarden, alleen voor de styleguide):</p>
         <CaseResults
           results={[
             { metric: 'Voorbeeldmetriek A', value: '00', unit: '%', period: 'Periode X', source: 'Bron Y', approved: true },
             { metric: 'Voorbeeldmetriek B', value: '0,0', unit: 'k', period: 'Periode X', source: 'Bron Y', approved: true },
           ]}
+          emptyText={getPages().caseDetail.resultsEmpty}
         />
       </Specimen>
 

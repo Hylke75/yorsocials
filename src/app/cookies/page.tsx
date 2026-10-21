@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { ConsentPreferences } from '@/components/consent/ConsentPreferences';
 import { LegalPageTemplate } from '@/components/LegalPageTemplate';
-import { getLegalPage } from '@/content/repository';
+import { getGlobalContent, getLegalPage } from '@/content/repository';
 import { buildMetadata } from '@/lib/seo';
 
 const page = getLegalPage('cookies');
@@ -16,7 +16,7 @@ export const metadata: Metadata = buildMetadata({
 export default function CookiesPage() {
   return (
     <LegalPageTemplate page={page}>
-      <h2 id="voorkeuren">Jouw cookievoorkeuren</h2>
+      <h2 id="voorkeuren">{getGlobalContent().consentPreferences.pageHeading}</h2>
       <ConsentPreferences variant="inline" />
     </LegalPageTemplate>
   );

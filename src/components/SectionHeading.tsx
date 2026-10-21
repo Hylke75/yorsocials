@@ -1,9 +1,10 @@
 import type { ReactNode } from 'react';
+import { AccentText } from './AccentText';
 import styles from './SectionHeading.module.css';
 
 interface SectionHeadingProps {
   eyebrow: string;
-  /** Mag spans met accentkleur bevatten. */
+  /** String met mini-opmaak (`*accent*`, \n) of eigen JSX. */
   heading: ReactNode;
   description?: ReactNode;
   alignment?: 'split' | 'center';
@@ -19,7 +20,7 @@ export function SectionHeading({ eyebrow, heading, description, alignment = 'spl
           <p className="eyebrow">{eyebrow}</p>
         </div>
         <Tag id={id} className="h2">
-          {heading}
+          {typeof heading === 'string' ? <AccentText text={heading} /> : heading}
         </Tag>
       </div>
       {description && <p className={styles.description}>{description}</p>}

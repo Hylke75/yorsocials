@@ -1,16 +1,11 @@
+import { globalContent } from '@/content/data/global';
 import { getArticles, getCases, getServices } from '@/content/repository';
 import type { ContentMode } from '@/content/types';
 
 export const STATIC_ROUTES = ['/', '/services', '/cases', '/over-ons', '/artikelen', '/contact', '/faq', '/privacy', '/cookies'] as const;
 
-export const NAV_LINKS = [
-  { href: '/', label: 'Home' },
-  { href: '/services', label: 'Services' },
-  { href: '/cases', label: 'Cases' },
-  { href: '/over-ons', label: 'Over ons' },
-  { href: '/artikelen', label: 'Artikelen' },
-  { href: '/contact', label: 'Contact' },
-] as const;
+/** Hoofdnavigatie; beheerd in de contentlaag (globalContent.navigation). */
+export const NAV_LINKS = globalContent.navigation;
 
 /** Alle routes die in de gegeven contentmodus bestaan (sitemap, tests). */
 export function getAllRoutes(mode?: ContentMode): string[] {

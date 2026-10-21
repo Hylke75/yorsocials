@@ -13,7 +13,8 @@ import { SectionHeading } from '@/components/SectionHeading';
 import { ServiceCard } from '@/components/ServiceCard';
 import { ServiceDetailIntro } from '@/components/ServiceDetailIntro';
 import { ServiceViewTracker } from '@/components/ViewTracker';
-import { getArticlesForService, getOtherServices, getService, getServices } from '@/content/repository';
+import { getArticlesForService, getOtherServices, getPages, getService, getServices } from '@/content/repository';
+import { AccentText } from '@/components/AccentText';
 import { buildMetadata } from '@/lib/seo';
 import styles from './page.module.css';
 
@@ -38,6 +39,7 @@ export default async function ServiceDetailPage({ params }: Props) {
   const articles = getArticlesForService(service.slug).slice(0, 3);
   const contactHref = `/contact?onderwerp=${encodeURIComponent(service.title)}#formulier`;
   const [first, ...rest] = service.title.split(' ');
+  const t = getPages().serviceDetail;
 
   return (
     <>
@@ -46,7 +48,7 @@ export default async function ServiceDetailPage({ params }: Props) {
         before={
           <Breadcrumbs
             items={[
-              { name: 'Services', href: '/services' },
+              { name: getPages().services.seo.title, href: '/services' },
               { name: service.title, href: `/services/${service.slug}` },
             ]}
           />
@@ -68,7 +70,7 @@ export default async function ServiceDetailPage({ params }: Props) {
           <>
             <BookingCTA placement={`service-${service.slug}-hero`} />
             <ButtonLink href={contactHref} variant="secondary" icon="mail" placement={`service-${service.slug}-vraag`}>
-              Stel een vraag
+              {t.askQuestionLabel}
             </ButtonLink>
           </>
         }
@@ -77,9 +79,9 @@ export default async function ServiceDetailPage({ params }: Props) {
       <section className="section" aria-labelledby="herkenning">
         <div className="container split split--top">
           <div>
-            <p className="eyebrow">Herken je dit?</p>
+            <p className="eyebrow">{t.problem.eyebrow}</p>
             <h2 id="herkenning" className="h2">
-              Waar we je <span className="accent-green">mee helpen.</span>
+              <AccentText text={t.problem.heading} />
             </h2>
             <p className="lead">{service.intro}</p>
           </div>
@@ -98,18 +100,14 @@ export default async function ServiceDetailPage({ params }: Props) {
         <div className="container">
           <ServiceDetailIntro
             headingId="aanbod"
-            eyebrow="Wat je kunt verwachten"
-            heading={
-              <>
-                Van plan naar <span className="accent-green">praktijk.</span>
-              </>
-            }
-            text="Geen standaardpakket. We kijken welke onderdelen aansluiten bij jouw doelen en werken vanuit een herkenbare merkidentiteit. Concreet kun je rekenen op:"
+            eyebrow={t.offer.eyebrow}
+            heading={<AccentText text={t.offer.heading} />}
+            text={t.offer.text}
             deliverables={service.deliverables}
             image={service.heroImage}
             actions={
               <ButtonLink href={contactHref} placement={`service-${service.slug}-aanbod`}>
-                Bespreek jouw plannen
+                {t.offer.buttonLabel}
               </ButtonLink>
             }
           />
@@ -118,15 +116,7 @@ export default async function ServiceDetailPage({ params }: Props) {
 
       <section className="section" aria-labelledby="werkwijze">
         <div className="container">
-          <SectionHeading
-            id="werkwijze"
-            eyebrow="Werkwijze"
-            heading={
-              <>
-                Zo pakken we <span className="accent-green">het aan.</span>
-              </>
-            }
-          />
+          <SectionHeading id="werkwijze" {...t.process} />
           <ProcessTimeline steps={service.process} />
         </div>
       </section>
@@ -135,12 +125,12 @@ export default async function ServiceDetailPage({ params }: Props) {
         <section className="section section--soft" aria-labelledby="dienst-faq">
           <div className="container split split--top">
             <div>
-              <p className="eyebrow">Veelgestelde vragen</p>
+              <p className="eyebrow">{t.faq.eyebrow}</p>
               <h2 id="dienst-faq" className="h2">
-                Goed om te <span className="accent-green">weten.</span>
+                <AccentText text={t.faq.heading} />
               </h2>
               <ButtonLink href="/faq" variant="secondary" placement={`service-${service.slug}-faq`}>
-                Alle vragen
+                {t.faq.allQuestionsLabel}
               </ButtonLink>
             </div>
             <AccordionFAQ items={service.faqs} />
@@ -151,15 +141,7 @@ export default async function ServiceDetailPage({ params }: Props) {
       {articles.length > 0 && (
         <section className="section" aria-labelledby="dienst-artikelen">
           <div className="container">
-            <SectionHeading
-              id="dienst-artikelen"
-              eyebrow="Kennis"
-              heading={
-                <>
-                  Lees <span className="accent-green">verder.</span>
-                </>
-              }
-            />
+            <SectionHeading id="dienst-artikelen" {...t.articles} />
             <div className="grid grid--3">
               {articles.map((a) => (
                 <ArticleCard key={a.slug} article={a} />
@@ -171,15 +153,7 @@ export default async function ServiceDetailPage({ params }: Props) {
 
       <section className="section section--soft" aria-labelledby="andere-diensten">
         <div className="container">
-          <SectionHeading
-            id="andere-diensten"
-            eyebrow="Andere expertises"
-            heading={
-              <>
-                Dit kunnen we ook <span className="accent-green">voor je doen.</span>
-              </>
-            }
-          />
+          <SectionHeading id="andere-diensten" {...t.otherServices} />
           <div className="grid grid--3">
             {others.map((s) => (
               <ServiceCard key={s.slug} service={s} />
@@ -188,7 +162,7 @@ export default async function ServiceDetailPage({ params }: Props) {
         </div>
       </section>
 
-      <CTASection placement={`service-${service.slug}`} />
+      <CTASection content={t.cta} placement={`service-${service.slug}`} />
     </>
   );
 }

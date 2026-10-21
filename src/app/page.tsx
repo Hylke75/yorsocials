@@ -10,12 +10,16 @@ import { ProcessTimeline } from '@/components/ProcessTimeline';
 import { SectionHeading } from '@/components/SectionHeading';
 import { ServiceCard } from '@/components/ServiceCard';
 import { FeatureImage } from '@/components/ServiceDetailIntro';
-import { media } from '@/content/data/media';
-import { getCases, getServices, getSiteSettings, getWorkProcess } from '@/content/repository';
+import { AccentText } from '@/components/AccentText';
+import { getCases, getGlobalContent, getPages, getServices, getWorkProcess } from '@/content/repository';
 import { buildMetadata } from '@/lib/seo';
+import { fillTemplate } from '@/lib/text';
+
+const content = getPages().home;
 
 export const metadata: Metadata = buildMetadata({
-  description: getSiteSettings().defaultSeo.description,
+  title: content.seo.title || undefined,
+  description: content.seo.description,
   path: '/',
 });
 
@@ -23,44 +27,30 @@ export default function HomePage() {
   const services = getServices();
   const cases = getCases().slice(0, 2);
   const hasDemoCases = cases.some((c) => c.status === 'demo');
+  const { hero, approach } = content;
 
   return (
     <>
       <HeroEditorial
-        eyebrow="Social-first creative agency"
-        heading={
-          <>
-            Social die opvalt.
-            <br />
-            <span className="accent-green">Content die blijft.</span>
-          </>
-        }
-        description="Strategie, content en campagnes voor merken die willen opvallen. Persoonlijk, creatief en gericht op wat écht telt."
-        image={media.hero}
-        annotation={['Van idee', 'naar impact.']}
+        eyebrow={hero.eyebrow}
+        heading={hero.heading}
+        description={hero.description}
+        image={hero.image}
+        annotation={hero.annotation}
         actions={
           <>
             <BookingCTA placement="home-hero" />
             <ButtonLink href={cases.length > 0 ? '/cases' : '/services'} variant="secondary" icon="play" placement="home-hero-secundair">
-              {cases.length > 0 ? 'Bekijk onze cases' : 'Bekijk onze services'}
+              {cases.length > 0 ? content.heroSecondaryCasesLabel : content.heroSecondaryServicesLabel}
             </ButtonLink>
           </>
         }
       />
-      <MarqueeTicker items={['Strategie', 'Content', 'Campagnes', 'Community', 'Video', 'Analyse']} />
+      <MarqueeTicker items={getGlobalContent().ticker} />
 
       <section className="section" aria-labelledby="home-services">
         <div className="container">
-          <SectionHeading
-            id="home-services"
-            eyebrow="Onze services"
-            heading={
-              <>
-                Alles voor jouw <span className="accent-green">social groei.</span>
-              </>
-            }
-            description="Van het eerste idee tot de laatste optimalisatie: één samenhangende aanpak."
-          />
+          <SectionHeading id="home-services" {...content.services} />
           <div className="grid grid--3">
             {services.slice(0, 3).map((s) => (
               <ServiceCard key={s.slug} service={s} />
@@ -68,7 +58,7 @@ export default function HomePage() {
           </div>
           <div className="actions" style={{ marginTop: 28 }}>
             <ButtonLink href="/services" placement="home-services">
-              Bekijk alle {services.length} diensten
+              {fillTemplate(content.allServicesLabel, { count: services.length })}
             </ButtonLink>
           </div>
         </div>
@@ -77,37 +67,24 @@ export default function HomePage() {
       <section className="section section--soft" aria-labelledby="home-approach">
         <div className="container split">
           <div>
-            <p className="eyebrow">Onze aanpak</p>
+            <p className="eyebrow">{approach.eyebrow}</p>
             <h2 id="home-approach" className="h2">
-              Goede content.
-              <br />
-              <span className="accent-green">Slimme keuzes.</span>
+              <AccentText text={approach.heading} />
             </h2>
-            <p className="lead">
-              We verbinden sterke ideeën aan een heldere strategie. Zo werk je aan herkenning, betrokkenheid en groei — stap voor stap en
-              meetbaar.
-            </p>
+            <p className="lead">{approach.text}</p>
             <div className="actions">
               <ButtonLink href="/over-ons" variant="secondary" placement="home-aanpak">
-                Leer ons kennen
+                {approach.buttonLabel}
               </ButtonLink>
             </div>
           </div>
-          <FeatureImage image={media.shoot} />
+          <FeatureImage image={approach.image} />
         </div>
       </section>
 
       <section className="section" aria-labelledby="home-process">
         <div className="container">
-          <SectionHeading
-            id="home-process"
-            eyebrow="Zo werken we"
-            heading={
-              <>
-                Van idee naar <span className="accent-green">impact.</span>
-              </>
-            }
-          />
+          <SectionHeading id="home-process" {...content.process} />
           <ProcessTimeline steps={getWorkProcess()} />
         </div>
       </section>
@@ -115,18 +92,10 @@ export default function HomePage() {
       {cases.length > 0 && (
         <section className="section section--soft" aria-labelledby="home-cases">
           <div className="container">
-            <SectionHeading
-              id="home-cases"
-              eyebrow="Werk dat raakt"
-              heading={
-                <>
-                  Resultaten beginnen met <span className="accent-green">een goed verhaal.</span>
-                </>
-              }
-            />
+            <SectionHeading id="home-cases" {...content.cases} />
             {hasDemoCases && (
               <Notice tone="demo">
-                <p>Onderstaande cases zijn demonstratievoorbeelden, geen geverifieerde klantcases.</p>
+                <p>{content.casesDemoNotice}</p>
               </Notice>
             )}
             <div className="grid grid--2">
@@ -136,14 +105,14 @@ export default function HomePage() {
             </div>
             <div className="actions" style={{ marginTop: 28 }}>
               <ButtonLink href="/cases" placement="home-cases">
-                Bekijk alle cases
+                {content.allCasesLabel}
               </ButtonLink>
             </div>
           </div>
         </section>
       )}
 
-      <CTASection placement="home" />
+      <CTASection content={content.cta} placement="home" />
     </>
   );
 }

@@ -18,6 +18,8 @@ import {
   validateNewsletter,
   type NewsletterErrors,
 } from '@/lib/newsletter';
+import type { GlobalContent } from '@/content/types';
+import { AccentText } from './AccentText';
 import { Button } from './Button';
 import { useConsent } from './consent/ConsentProvider';
 import { ErrorState } from './ErrorState';
@@ -39,7 +41,7 @@ function remember(value: 'dismissed' | 'subscribed', maxAge: number) {
  * Aanmeldingen gaan vanuit de browser rechtstreeks naar Mailento (double opt-in: de bezoeker
  * krijgt eerst een bevestigingsmail).
  */
-export function NewsletterPopup({ endpoint, slug }: { endpoint: string; slug: string }) {
+export function NewsletterPopup({ endpoint, slug, content: t }: { endpoint: string; slug: string; content: GlobalContent['newsletter'] }) {
   const { consent } = useConsent();
   const pathname = usePathname();
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -151,29 +153,29 @@ export function NewsletterPopup({ endpoint, slug }: { endpoint: string; slug: st
     >
       {open && (
         <div className={styles.inner}>
-          <button type="button" className={styles.close} onClick={dismiss} aria-label="Sluiten">
+          <button type="button" className={styles.close} onClick={dismiss} aria-label={t.closeLabel}>
             <Icon name="close" size={22} />
           </button>
-          <p className="eyebrow">Nieuwsbrief</p>
+          <p className="eyebrow">{t.eyebrow}</p>
           {status.kind === 'success' ? (
             <div role="status">
               <h2 id="nb-title" className={styles.title}>
-                Bijna <span className="accent-green">klaar!</span>
+                <AccentText text={t.successHeading} />
               </h2>
               <p id="nb-text" className={styles.text}>
-                Bevestig je inschrijving via de mail in je inbox. Geen mail gezien? Kijk ook even in je spammap.
+                {t.successText}
               </p>
               <Button type="button" icon={null} onClick={() => setOpen(false)}>
-                Sluiten
+                {t.closeLabel}
               </Button>
             </div>
           ) : (
             <form noValidate onSubmit={onSubmit}>
               <h2 id="nb-title" className={styles.title}>
-                Blijf op de <span className="accent-green">hoogte.</span>
+                <AccentText text={t.heading} />
               </h2>
               <p id="nb-text" className={styles.text}>
-                Wil je praktische tips over social media, content en campagnes in je inbox? Meld je aan voor de nieuwsbrief van YorSocials.
+                {t.text}
               </p>
               {status.kind === 'error' && (
                 <div className={styles.status}>
@@ -181,7 +183,7 @@ export function NewsletterPopup({ endpoint, slug }: { endpoint: string; slug: st
                 </div>
               )}
               <label className={styles.label} htmlFor="nb-email">
-                E-mailadres
+                {t.emailLabel}
               </label>
               <input
                 id="nb-email"
@@ -200,7 +202,7 @@ export function NewsletterPopup({ endpoint, slug }: { endpoint: string; slug: st
                 </p>
               )}
               <label className={styles.label} htmlFor="nb-voornaam" style={{ marginTop: 16 }}>
-                Voornaam <span className={styles.optional}>(optioneel)</span>
+                {t.firstNameLabel} <span className={styles.optional}>(optioneel)</span>
               </label>
               <input id="nb-voornaam" name="voornaam" type="text" autoComplete="given-name" maxLength={80} className={styles.input} />
               <div className={styles.honeypot} aria-hidden="true">
@@ -216,7 +218,7 @@ export function NewsletterPopup({ endpoint, slug }: { endpoint: string; slug: st
                   aria-describedby={errors.consent ? 'nb-consent-error' : undefined}
                 />
                 <label htmlFor="nb-consent">
-                  Ja, stuur mij de nieuwsbrief. Afmelden kan altijd. Lees de <Link href="/privacy">privacyverklaring</Link>.
+                  {t.consentLabel} <Link href="/privacy">{t.privacyLinkLabel}</Link>.
                 </label>
               </div>
               {errors.consent && (
@@ -226,10 +228,10 @@ export function NewsletterPopup({ endpoint, slug }: { endpoint: string; slug: st
               )}
               <div className={styles.actions}>
                 <Button type="submit" disabled={status.kind === 'submitting'} icon={status.kind === 'submitting' ? 'loader' : 'arrowRight'}>
-                  {status.kind === 'submitting' ? 'Bezig met aanmelden…' : 'Aanmelden'}
+                  {status.kind === 'submitting' ? 'Bezig met aanmelden…' : t.submitLabel}
                 </Button>
                 <button type="button" className={styles.decline} onClick={dismiss}>
-                  Nee, bedankt
+                  {t.declineLabel}
                 </button>
               </div>
             </form>

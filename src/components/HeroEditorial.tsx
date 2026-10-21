@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import type { MediaAsset } from '@/content/types';
+import { AccentText } from './AccentText';
 import { Annotation } from './Annotation';
 import { MediaImage } from './MediaImage';
 import styles from './HeroEditorial.module.css';
@@ -29,7 +30,7 @@ export function HeroEditorial({ eyebrow, heading, description, image, actions, a
           {before}
           <p className="eyebrow">{eyebrow}</p>
           <h1 id="page-title" className="h1">
-            {heading}
+            {typeof heading === 'string' ? <AccentText text={heading} /> : heading}
           </h1>
           {description && <p className={styles.description}>{description}</p>}
           {children}

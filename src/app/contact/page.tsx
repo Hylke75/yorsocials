@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
+import { AccentText } from '@/components/AccentText';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { ButtonLink } from '@/components/Button';
 import { ContactForm } from '@/components/ContactForm';
@@ -8,51 +9,39 @@ import { Icon } from '@/components/Icon';
 import { LoadingIndicator } from '@/components/LoadingIndicator';
 import { Notice } from '@/components/Notice';
 import { SectionHeading } from '@/components/SectionHeading';
-import { media } from '@/content/data/media';
-import { getSiteSettings } from '@/content/repository';
+import { getGlobalContent, getPages, getSiteSettings } from '@/content/repository';
 import { getContentMode } from '@/lib/env';
 import { buildMetadata } from '@/lib/seo';
 import styles from './page.module.css';
 
-export const metadata: Metadata = buildMetadata({
-  title: 'Contact',
-  description: 'Vertel ons over je merk en plannen. Neem contact op met YorSocials of plan een kennismaking.',
-  path: '/contact',
-});
+const content = getPages().contact;
 
-const steps = [
-  { icon: 'messages' as const, title: 'Kennismaking', copy: 'We luisteren naar jouw merk, doelen en uitdagingen.' },
-  { icon: 'lightbulb' as const, title: 'Een eerste richting', copy: 'We bespreken kansen en aandachtspunten en geven eerlijk advies.' },
-  { icon: 'strategy' as const, title: 'Een voorstel', copy: 'Als het past, werken we een concrete aanpak voor je uit.' },
-];
+export const metadata: Metadata = buildMetadata({ ...content.seo, path: '/contact' });
 
 export default function ContactPage() {
   const site = getSiteSettings();
   const hasDirect = Boolean(site.email || site.phone);
+  const { hero, intro, booking } = content;
   return (
     <>
       <HeroEditorial
-        before={<Breadcrumbs items={[{ name: 'Contact', href: '/contact' }]} />}
-        eyebrow="Samen aan de slag"
-        heading={
-          <>
-            Let’s <span className="accent-green">talk.</span>
-          </>
-        }
-        description="Vertel ons over je merk en je plannen. We denken graag met je mee over strategie, content en campagnes."
-        image={media.hero}
+        before={<Breadcrumbs items={[{ name: content.seo.title, href: '/contact' }]} />}
+        eyebrow={hero.eyebrow}
+        heading={hero.heading}
+        description={hero.description}
+        image={hero.image}
         size="compact"
-        annotation={['Jouw merk.', 'Onze missie.']}
+        annotation={hero.annotation}
       />
 
       <section className="section" aria-labelledby="direct-contact">
         <div className={`container ${styles.layout}`}>
           <div>
-            <p className="eyebrow">Direct contact</p>
+            <p className="eyebrow">{intro.eyebrow}</p>
             <h2 id="direct-contact" className="h2">
-              Goed idee? <span className="accent-green">Laat van je horen.</span>
+              <AccentText text={intro.heading} />
             </h2>
-            <p className="lead">Vul het formulier in en we nemen contact met je op. Je kunt ook direct een kennismaking inplannen zodra onze agenda online staat.</p>
+            <p className="lead">{intro.text}</p>
 
             {hasDirect ? (
               <ul className={styles.channels}>
@@ -60,7 +49,7 @@ export default function ContactPage() {
                   <li>
                     <Icon name="mail" size={26} />
                     <div>
-                      <strong>E-mail</strong>
+                      <strong>{content.emailLabel}</strong>
                       <a href={`mailto:${site.email}`}>{site.email}</a>
                     </div>
                   </li>
@@ -69,7 +58,7 @@ export default function ContactPage() {
                   <li>
                     <Icon name="messages" size={26} />
                     <div>
-                      <strong>Telefoon</strong>
+                      <strong>{content.phoneLabel}</strong>
                       <a href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a>
                     </div>
                   </li>
@@ -78,7 +67,7 @@ export default function ContactPage() {
             ) : (
               getContentMode() === 'staging' && (
                 <Notice tone="demo">
-                  <p>E-mailadres, telefoonnummer, social-profielen en agenda-URL moeten nog door YorSocials worden bevestigd. Tot die tijd tonen we ze niet.</p>
+                  <p>{content.missingContactNotice}</p>
                 </Notice>
               )
             )}
@@ -86,42 +75,33 @@ export default function ContactPage() {
             <div className={styles.booking}>
               <Icon name="calendar" size={30} />
               <div>
-                <h3 className="h3">Een kennismaking inplannen?</h3>
+                <h3 className="h3">{booking.title}</h3>
                 {site.bookingUrl ? (
                   <>
-                    <p className="muted">Kies zelf een moment dat jou past in onze agenda.</p>
+                    <p className="muted">{booking.textWithUrl}</p>
                     <ButtonLink href={site.bookingUrl} external trackAs="booking" placement="contact-agenda" icon="calendar">
-                      Open de agenda
+                      {booking.buttonLabel}
                     </ButtonLink>
                   </>
                 ) : (
                   <p className="muted" style={{ margin: 0 }}>
-                    Online inplannen is binnenkort mogelijk. Laat via het formulier weten wanneer het je uitkomt, dan stellen we een moment voor.
+                    {booking.textWithoutUrl}
                   </p>
                 )}
               </div>
             </div>
           </div>
-          <Suspense fallback={<LoadingIndicator label="Formulier laden…" />}>
-            <ContactForm />
+          <Suspense fallback={<LoadingIndicator />}>
+            <ContactForm content={getGlobalContent().contactForm} />
           </Suspense>
         </div>
       </section>
 
       <section className="section section--soft" aria-labelledby="verwachtingen">
         <div className="container">
-          <SectionHeading
-            id="verwachtingen"
-            eyebrow="Wat kun je verwachten?"
-            heading={
-              <>
-                Van een goed gesprek naar <span className="accent-green">concrete plannen.</span>
-              </>
-            }
-            description="Een kennismaking is vrijblijvend en bedoeld om elkaar te leren kennen."
-          />
+          <SectionHeading id="verwachtingen" {...content.expectations} />
           <ol className="grid grid--3" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-            {steps.map((s, i) => (
+            {content.steps.map((s, i) => (
               <li key={s.title} className={styles.step}>
                 <span className={styles.stepNum} aria-hidden="true">
                   {String(i + 1).padStart(2, '0')}

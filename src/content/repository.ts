@@ -3,6 +3,8 @@ import { articles } from './data/articles';
 import { cases, sectors } from './data/cases';
 import { services, workProcess } from './data/services';
 import { faqs, legalPages, siteSettings, team, values } from './data/site';
+import { globalContent } from './data/global';
+import { pages } from './data/pages';
 import type { Article, CaseResult, CaseStudy, ContentMode, ContentStatus, LegalPage, Service } from './types';
 
 /**
@@ -17,6 +19,8 @@ export function isVisible(status: ContentStatus, mode: ContentMode = getContentM
 }
 
 export const getSiteSettings = () => siteSettings;
+export const getPages = () => pages;
+export const getGlobalContent = () => globalContent;
 export const getValues = () => values;
 export const getWorkProcess = () => workProcess;
 
