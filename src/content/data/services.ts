@@ -104,7 +104,7 @@ export const services: Service[] = [
       'Je wilt met Reels of TikTok starten, maar weet niet hoe.',
       'Elke video is een los project in plaats van een herkenbaar format.',
     ],
-    heroImage: media.creator,
+    heroImage: media.gimbal,
     deliverables: ['Concept en scripts', 'Short-form video', 'Editing en motion', 'Optimalisatie per platform'],
     process: defaultProcess,
     faqs: [
@@ -237,6 +237,6 @@ export const workProcess: ProcessStep[] = [
   { title: 'Kennismaking', copy: 'We leren jouw merk, doelen en uitdagingen kennen.', image: media.creator },
   { title: 'Strategie', copy: 'We bepalen richting, doelen en een contentplan op maat.', image: media.strategy },
   { title: 'Creatie', copy: 'We maken content die past bij je merk en kanaal.', image: media.shoot },
-  { title: 'Distributie', copy: 'We publiceren organisch en zetten waar zinvol advertenties in.', image: media.hero },
+  { title: 'Distributie', copy: 'We publiceren organisch en zetten waar zinvol advertenties in.', image: media.onSet },
   { title: 'Optimalisatie', copy: 'We meten, leren en verbeteren continu.', image: media.analytics },
 ];

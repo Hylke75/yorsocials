@@ -6,8 +6,8 @@ Productieversie van de publieke YorSocials-website, gebouwd volgens het overdrac
 **Stack:** Next.js 16 (App Router, statische generatie) · TypeScript strict · CSS Modules + design tokens ·
 lokaal gehoste fonts · Vitest · Playwright + axe-core.
 
-> **Status: staging.** De site bevat voorbeeldcontent en placeholderbeelden die nog niet geverifieerd
-> zijn. Zie [`docs/ONTBREKENDE_CONTENT.md`](docs/ONTBREKENDE_CONTENT.md) voor wat er nog nodig is vóór livegang.
+> **Status: staging.** De site bevat voorbeeldcontent (demo-cases en -artikelen) die nog niet geverifieerd
+> is. Beelden zijn stockfoto's van Pexels (zie [`docs/BEELDCREDITS.md`](docs/BEELDCREDITS.md)). Zie [`docs/ONTBREKENDE_CONTENT.md`](docs/ONTBREKENDE_CONTENT.md) voor wat er nog nodig is vóór livegang.
 
 ## Snel starten
 
@@ -57,7 +57,7 @@ src/
   styles/tokens.css       Design tokens (kleur, typografie, spacing, radii, elevation, breakpoints)
   fonts/                  Space Grotesk + DM Sans (woff2, SIL OFL)
 public/brand/             Aangeleverd logo + contrastvariant voor donkere achtergrond
-public/images/demo/       Placeholderbeelden (NIET publicatieklaar)
+public/images/stock/      Stockfoto's van Pexels (Pexels-licentie, zie docs/BEELDCREDITS.md)
 design/                   Overdrachtspakket: referentiebeelden, tokens, componentinventaris, documentatie
 docs/                     Ontbrekende content, routes, CMS, deployment, testresultaten, screenshots
 tests/unit, tests/e2e     Vitest- en Playwright-tests
@@ -68,9 +68,9 @@ tests/unit, tests/e2e     Vitest- en Playwright-tests
 - **Geen verzonnen feiten.** E-mail, telefoon, socials, boekingslink, team, klantnamen, resultaten en quotes
   staan op `null`/leeg en worden dan simpelweg niet getoond. Een unit-test bewaakt dat er geen cijfermatige
   claims in teksten staan en dat resultaten alleen met bron + periode + akkoord verschijnen.
-- **Placeholderbeelden opgeschoond.** De aangeleverde uitsneden bevatten ingebakken verzonnen statistieken
-  (“+278% gemiddelde groei bij onze klanten”), UI-kaarten en een merklogo van derden. Ze zijn bijgesneden/geblurd;
-  twee zijn vervangen door neutrale gegenereerde illustraties. Originelen staan in `design/placeholder-bronnen/`.
+- **Stockfoto's in plaats van mockup-uitsneden.** De aangeleverde uitsneden bevatten ingebakken verzonnen
+  statistieken (“+278% gemiddelde groei bij onze klanten”), UI-kaarten en een merklogo van derden. Ze zijn vervangen
+  door Pexels-foto's zonder merken of cijfers in beeld. Originelen staan alleen ter referentie in `design/placeholder-bronnen/`.
 - **Logo.** Het aangeleverde logo wordt als afbeelding gebruikt (niet nagebouwd). Omdat “YOR” zwart is en op de
   donkere achtergrond onleesbaar wordt, is `public/brand/logo-on-dark.png` afgeleid: alléén de zwarte delen zijn
   naar gebroken wit gezet. **Ter goedkeuring bij de merkeigenaar.**

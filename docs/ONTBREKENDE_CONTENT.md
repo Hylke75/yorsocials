@@ -7,7 +7,7 @@ Overzicht van alles wat nog door YorSocials (of een bevoegde partij) moet worden
 
 | Onderdeel | Wat ontbreekt | Waar invullen | Blokkerend |
 |---|---|---|---|
-| Fotografie | Alle beelden zijn placeholders (bijgesneden AI-mockups of gegenereerde illustraties). Eigen of gelicentieerde fotografie met alt-tekst, focal point en bron/licentie. | `src/content/data/media.ts`, `public/images/` | **Ja** |
+| Fotografie | Nu Pexels-stockfoto's (gelicentieerd, zie [BEELDCREDITS.md](BEELDCREDITS.md)). Eigen fotografie van team, werk en studio maakt de site geloofwaardiger; stockfoto's mogen niet als team- of klantbeeld worden gebruikt. | `src/content/data/media.ts`, `public/images/` | Nee (aanbevolen) |
 | Logo | Akkoord op de contrastvariant `logo-on-dark.png`, of een officiële lichte logo-export. Liefst ook een SVG-versie. | `public/brand/` | **Ja** |
 | Dienstenaanbod | De zes diensten en hun teksten zijn een ontwerpvoorstel. Definitieve propositie, deliverables en werkwijze per dienst bevestigen. | `src/content/data/services.ts` | **Ja** |
 | Cases | 3–6 echte cases met schriftelijke toestemming, context, doel, aanpak, beeldmateriaal met toestemming, resultaten met bron + meetperiode, eventueel quote met akkoord. Huidige 4 cases zijn demo. | `src/content/data/cases.ts` | Nee (pagina toont een nette lege toestand) |

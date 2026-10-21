@@ -11,7 +11,7 @@ Node 22, Chromium (Playwright 1.56).
 | Productiebuild | `npm run build` | ✅ 44 statische pagina's/assets + 1 API-route |
 | E2E desktop (1440×900) + mobiel (Pixel 7) | `npm run test:e2e` | ✅ 92/92 geslaagd |
 | Productiemodus-build | `NEXT_PUBLIC_CONTENT_MODE=production npm run build` | ✅ demo-cases/-artikelen en `/styleguide` geven 404, overzichten tonen lege toestand, sitemap bevat alleen indexeerbare pagina's |
-| Screenshots 375 / 768 / 1440 | `npm run screenshots` | ✅ 18 screenshots in `docs/screenshots/` |
+| Screenshots 375 / 768 / 1440 | `npm run screenshots` | ✅ 18 screenshots in `docs/screenshots/` (met Pexels-stockfoto’s) |
 
 ## Wat de tests dekken
 

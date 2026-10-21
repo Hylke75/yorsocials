@@ -26,7 +26,7 @@ export interface MediaAsset {
   caption?: string;
   /** Herkomst/licentie. Verplicht voor livegang. */
   source: string;
-  /** true = placeholder uit AI-mockup; niet publicatieklaar. */
+  /** true = placeholder zonder publicatielicentie; krijgt in staging een "Placeholder"-label. */
   isPlaceholder: boolean;
   transcript?: string;
 }

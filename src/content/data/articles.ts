@@ -39,7 +39,7 @@ export const articles: Article[] = [
           '.',
         ],
       },
-      { type: 'image', image: { ...media.strategy, caption: 'Placeholderbeeld — vervangen door eigen fotografie.' } },
+      { type: 'image', image: { ...media.strategy, caption: 'Foto: Ketut Subiyanto via Pexels.' } },
     ],
     author: null,
     publishedAt: null,

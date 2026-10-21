@@ -16,7 +16,7 @@ export function StagingBanner() {
         borderBottom: '1px solid #4a3d18',
       }}
     >
-      <strong>Staging:</strong> deze site bevat voorbeeldcontent en placeholderbeelden die nog niet geverifieerd zijn. Niet publiceren
+      <strong>Staging:</strong> deze site bevat voorbeeldcontent (demo-cases en -artikelen) die nog niet geverifieerd is. Niet publiceren
       zonder akkoord van de opdrachtgever.
     </div>
   );
