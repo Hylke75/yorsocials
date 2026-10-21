@@ -12,7 +12,7 @@ Zie [`.env.example`](../.env.example).
 
 | Variabele | Verplicht | Toelichting |
 |---|---|---|
-| `NEXT_PUBLIC_SITE_URL` | ja | Basis-URL voor canonicals, sitemap en OG. |
+| `NEXT_PUBLIC_SITE_URL` | aanbevolen | Basis-URL voor canonicals, sitemap en OG. Leeg op Vercel → het productiedomein van het project (`VERCEL_PROJECT_PRODUCTION_URL`). Zet hem zodra www.yorsocials.nl gekoppeld is. |
 | `NEXT_PUBLIC_CONTENT_MODE` | ja | `staging` of `production` (build-time). |
 | `CONTACT_WEBHOOK_URL` | één van beide | POST JSON naar CRM/automation. Verwacht 2xx. Retry bij 5xx/429/netwerkfout. |
 | `CONTACT_WEBHOOK_SECRET` | aanbevolen | HMAC-SHA256 van de body in header `x-yorsocials-signature`. |

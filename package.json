@@ -17,7 +17,7 @@
     "content:export": "tsx scripts/export-seed.ts"
   },
   "engines": {
-    "node": ">=20.9"
+    "node": "22.x"
   },
   "dependencies": {
     "lucide-react": "^0.577.0",
