@@ -43,7 +43,7 @@ Na vaststelling: in `legalPages` (`src/content/data/site.ts`) `status: 'publishe
 | CMS | Link & Lead-CMS (headless) aangemaakt; read-API werkt maar is nog leeg. Alle sitetekst staat gestructureerd in `src/content/data/` (zie [CMS.md](CMS.md)). | Contentmodel in het CMS inrichten en `src/content/repository.ts` laten lezen uit `linkandlead.nl/api/cms/content`. |
 | Bestemming contactformulier | Ondersteund: webhook (CRM/automation, met HMAC-handtekening) of e-mail via Resend. Niet geconfigureerd. | Bestemming kiezen en env-variabelen zetten. **Blokkerend.** |
 | Nieuwsbriefdienst | Gekoppeld aan Mailento (lijst `yorsocials-nieuwsbrief`, double opt-in). | Mailento opnemen in de privacyverklaring als verwerker (verwerkersovereenkomst). |
-| Analytics | GA4 ondersteund, laadt alleen na toestemming. Niet geconfigureerd. | Leverancier kiezen (of geen). Bij een andere leverancier: loader + CSP aanpassen. |
-| Hosting | Nog niet gekozen; zie [DEPLOYMENT.md](DEPLOYMENT.md). | Kiezen. Bij meerdere serverinstanties: gedeelde rate-limitstore. |
+| Analytics | Cookieloos via Plausible ondersteund (geen cookiemelding nodig). Niet geconfigureerd. | Plausible-domein instellen als `NEXT_PUBLIC_PLAUSIBLE_DOMAIN`, of geen analytics. |
+| Hosting | Vercel (project `yorsocials`, team Hylke's projects). | Na merge productiebranch op `main` zetten; www.yorsocials.nl koppelen. |
 | Domein | `NEXT_PUBLIC_SITE_URL` voorbeeld `https://www.yorsocials.nl` (niet bevestigd). | Bevestigen. |
 | Contentredacteur en beheerproces | Onbekend. | Beleggen. |
