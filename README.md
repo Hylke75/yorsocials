@@ -93,6 +93,7 @@ tests/unit, tests/e2e     Vitest- en Playwright-tests
 - [Ontbrekende content en open beslissingen](docs/ONTBREKENDE_CONTENT.md)
 - [Route-overzicht](docs/ROUTES.md)
 - [Contentmodel, CMS-koppeling en migratie](docs/CMS.md)
+- [Verzoek aan de CMS-bouwer](docs/CMS-VERZOEK.md)
 - [Deployment en omgevingsvariabelen](docs/DEPLOYMENT.md)
 - [Testresultaten](docs/TESTRESULTATEN.md)
 - Screenshots: [`docs/screenshots/`](docs/screenshots/) — vergelijk met [`design/referenties/`](design/referenties/)
