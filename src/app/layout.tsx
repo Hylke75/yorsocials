@@ -64,7 +64,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             {children}
           </main>
           <SiteFooter />
-          <NewsletterPopup />
+          {site.newsletter && <NewsletterPopup endpoint={site.newsletter.endpoint} slug={site.newsletter.slug} />}
         </ConsentProvider>
         <JsonLd data={organizationJsonLd()} />
       </body>

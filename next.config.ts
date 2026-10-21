@@ -10,13 +10,16 @@ const analyticsConnect = analyticsEnabled
   ? ' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com'
   : '';
 
+// Nieuwsbriefaanmeldingen gaan vanuit de browser rechtstreeks naar Mailento.
+const newsletterConnect = ' https://gfnxbkketubsevavlegj.supabase.co';
+
 const csp = [
   "default-src 'self'",
   `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''}${analyticsScript}`,
   "style-src 'self' 'unsafe-inline'",
   `img-src 'self' blob: data:${analyticsEnabled ? ' https://www.google-analytics.com https://www.googletagmanager.com' : ''}`,
   "font-src 'self'",
-  `connect-src 'self'${analyticsConnect}`,
+  `connect-src 'self'${newsletterConnect}${analyticsConnect}`,
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",

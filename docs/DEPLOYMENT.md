@@ -17,7 +17,6 @@ Zie [`.env.example`](../.env.example).
 | `CONTACT_WEBHOOK_URL` | één van beide | POST JSON naar CRM/automation. Verwacht 2xx. Retry bij 5xx/429/netwerkfout. |
 | `CONTACT_WEBHOOK_SECRET` | aanbevolen | HMAC-SHA256 van de body in header `x-yorsocials-signature`. |
 | `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL` | één van beide | E-maillevering via Resend; afzenderdomein moet geverifieerd zijn. |
-| `NEWSLETTER_WEBHOOK_URL` (+ `NEWSLETTER_WEBHOOK_SECRET`) of `RESEND_AUDIENCE_ID` | nee | Bestemming voor nieuwsbriefaanmeldingen. Zonder: pop-up meldt dat aanmelden niet gelukt is. |
 | `NEXT_PUBLIC_GA_MEASUREMENT_ID` | nee | GA4; laadt alleen na analytics-toestemming en opent de CSP voor Google-domeinen. |
 
 Zonder contactbestemming retourneert `/api/contact` een 503 en ziet de bezoeker dat het bericht **niet** is verzonden.

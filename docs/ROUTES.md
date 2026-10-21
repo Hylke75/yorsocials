@@ -29,7 +29,6 @@ Alle routes zijn echte, server-gerenderde/statisch gegenereerde URL's (geen hash
 
 | Route | Doel |
 |---|---|
-| `POST /api/newsletter` | Nieuwsbriefaanmelding: validatie, antispam, rate limit, levering via webhook of Resend-audience |
 | `POST /api/contact` | Contactformulier: validatie, antispam, rate limit, levering via webhook of e-mail |
 | `/sitemap.xml` | Alleen indexeerbare pagina's |
 | `/robots.txt` | Staging: alles geblokkeerd. Productie: alles behalve `/api/` en `/styleguide` |

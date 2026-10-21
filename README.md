@@ -82,9 +82,9 @@ tests/unit, tests/e2e     Vitest- en Playwright-tests
 - **Consent.** Geen analytics vóór opt-in. Accepteren en weigeren zijn even prominent, keuze is wijzigbaar via de
   footer en `/cookies`, met versie + tijdstip in een first-party cookie. Intrekken verwijdert GA-cookies.
 - **Nieuwsbrief-pop-up.** Verschijnt 3 seconden na het laden (pas nádat de cookiekeuze is gemaakt), niet op
-  `/privacy` en `/cookies`, en wordt na sluiten 30 dagen / na aanmelden een jaar niet meer getoond. Aanmeldingen gaan via
-  `POST /api/newsletter` naar een webhook of een Resend-audience; zonder bestemming meldt de pop-up eerlijk dat
-  aanmelden niet gelukt is.
+  `/privacy` en `/cookies`, en wordt na sluiten 30 dagen / na aanmelden een jaar niet meer getoond. Aanmeldingen gaan vanuit
+  de browser rechtstreeks naar Mailento (`siteSettings.newsletter`: endpoint + slug `yorsocials-nieuwsbrief`), met
+  honeypot, invultijd (`duur_ms`) en utm-herkomst. Mailento stuurt een bevestigingsmail (double opt-in).
 - **Componentenbibliotheek.** `/styleguide` (alleen staging) toont alle componenten met varianten en toestanden,
   als lichtgewicht equivalent van Storybook.
 

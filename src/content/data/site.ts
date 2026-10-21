@@ -14,6 +14,10 @@ export const siteSettings: SiteSettings = {
   email: null,
   phone: null,
   bookingUrl: null,
+  newsletter: {
+    endpoint: 'https://gfnxbkketubsevavlegj.supabase.co/functions/v1/aanmelden',
+    slug: 'yorsocials-nieuwsbrief',
+  },
   legalEntity: null,
   defaultSeo: {
     title: 'YorSocials — Social die opvalt. Content die blijft.',
@@ -96,7 +100,7 @@ export const legalPages: LegalPage[] = [
         heading: 'Welke gegevens verwerken we?',
         body: [
           'Via het contactformulier: naam, e-mailadres, (optioneel) bedrijfsnaam, het gekozen onderwerp en je bericht.',
-          'Via de nieuwsbriefaanmelding: je e-mailadres en je toestemming om de nieuwsbrief te ontvangen.',
+          'Via de nieuwsbriefaanmelding: je e-mailadres, optioneel je voornaam en (indien aanwezig) de campagnebron waarmee je op de site kwam. Deze gegevens worden verwerkt door onze nieuwsbriefdienst Mailento. Je ontvangt eerst een bevestigingsmail; pas na bevestiging ben je ingeschreven. Afmelden kan altijd via de link in elke nieuwsbrief.',
           '[Aanvullen met alle andere daadwerkelijke verwerkingen, zoals analytics na toestemming.]',
         ],
       },

@@ -9,8 +9,12 @@ import {
   NEWSLETTER_DELAY_MS,
   NEWSLETTER_DISMISS_SECONDS,
   NEWSLETTER_SUBSCRIBED_SECONDS,
+  buildSignupPayload,
+  interpretSignupResponse,
   normalizeNewsletterInput,
+  rememberUtm,
   shouldShowNewsletter,
+  storedUtm,
   validateNewsletter,
   type NewsletterErrors,
 } from '@/lib/newsletter';
@@ -31,8 +35,11 @@ function remember(value: 'dismissed' | 'subscribed', maxAge: number) {
  * Nieuwsbrief-pop-up: verschijnt 3 seconden na het laden, pas nadat de cookiekeuze is gemaakt
  * (zodat de twee niet over elkaar heen vallen), en daarna niet opnieuw zodra iemand sluit of zich aanmeldt.
  * Native <dialog>: focus-trap, Escape en focusherstel regelt de browser.
+ *
+ * Aanmeldingen gaan vanuit de browser rechtstreeks naar Mailento (double opt-in: de bezoeker
+ * krijgt eerst een bevestigingsmail).
  */
-export function NewsletterPopup({ endpoint = '/api/newsletter' }: { endpoint?: string }) {
+export function NewsletterPopup({ endpoint, slug }: { endpoint: string; slug: string }) {
   const { consent } = useConsent();
   const pathname = usePathname();
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -43,6 +50,10 @@ export function NewsletterPopup({ endpoint = '/api/newsletter' }: { endpoint?: s
   const [status, setStatus] = useState<Status>({ kind: 'idle' });
 
   const consentDecided = consent !== undefined && consent !== null;
+
+  useEffect(() => {
+    rememberUtm(window.location.search);
+  }, []);
 
   useEffect(() => {
     if (!consentDecided || scheduled.current) return;
@@ -78,31 +89,45 @@ export function NewsletterPopup({ endpoint = '/api/newsletter' }: { endpoint?: s
     e.preventDefault();
     if (status.kind === 'submitting') return;
     const fd = new FormData(e.currentTarget);
-    const raw = { email: fd.get('email'), consent: fd.get('consent') === 'on', website: fd.get('website'), startedAt: openedAt.current };
-    const clientErrors = validateNewsletter(normalizeNewsletterInput(raw));
+    const input = normalizeNewsletterInput({ email: fd.get('email'), firstName: fd.get('voornaam'), consent: fd.get('consent') === 'on' });
+    const clientErrors = validateNewsletter(input);
     setErrors(clientErrors);
     if (Object.keys(clientErrors).length > 0) {
-      const first = clientErrors.email ? 'nb-email' : 'nb-consent';
-      document.getElementById(first)?.focus();
+      document.getElementById(clientErrors.email ? 'nb-email' : 'nb-consent')?.focus();
       return;
     }
     setStatus({ kind: 'submitting' });
+    const payload = buildSignupPayload(input, {
+      slug,
+      honeypot: String(fd.get('website') ?? ''),
+      // Tijd sinds het laden van de pagina; Mailento negeert alles onder 2,5 s als bot.
+      durationMs: performance.now(),
+      utm: storedUtm(),
+    });
     try {
-      const res = await fetch(endpoint, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(raw) });
-      const data = (await res.json().catch(() => ({}))) as { status?: string; message?: string; errors?: NewsletterErrors; code?: string };
-      if (res.ok && data.status === 'subscribed') {
+      const res = await fetch(endpoint, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) });
+      const data = (await res.json().catch(() => null)) as { status?: string; fout?: string } | null;
+      const outcome = interpretSignupResponse(res.status, data);
+      if (outcome.kind === 'success') {
         remember('subscribed', NEWSLETTER_SUBSCRIBED_SECONDS);
         setStatus({ kind: 'success' });
         track('newsletter_signup_success');
         return;
       }
-      if (res.status === 422 && data.errors) {
-        setErrors(data.errors);
+      track('newsletter_signup_error', { error: outcome.kind });
+      if (outcome.kind === 'invalid') {
+        setErrors({ email: outcome.message });
         setStatus({ kind: 'idle' });
+        document.getElementById('nb-email')?.focus();
         return;
       }
-      track('newsletter_signup_error', { error: data.code ?? String(res.status) });
-      setStatus({ kind: 'error', message: data.message ?? 'Aanmelden is niet gelukt. Probeer het later opnieuw.' });
+      setStatus({
+        kind: 'error',
+        message:
+          outcome.kind === 'rate_limited'
+            ? 'Te veel pogingen. Je bent níet aangemeld; probeer het later opnieuw.'
+            : 'Er ging iets mis. Je bent níet aangemeld; probeer het opnieuw.',
+      });
     } catch {
       track('newsletter_signup_error', { error: 'network' });
       setStatus({ kind: 'error', message: 'Geen verbinding. Je bent níet aangemeld; probeer het later opnieuw.' });
@@ -133,10 +158,10 @@ export function NewsletterPopup({ endpoint = '/api/newsletter' }: { endpoint?: s
           {status.kind === 'success' ? (
             <div role="status">
               <h2 id="nb-title" className={styles.title}>
-                Je bent <span className="accent-green">aangemeld.</span>
+                Bijna <span className="accent-green">klaar!</span>
               </h2>
               <p id="nb-text" className={styles.text}>
-                Bedankt! Je ontvangt onze nieuwsbrief op het opgegeven e-mailadres. Afmelden kan altijd via de link onderaan elke mail.
+                Bevestig je inschrijving via de mail in je inbox. Geen mail gezien? Kijk ook even in je spammap.
               </p>
               <Button type="button" icon={null} onClick={() => setOpen(false)}>
                 Sluiten
@@ -174,6 +199,10 @@ export function NewsletterPopup({ endpoint = '/api/newsletter' }: { endpoint?: s
                   {errors.email}
                 </p>
               )}
+              <label className={styles.label} htmlFor="nb-voornaam" style={{ marginTop: 16 }}>
+                Voornaam <span className={styles.optional}>(optioneel)</span>
+              </label>
+              <input id="nb-voornaam" name="voornaam" type="text" autoComplete="given-name" maxLength={80} className={styles.input} />
               <div className={styles.honeypot} aria-hidden="true">
                 <label htmlFor="nb-website">Website</label>
                 <input id="nb-website" name="website" type="text" tabIndex={-1} autoComplete="off" />

@@ -52,6 +52,8 @@ export interface SiteSettings {
   phone: string | null;
   /** Echte boekingslink (Calendly/Cal.com e.d.). Null = afspraak-CTA verwijst naar het formulier. */
   bookingUrl: string | null;
+  /** Nieuwsbriefdienst (Mailento): openbaar aanmeld-endpoint + lijst-slug. Null = pop-up uit. */
+  newsletter: { endpoint: string; slug: string } | null;
   legalEntity: { name: string; kvk: string; address: string } | null;
   defaultSeo: Seo;
 }

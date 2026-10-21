@@ -55,24 +55,52 @@ test('validatie: e-mailadres en toestemming verplicht', async ({ page, context, 
   await expect(page.getByLabel('E-mailadres')).toBeFocused();
 });
 
-test('succesvolle aanmelding (gemockte server)', async ({ page, context, baseURL }) => {
+const MAILENTO = 'https://gfnxbkketubsevavlegj.supabase.co/functions/v1/aanmelden';
+
+test('succesvolle aanmelding stuurt het juiste bericht naar Mailento', async ({ page, context, baseURL }) => {
   await consentOnly(context, baseURL!);
-  await page.route('/api/newsletter', (r) => r.fulfill({ status: 200, json: { status: 'subscribed' } }));
-  await page.goto('/');
-  await page.getByLabel('E-mailadres').fill('lezer@voorbeeld.nl', { timeout: 5000 });
+  let sent: Record<string, unknown> | null = null;
+  await page.route(MAILENTO, async (r) => {
+    sent = r.request().postDataJSON();
+    await r.fulfill({ status: 200, json: { status: 'ok', tekst: 'Bevestigingsmail verstuurd' } });
+  });
+  await page.goto('/?utm_source=instagram&utm_campaign=najaar');
+  await page.getByLabel('E-mailadres').fill('Lezer@Voorbeeld.nl', { timeout: 5000 });
+  await page.getByLabel(/Voornaam/).fill('Sam');
   await page.getByLabel(/stuur mij de nieuwsbrief/).check();
   await page.getByRole('button', { name: 'Aanmelden' }).click();
-  await expect(page.getByRole('heading', { name: /Je bent aangemeld/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /Bijna klaar/ })).toBeVisible();
+  await expect(page.getByText(/Bevestig je inschrijving via de mail/)).toBeVisible();
+  expect(sent).toMatchObject({
+    actie: 'aanmelden',
+    slug: 'yorsocials-nieuwsbrief',
+    email: 'lezer@voorbeeld.nl',
+    voornaam: 'Sam',
+    website: '',
+    utm: { utm_source: 'instagram', utm_campaign: 'najaar' },
+  });
+  expect((sent as unknown as { duur_ms: number }).duur_ms).toBeGreaterThan(2500);
 });
 
-test('echte API zonder bestemming: eerlijke foutmelding', async ({ page, context, baseURL }) => {
+test('"ongeldig" van Mailento toont de foutmelding bij het e-mailveld', async ({ page, context, baseURL }) => {
   await consentOnly(context, baseURL!);
+  await page.route(MAILENTO, (r) => r.fulfill({ status: 200, json: { status: 'ongeldig', fout: 'Dit e-mailadres bestaat niet.' } }));
   await page.goto('/');
   await page.getByLabel('E-mailadres').fill('lezer@voorbeeld.nl', { timeout: 5000 });
   await page.getByLabel(/stuur mij de nieuwsbrief/).check();
-  await page.waitForTimeout(1300); // boven de antispamdrempel
   await page.getByRole('button', { name: 'Aanmelden' }).click();
-  await expect(page.getByText(/Je bent níet aangemeld/)).toBeVisible();
+  await expect(page.getByText('Dit e-mailadres bestaat niet.')).toBeVisible();
+  await expect(page.getByLabel('E-mailadres')).toHaveAttribute('aria-invalid', 'true');
+});
+
+test('"te_vaak" (429) toont een eerlijke melding', async ({ page, context, baseURL }) => {
+  await consentOnly(context, baseURL!);
+  await page.route(MAILENTO, (r) => r.fulfill({ status: 429, json: { status: 'te_vaak' } }));
+  await page.goto('/');
+  await page.getByLabel('E-mailadres').fill('lezer@voorbeeld.nl', { timeout: 5000 });
+  await page.getByLabel(/stuur mij de nieuwsbrief/).check();
+  await page.getByRole('button', { name: 'Aanmelden' }).click();
+  await expect(page.getByText(/Te veel pogingen. Je bent níet aangemeld/)).toBeVisible();
 });
 
 test('niet op de juridische pagina’s', async ({ page, context, baseURL }) => {
