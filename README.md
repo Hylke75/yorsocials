@@ -81,6 +81,10 @@ tests/unit, tests/e2e     Vitest- en Playwright-tests
   Zonder geconfigureerde bestemming antwoordt de API eerlijk met 503 (“niet verzonden”) — nooit een nep-succes.
 - **Consent.** Geen analytics vóór opt-in. Accepteren en weigeren zijn even prominent, keuze is wijzigbaar via de
   footer en `/cookies`, met versie + tijdstip in een first-party cookie. Intrekken verwijdert GA-cookies.
+- **Nieuwsbrief-pop-up.** Verschijnt 3 seconden na het laden (pas nádat de cookiekeuze is gemaakt), niet op
+  `/privacy` en `/cookies`, en wordt na sluiten 30 dagen / na aanmelden een jaar niet meer getoond. Aanmeldingen gaan via
+  `POST /api/newsletter` naar een webhook of een Resend-audience; zonder bestemming meldt de pop-up eerlijk dat
+  aanmelden niet gelukt is.
 - **Componentenbibliotheek.** `/styleguide` (alleen staging) toont alle componenten met varianten en toestanden,
   als lichtgewicht equivalent van Storybook.
 

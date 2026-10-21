@@ -1,6 +1,11 @@
 import { expect, test } from '@playwright/test';
 import { analyticsLog } from './helpers';
 
+// Nieuwsbrief-pop-up onderdrukken; die heeft een eigen spec.
+test.beforeEach(async ({ context, baseURL }) => {
+  await context.addCookies([{ name: 'ys_newsletter', value: 'dismissed', url: baseURL! }]);
+});
+
 test('banner verschijnt en er worden geen events verstuurd vóór toestemming', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByTestId('consent-banner')).toBeVisible();

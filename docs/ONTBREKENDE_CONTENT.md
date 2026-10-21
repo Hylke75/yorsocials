@@ -42,6 +42,7 @@ Na vaststelling: in `legalPages` (`src/content/data/site.ts`) `status: 'publishe
 |---|---|---|
 | CMS | Getypte seedbestanden; contentmodel klaar voor CMS (zie [CMS.md](CMS.md)). | Kies Sanity/Directus/anders; koppel `src/content/repository.ts`. |
 | Bestemming contactformulier | Ondersteund: webhook (CRM/automation, met HMAC-handtekening) of e-mail via Resend. Niet geconfigureerd. | Bestemming kiezen en env-variabelen zetten. **Blokkerend.** |
+| Nieuwsbriefdienst | Pop-up en `/api/newsletter` staan klaar (webhook of Resend-audience). Niet geconfigureerd; ook nog geen afmeldproces/verzendtool gekozen. | Dienst kiezen (bijv. Resend, Mailchimp, Laposta) en env-variabelen zetten; overweeg double opt-in. |
 | Analytics | GA4 ondersteund, laadt alleen na toestemming. Niet geconfigureerd. | Leverancier kiezen (of geen). Bij een andere leverancier: loader + CSP aanpassen. |
 | Hosting | Nog niet gekozen; zie [DEPLOYMENT.md](DEPLOYMENT.md). | Kiezen. Bij meerdere serverinstanties: gedeelde rate-limitstore. |
 | Domein | `NEXT_PUBLIC_SITE_URL` voorbeeld `https://www.yorsocials.nl` (niet bevestigd). | Bevestigen. |

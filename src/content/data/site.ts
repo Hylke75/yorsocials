@@ -96,6 +96,7 @@ export const legalPages: LegalPage[] = [
         heading: 'Welke gegevens verwerken we?',
         body: [
           'Via het contactformulier: naam, e-mailadres, (optioneel) bedrijfsnaam, het gekozen onderwerp en je bericht.',
+          'Via de nieuwsbriefaanmelding: je e-mailadres en je toestemming om de nieuwsbrief te ontvangen.',
           '[Aanvullen met alle andere daadwerkelijke verwerkingen, zoals analytics na toestemming.]',
         ],
       },
@@ -120,6 +121,7 @@ export const legalPages: LegalPage[] = [
         heading: 'Noodzakelijke cookies',
         body: [
           'We slaan je cookievoorkeur op in een functionele cookie (ys_consent), zodat we je keuze kunnen respecteren. Deze cookie bevat geen persoonsgegevens en is 6 maanden geldig.',
+          'Als je de nieuwsbrief-pop-up sluit of je aanmeldt, onthouden we dat in een functionele cookie (ys_newsletter), zodat je de pop-up niet steeds opnieuw ziet. Deze cookie bevat geen persoonsgegevens en is 30 dagen (na sluiten) of een jaar (na aanmelden) geldig.',
         ],
       },
       {

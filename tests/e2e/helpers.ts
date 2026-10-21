@@ -25,7 +25,11 @@ export async function dismissConsent(context: BrowserContext, baseURL: string, a
   const value = encodeURIComponent(
     JSON.stringify({ version: '2026-10-1', necessary: true, analytics, marketing: false, updatedAt: '2026-10-21T00:00:00.000Z' }),
   );
-  await context.addCookies([{ name: 'ys_consent', value, url: baseURL }]);
+  await context.addCookies([
+    { name: 'ys_consent', value, url: baseURL },
+    // Nieuwsbrief-pop-up onderdrukken in tests die er niet over gaan.
+    { name: 'ys_newsletter', value: 'dismissed', url: baseURL },
+  ]);
 }
 
 export async function analyticsLog(page: Page) {

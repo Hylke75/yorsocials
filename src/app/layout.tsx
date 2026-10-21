@@ -3,6 +3,7 @@ import localFont from 'next/font/local';
 import type { ReactNode } from 'react';
 import { ConsentProvider } from '@/components/consent/ConsentProvider';
 import { JsonLd } from '@/components/JsonLd';
+import { NewsletterPopup } from '@/components/NewsletterPopup';
 import { SiteFooter } from '@/components/SiteFooter';
 import { SiteHeader } from '@/components/SiteHeader';
 import { StagingBanner } from '@/components/StagingBanner';
@@ -63,6 +64,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             {children}
           </main>
           <SiteFooter />
+          <NewsletterPopup />
         </ConsentProvider>
         <JsonLd data={organizationJsonLd()} />
       </body>

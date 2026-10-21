@@ -37,6 +37,10 @@ export const LIMITS = {
 
 // Pragmatische e-mailcheck: één @, geen spaties, een punt in het domein.
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+export function isValidEmail(email: string): boolean {
+  return email.length <= LIMITS.email && EMAIL_RE.test(email);
+}
 // Controle- en zero-width tekens weren (geen legitiem gebruik in een contactbericht).
 const CONTROL_RE = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F\u200B-\u200F\u2028\u2029\uFEFF]/g;
 
@@ -92,12 +96,12 @@ export function hasErrors(errors: ContactErrors): boolean {
 /** Antispam: honeypot gevuld of formulier onmenselijk snel verzonden. */
 export const MIN_FILL_TIME_MS = 2500;
 
-export function isLikelySpam(raw: Record<string, unknown>, now = Date.now()): boolean {
+export function isLikelySpam(raw: Record<string, unknown>, now = Date.now(), minFillTimeMs = MIN_FILL_TIME_MS): boolean {
   const honeypot = typeof raw.website === 'string' ? raw.website.trim() : '';
   if (honeypot) return true;
   const startedAt = Number(raw.startedAt);
   if (!Number.isFinite(startedAt) || startedAt <= 0) return true;
-  return now - startedAt < MIN_FILL_TIME_MS;
+  return now - startedAt < minFillTimeMs;
 }
 
 /** Escape voor gebruik in HTML-e-mails. */

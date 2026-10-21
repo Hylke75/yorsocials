@@ -12,7 +12,10 @@ export type AnalyticsEvent =
   | 'form_start'
   | 'form_submit_success'
   | 'form_submit_error'
-  | 'booking_click';
+  | 'booking_click'
+  | 'newsletter_view'
+  | 'newsletter_signup_success'
+  | 'newsletter_signup_error';
 
 type Params = Partial<Record<'destination' | 'placement' | 'slug' | 'sector' | 'error' | 'path' | 'topic', string>>;
 
