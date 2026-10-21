@@ -2,13 +2,13 @@ import type { NextConfig } from 'next';
 
 const isDev = process.env.NODE_ENV === 'development';
 
-// Analytics-domeinen worden alleen toegestaan wanneer er een meet-ID is geconfigureerd.
-// De scripts zelf laden pas ná toestemming (zie src/components/consent).
-const analyticsEnabled = Boolean(process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID);
-const analyticsScript = analyticsEnabled ? ' https://www.googletagmanager.com' : '';
-const analyticsConnect = analyticsEnabled
-  ? ' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com'
-  : '';
+// Cookieloze analytics (Plausible) alleen als er een domein is ingesteld.
+const analyticsEnabled = Boolean(process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN);
+const analyticsScript = analyticsEnabled ? ' https://plausible.io' : '';
+const analyticsConnect = analyticsEnabled ? ' https://plausible.io' : '';
+
+// Mediabibliotheek van het Link & Lead-CMS.
+const CMS_MEDIA_HOST = 'mucwwqjctynklovacwbv.supabase.co';
 
 // Nieuwsbriefaanmeldingen gaan vanuit de browser rechtstreeks naar Mailento.
 const newsletterConnect = ' https://gfnxbkketubsevavlegj.supabase.co';
@@ -17,7 +17,7 @@ const csp = [
   "default-src 'self'",
   `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''}${analyticsScript}`,
   "style-src 'self' 'unsafe-inline'",
-  `img-src 'self' blob: data:${analyticsEnabled ? ' https://www.google-analytics.com https://www.googletagmanager.com' : ''}`,
+  `img-src 'self' blob: data: https://${CMS_MEDIA_HOST}`,
   "font-src 'self'",
   `connect-src 'self'${newsletterConnect}${analyticsConnect}`,
   "object-src 'none'",
@@ -42,6 +42,7 @@ const nextConfig: NextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
     qualities: [60, 75],
+    remotePatterns: [{ protocol: 'https', hostname: CMS_MEDIA_HOST, pathname: '/storage/v1/object/public/media/**' }],
   },
   async headers() {
     return [{ source: '/(.*)', headers: securityHeaders }];

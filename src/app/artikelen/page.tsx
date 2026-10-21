@@ -6,16 +6,24 @@ import { EmptyState } from '@/components/EmptyState';
 import { HeroEditorial } from '@/components/HeroEditorial';
 import { Notice } from '@/components/Notice';
 import { getArticleCategories, getArticles, getPages } from '@/content/repository';
+import { cmsMetadata, renderCmsPage } from '@/cms/render';
 import { buildMetadata } from '@/lib/seo';
 import styles from './page.module.css';
 
 const content = getPages().articles;
 
-export const metadata: Metadata = buildMetadata({ ...content.seo, path: '/artikelen' });
+const localMetadata: Metadata = buildMetadata({ ...content.seo, path: '/artikelen' });
+
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata('/artikelen', localMetadata);
+}
 
 const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
-export default function ArticlesPage() {
+export default async function ArticlesPage() {
+  const cmsView = await renderCmsPage('/artikelen');
+  if (cmsView) return cmsView;
+
   const articles = getArticles();
   const categories = getArticleCategories();
   return (

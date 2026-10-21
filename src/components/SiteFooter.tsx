@@ -1,17 +1,16 @@
 import Link from 'next/link';
+import { getSiteChrome } from '@/cms/chrome';
+import { CmsImage } from '@/cms/CmsImage';
 import { getGlobalContent, getServices, getSiteSettings } from '@/content/repository';
 import { getContentMode } from '@/lib/env';
-import { NAV_LINKS } from '@/lib/routes';
 import { BookingCTA } from './BookingCTA';
-import { CookieSettingsButton } from './consent/CookieSettingsButton';
 import { Logo } from './Logo';
 import styles from './SiteFooter.module.css';
 
-const SOCIAL_LABELS = { instagram: 'Instagram', tiktok: 'TikTok', linkedin: 'LinkedIn', youtube: 'YouTube' } as const;
-
-export function SiteFooter() {
+export async function SiteFooter() {
   const site = getSiteSettings();
-  const socials = site.socialLinks.filter((s) => s.verified);
+  const chrome = await getSiteChrome();
+  const socials = chrome.socials;
   const year = new Date().getFullYear();
   const f = getGlobalContent().footer;
   return (
@@ -19,18 +18,24 @@ export function SiteFooter() {
       <div className="container">
         <div className={styles.top}>
           <div>
-            <Logo asset={site.logo.onDark} width={180} />
-            <p className={styles.tagline}>{site.tagline}</p>
-            {(site.email || site.phone) && (
+            {chrome.logoUrl ? (
+              <span style={{ display: 'block', width: 180 }}>
+                <CmsImage src={chrome.logoUrl} alt={chrome.name} kind="logo" ratio="180 / 40" sizes="180px" />
+              </span>
+            ) : (
+              <Logo asset={site.logo.onDark} width={180} />
+            )}
+            <p className={styles.tagline}>{chrome.tagline}</p>
+            {(chrome.email || chrome.phone) && (
               <ul className={styles.links} style={{ marginTop: 12 }}>
-                {site.email && (
+                {chrome.email && (
                   <li>
-                    <a href={`mailto:${site.email}`}>{site.email}</a>
+                    <a href={`mailto:${chrome.email}`}>{chrome.email}</a>
                   </li>
                 )}
-                {site.phone && (
+                {chrome.phone && (
                   <li>
-                    <a href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a>
+                    <a href={`tel:${chrome.phone.replace(/\s/g, '')}`}>{chrome.phone}</a>
                   </li>
                 )}
               </ul>
@@ -39,18 +44,14 @@ export function SiteFooter() {
           <nav aria-label="Footernavigatie">
             <h2 className={styles.heading}>{f.navigationHeading}</h2>
             <ul className={styles.links}>
-              {NAV_LINKS.map((l) => (
-                <li key={l.href}>
-                  <Link href={l.href}>{l.label}</Link>
-                </li>
-              ))}
-              {f.extraLinks.map((l) => (
+              {chrome.footerNav.map((l) => (
                 <li key={l.href}>
                   <Link href={l.href}>{l.label}</Link>
                 </li>
               ))}
             </ul>
           </nav>
+          {!chrome.footerFromCms && (
           <nav aria-label="Diensten">
             <h2 className={styles.heading}>{f.servicesHeading}</h2>
             <ul className={styles.links}>
@@ -61,15 +62,16 @@ export function SiteFooter() {
               ))}
             </ul>
           </nav>
+          )}
           <div>
             <h2 className={styles.heading}>{f.ctaHeading}</h2>
             <BookingCTA placement="footer" size="small" />
             {socials.length > 0 && (
               <ul className={styles.links} style={{ marginTop: 16 }} aria-label="Social media">
                 {socials.map((s) => (
-                  <li key={s.platform}>
+                  <li key={s.url}>
                     <a href={s.url} target="_blank" rel="noopener noreferrer">
-                      {SOCIAL_LABELS[s.platform]}
+                      {s.label}
                       <span className="visually-hidden"> (opent in nieuw venster)</span>
                     </a>
                   </li>
@@ -80,7 +82,7 @@ export function SiteFooter() {
         </div>
         <div className={styles.bottom}>
           <p>
-            © {year} {site.legalEntity?.name ?? site.name}
+            © {year} {site.legalEntity?.name ?? chrome.name}
             {getContentMode() === 'staging' && f.stagingSuffix}
             {f.credit && (
               <>
@@ -93,14 +95,11 @@ export function SiteFooter() {
             )}
           </p>
           <ul className={styles.links} style={{ display: 'flex', gap: 18, flexWrap: 'wrap' }} aria-label="Juridisch">
-            {f.legalLinks.map((l) => (
+            {chrome.legalNav.map((l) => (
               <li key={l.href}>
                 <Link href={l.href}>{l.label}</Link>
               </li>
             ))}
-            <li>
-              <CookieSettingsButton className={styles.linkButton}>{f.cookieSettingsLabel}</CookieSettingsButton>
-            </li>
           </ul>
         </div>
       </div>

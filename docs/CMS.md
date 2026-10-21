@@ -1,4 +1,31 @@
-# Contentmodel, CMS-koppeling en migratie
+# CMS-koppeling (Link & Lead)
+
+## Architectuur (volgens het contract van de CMS-bouwer)
+
+- **Eén bron:** `GET https://linkandlead.nl/api/cms/content` met `Authorization: Bearer $CMS_TOKEN`, alleen
+  server-side (`src/cms/client.ts`). Eén call voor alle pagina's, gecachet met ISR (60 s, tag `cms`).
+- **Defensief lezen:** `src/cms/parse.ts` zet de respons om naar het contract (`src/cms/types.ts`); ontbrekende
+  of kapotte velden worden standaardwaarden, nooit een fout.
+- **Pagina's = blokken:** `src/cms/blocks/` — één component per bloktype (registry), onbekend type wordt
+  overgeslagen, `bg`-token → sectieklasse. Afbeeldingen via `CmsImage` in vaste verhoudingen
+  (logo's `contain`, foto's `cover`), want het CMS levert geen afmetingen.
+- **Routes:** vaste routes (/, /services, /cases, …) tonen de CMS-versie zodra die renderbare blokken heeft,
+  anders de ingebouwde inhoud. Alle andere CMS-pagina's (/diensten/<slug>, /juridisch/<slug>, detailpagina's)
+  lopen via `src/app/[...slug]/page.tsx`; onbekende URL's volgen `site.redirects` of geven een 404.
+- **Chrome:** menu, footer, juridische links, actieknop, logo, tagline, contact en socials komen uit
+  `site.navigatie` / `site.merk` (`src/cms/chrome.ts`), met de ingebouwde inhoud als terugval per onderdeel.
+- **Verversen:** `POST /api/revalidate` met HMAC-handtekening (`x-ll-signature`, `CMS_WEBHOOK_SECRET`) ververst
+  direct; tot die webhook aanstaat geldt ISR van 60 s.
+- **Media:** alleen `mucwwqjctynklovacwbv.supabase.co/storage/v1/object/public/media/**` (image-allowlist + CSP).
+- **Geen cookiemelding:** het platform is cookieloos (zie README).
+
+**Status:** de infrastructuur staat; de componenten per bloktype volgen zodra de CMS-bouwer de
+veldenschema's levert (zie [CMS-BLOKKEN.md](CMS-BLOKKEN.md)). Tot die tijd, en zolang `CMS_TOKEN` leeg is,
+toont de site de ingebouwde inhoud uit `src/content/data/`.
+
+---
+
+## Ingebouwde inhoud (terugval)
 
 ## Huidige opzet
 

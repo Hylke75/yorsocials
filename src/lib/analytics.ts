@@ -1,6 +1,7 @@
 /**
- * Analytics-events (functioneel ontwerp §11). Events worden ALLEEN verstuurd als er
- * analytics-toestemming is; zonder toestemming worden ze weggegooid, niet gebufferd.
+ * Analytics-events (functioneel ontwerp §11). Het platform is cookieloos: events gaan naar Plausible
+ * (geen cookies, geen persoonsgegevens) wanneer NEXT_PUBLIC_PLAUSIBLE_DOMAIN is ingesteld. Zonder
+ * Plausible worden ze alleen in het geheugen verzameld (staging/tests), nooit verstuurd.
  * Payloads mogen nooit persoonsgegevens bevatten: alleen whitelisted, korte waarden.
  */
 export type AnalyticsEvent =
@@ -21,10 +22,8 @@ type Params = Partial<Record<'destination' | 'placement' | 'slug' | 'sector' | '
 
 declare global {
   interface Window {
-    gtag?: (...args: unknown[]) => void;
-    dataLayer?: unknown[];
-    __ysAnalyticsConsent?: boolean;
-    /** Zonder GA-ID worden events hier verzameld (handig in staging en tests). */
+    plausible?: ((event: string, options?: { props?: Record<string, string> }) => void) & { q?: unknown[] };
+    /** Zonder Plausible worden events hier verzameld (handig in staging en tests). */
     __ysAnalyticsLog?: { event: AnalyticsEvent; params: Params }[];
   }
 }
@@ -43,8 +42,8 @@ export function sanitizeParams(params: Params = {}): Params {
 }
 
 export function track(event: AnalyticsEvent, params?: Params): void {
-  if (typeof window === 'undefined' || !window.__ysAnalyticsConsent) return;
+  if (typeof window === 'undefined') return;
   const clean = sanitizeParams(params);
-  if (window.gtag) window.gtag('event', event, clean);
+  if (window.plausible) window.plausible(event, { props: clean });
   else (window.__ysAnalyticsLog ??= []).push({ event, params: clean });
 }

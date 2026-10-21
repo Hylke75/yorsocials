@@ -12,13 +12,21 @@ import { TeamCard } from '@/components/TeamCard';
 import { ValuesGrid } from '@/components/ValuesGrid';
 import { getPages, getTeam, getValues, getWorkProcess } from '@/content/repository';
 import { getContentMode } from '@/lib/env';
+import { cmsMetadata, renderCmsPage } from '@/cms/render';
 import { buildMetadata } from '@/lib/seo';
 
 const content = getPages().about;
 
-export const metadata: Metadata = buildMetadata({ ...content.seo, path: '/over-ons' });
+const localMetadata: Metadata = buildMetadata({ ...content.seo, path: '/over-ons' });
 
-export default function AboutPage() {
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata('/over-ons', localMetadata);
+}
+
+export default async function AboutPage() {
+  const cmsView = await renderCmsPage('/over-ons');
+  if (cmsView) return cmsView;
+
   const team = getTeam();
   const staging = getContentMode() === 'staging';
   const { hero, story } = content;

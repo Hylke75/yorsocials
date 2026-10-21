@@ -10,7 +10,6 @@ import { Button, ButtonLink } from '@/components/Button';
 import { CaseCard } from '@/components/CaseCard';
 import { CaseFilter } from '@/components/CaseFilter';
 import { CaseResults } from '@/components/CaseResults';
-import { ConsentPreferences } from '@/components/consent/ConsentPreferences';
 import { DemoBadge } from '@/components/DemoBadge';
 import { EmptyState } from '@/components/EmptyState';
 import { ErrorState } from '@/components/ErrorState';
@@ -190,12 +189,9 @@ export default function StyleguidePage() {
         </div>
       </Specimen>
 
-      <Specimen name="ConsentPreferences" props="variant: inline | dialog">
-        <ConsentPreferences />
-      </Specimen>
 
       <p className="muted" style={{ marginTop: 32 }}>
-        ContactForm, SiteHeader, MobileNav, SiteFooter, HeroEditorial, CTASection en ConsentBanner zijn live te zien op de pagina’s zelf (bijv. /contact).
+        ContactForm, SiteHeader, MobileNav, SiteFooter, HeroEditorial, CTASection en NewsletterPopup zijn live te zien op de pagina’s zelf (bijv. /contact).
       </p>
     </div>
   );

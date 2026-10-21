@@ -12,18 +12,26 @@ import { ServiceCard } from '@/components/ServiceCard';
 import { FeatureImage } from '@/components/ServiceDetailIntro';
 import { AccentText } from '@/components/AccentText';
 import { getCases, getGlobalContent, getPages, getServices, getWorkProcess } from '@/content/repository';
+import { cmsMetadata, renderCmsPage } from '@/cms/render';
 import { buildMetadata } from '@/lib/seo';
 import { fillTemplate } from '@/lib/text';
 
 const content = getPages().home;
 
-export const metadata: Metadata = buildMetadata({
+const localMetadata: Metadata = buildMetadata({
   title: content.seo.title || undefined,
   description: content.seo.description,
   path: '/',
 });
 
-export default function HomePage() {
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata('/', localMetadata);
+}
+
+export default async function HomePage() {
+  const cmsView = await renderCmsPage('/');
+  if (cmsView) return cmsView;
+
   const services = getServices();
   const cases = getCases().slice(0, 2);
   const hasDemoCases = cases.some((c) => c.status === 'demo');

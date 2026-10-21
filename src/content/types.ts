@@ -361,29 +361,8 @@ export interface GlobalContent {
     ctaHeading: string;
     extraLinks: { href: string; label: string }[];
     legalLinks: { href: string; label: string }[];
-    cookieSettingsLabel: string;
     stagingSuffix: string;
     credit: { prefix: string; name: string; url: string } | null;
-  };
-  consentBanner: { title: string; text: string; policyLinkLabel: string; acceptLabel: string; rejectLabel: string; settingsLabel: string };
-  consentPreferences: {
-    title: string;
-    /** Kop boven het formulier op /cookies. */
-    pageHeading: string;
-    necessaryLabel: string;
-    necessaryDescription: string;
-    analyticsLabel: string;
-    analyticsDescription: string;
-    marketingLabel: string;
-    marketingDescription: string;
-    saveLabel: string;
-    savedMessage: string;
-    loadingMessage: string;
-    noChoiceMessage: string;
-    /** `{status}` = toegestaan/geweigerd, `{date}` = moment van opslaan. */
-    currentChoiceMessage: string;
-    allowedWord: string;
-    deniedWord: string;
   };
   newsletter: {
     eyebrow: string;

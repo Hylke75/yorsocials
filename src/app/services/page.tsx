@@ -7,14 +7,22 @@ import { ProcessTimeline } from '@/components/ProcessTimeline';
 import { SectionHeading } from '@/components/SectionHeading';
 import { ServiceCard } from '@/components/ServiceCard';
 import { getPages, getServices, getWorkProcess } from '@/content/repository';
+import { cmsMetadata, renderCmsPage } from '@/cms/render';
 import { buildMetadata } from '@/lib/seo';
 import { plainText } from '@/lib/text';
 
 const content = getPages().services;
 
-export const metadata: Metadata = buildMetadata({ ...content.seo, path: '/services' });
+const localMetadata: Metadata = buildMetadata({ ...content.seo, path: '/services' });
 
-export default function ServicesPage() {
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata('/services', localMetadata);
+}
+
+export default async function ServicesPage() {
+  const cmsView = await renderCmsPage('/services');
+  if (cmsView) return cmsView;
+
   const { hero } = content;
   return (
     <>

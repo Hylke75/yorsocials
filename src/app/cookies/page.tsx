@@ -1,23 +1,25 @@
 import type { Metadata } from 'next';
-import { ConsentPreferences } from '@/components/consent/ConsentPreferences';
 import { LegalPageTemplate } from '@/components/LegalPageTemplate';
-import { getGlobalContent, getLegalPage } from '@/content/repository';
+import { getLegalPage } from '@/content/repository';
+import { cmsMetadata, renderCmsPage } from '@/cms/render';
 import { buildMetadata } from '@/lib/seo';
 
 const page = getLegalPage('cookies');
 
-export const metadata: Metadata = buildMetadata({
+const localMetadata: Metadata = buildMetadata({
   title: page.seo.title,
   description: page.seo.description,
   path: '/cookies',
   noIndex: page.status !== 'published' || page.seo.noIndex,
 });
 
-export default function CookiesPage() {
-  return (
-    <LegalPageTemplate page={page}>
-      <h2 id="voorkeuren">{getGlobalContent().consentPreferences.pageHeading}</h2>
-      <ConsentPreferences variant="inline" />
-    </LegalPageTemplate>
-  );
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata('/cookies', localMetadata);
+}
+
+export default async function CookiesPage() {
+  const cmsView = await renderCmsPage('/cookies');
+  if (cmsView) return cmsView;
+
+  return <LegalPageTemplate page={page} />;
 }

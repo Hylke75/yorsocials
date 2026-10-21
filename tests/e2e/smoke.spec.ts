@@ -56,3 +56,14 @@ test('beveiligingsheaders worden meegestuurd', async ({ request }) => {
   expect(headers['strict-transport-security']).toBeTruthy();
   expect(headers['x-content-type-options']).toBe('nosniff');
 });
+
+test('revalidate-webhook staat uit zonder geheim en weigert ongetekende verzoeken', async ({ request }) => {
+  const res = await request.post('/api/revalidate', { data: { gebeurtenis: 'gepubliceerd' } });
+  expect([401, 503]).toContain(res.status());
+});
+
+test('er wordt geen cookiemelding getoond', async ({ page, context }) => {
+  await context.clearCookies();
+  await page.goto('/');
+  await expect(page.getByText('Cookies op deze website')).toHaveCount(0);
+});

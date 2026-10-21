@@ -152,3 +152,14 @@
     width: 150px;
   }
 }
+
+.cmsLogo {
+  display: block;
+  width: 200px;
+}
+
+@media (max-width: 740px) {
+  .cmsLogo {
+    width: 150px;
+  }
+}

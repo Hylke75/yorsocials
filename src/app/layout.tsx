@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import localFont from 'next/font/local';
 import type { ReactNode } from 'react';
-import { ConsentProvider } from '@/components/consent/ConsentProvider';
+import { Analytics } from '@/components/Analytics';
 import { JsonLd } from '@/components/JsonLd';
 import { NewsletterPopup } from '@/components/NewsletterPopup';
 import { SiteFooter } from '@/components/SiteFooter';
@@ -58,17 +58,16 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <a href="#inhoud" className="skip-link">
           Direct naar inhoud
         </a>
-        <ConsentProvider texts={{ banner: globalContent.consentBanner, preferences: globalContent.consentPreferences }}>
-          <StagingBanner />
-          <SiteHeader />
-          <main id="inhoud" tabIndex={-1}>
-            {children}
-          </main>
-          <SiteFooter />
-          {site.newsletter && (
-            <NewsletterPopup endpoint={site.newsletter.endpoint} slug={site.newsletter.slug} content={globalContent.newsletter} />
-          )}
-        </ConsentProvider>
+        <StagingBanner />
+        <SiteHeader />
+        <main id="inhoud" tabIndex={-1}>
+          {children}
+        </main>
+        <SiteFooter />
+        <Analytics />
+        {site.newsletter && (
+          <NewsletterPopup endpoint={site.newsletter.endpoint} slug={site.newsletter.slug} content={globalContent.newsletter} />
+        )}
         <JsonLd data={organizationJsonLd()} />
       </body>
     </html>

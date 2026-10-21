@@ -1,7 +1,7 @@
 import type { GlobalContent } from '../types';
 
 /**
- * Terugkerende interfaceteksten: navigatie, knoppen, footer, cookiemelding, nieuwsbrief en
+ * Terugkerende interfaceteksten: navigatie, knoppen, footer, nieuwsbrief en
  * contactformulier. Validatie-foutmeldingen en teksten die alleen voor screenreaders zijn
  * (zoals "opent in nieuw venster") staan bewust in de code.
  */
@@ -32,34 +32,8 @@ export const globalContent: GlobalContent = {
       { href: '/privacy', label: 'Privacy' },
       { href: '/cookies', label: 'Cookies' },
     ],
-    cookieSettingsLabel: 'Cookie-instellingen',
     stagingSuffix: ' — stagingomgeving',
     credit: { prefix: 'Website door', name: 'Link & Lead', url: 'https://linkandlead.nl' },
-  },
-  consentBanner: {
-    title: 'Cookies op deze website',
-    text: 'We gebruiken alleen noodzakelijke cookies, tenzij je toestemming geeft voor analytische cookies om de site te verbeteren. Lees meer in ons',
-    policyLinkLabel: 'cookiebeleid',
-    acceptLabel: 'Alles accepteren',
-    rejectLabel: 'Alleen noodzakelijk',
-    settingsLabel: 'Instellingen',
-  },
-  consentPreferences: {
-    title: 'Cookievoorkeuren',
-    pageHeading: 'Jouw cookievoorkeuren',
-    necessaryLabel: 'Noodzakelijk (altijd aan)',
-    necessaryDescription: 'Nodig om de website te laten werken en je cookiekeuze te onthouden.',
-    analyticsLabel: 'Analytisch',
-    analyticsDescription: 'Anonieme statistieken over het gebruik van de site, zodat we die kunnen verbeteren.',
-    marketingLabel: 'Marketing',
-    marketingDescription: 'Momenteel niet in gebruik op deze website.',
-    saveLabel: 'Voorkeuren opslaan',
-    savedMessage: 'Je voorkeuren zijn opgeslagen.',
-    loadingMessage: 'Je voorkeur wordt geladen…',
-    noChoiceMessage: 'Je hebt nog geen keuze gemaakt. Er worden alleen noodzakelijke cookies gebruikt.',
-    currentChoiceMessage: 'Huidige keuze: analytische cookies {status}{date}.',
-    allowedWord: 'toegestaan',
-    deniedWord: 'geweigerd',
   },
   newsletter: {
     eyebrow: 'Nieuwsbrief',

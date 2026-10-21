@@ -122,23 +122,20 @@ export const legalPages: LegalPage[] = [
     lastReviewed: null,
     sections: [
       {
-        heading: 'Noodzakelijke cookies',
+        heading: 'Functionele cookies',
         body: [
-          'We slaan je cookievoorkeur op in een functionele cookie (ys_consent), zodat we je keuze kunnen respecteren. Deze cookie bevat geen persoonsgegevens en is 6 maanden geldig.',
           'Als je de nieuwsbrief-pop-up sluit of je aanmeldt, onthouden we dat in een functionele cookie (ys_newsletter), zodat je de pop-up niet steeds opnieuw ziet. Deze cookie bevat geen persoonsgegevens en is 30 dagen (na sluiten) of een jaar (na aanmelden) geldig.',
         ],
       },
       {
-        heading: 'Analytische cookies',
+        heading: 'Statistieken zonder cookies',
         body: [
-          'Alleen na jouw toestemming laden we analytics om te begrijpen hoe de site wordt gebruikt. Zonder toestemming worden er geen analytische scripts geladen.',
-          '[Leverancier, doel, bewaartermijn en privacy-instellingen invullen zodra de analyticskeuze definitief is.]',
+          'Voor bezoekersstatistieken gebruiken we (indien ingeschakeld) Plausible Analytics. Plausible plaatst geen cookies en verwerkt geen persoonsgegevens; we zien alleen geanonimiseerde totalen.',
         ],
       },
-      { heading: 'Marketingcookies', body: ['Momenteel worden er geen marketing- of advertentiecookies geplaatst.'] },
-      { heading: 'Toestemming wijzigen of intrekken', body: ['Je kunt je voorkeuren hieronder op elk moment aanpassen of intrekken.'] },
+      { heading: 'Marketingcookies', body: ['Er worden geen marketing- of advertentiecookies geplaatst.'] },
     ],
-    seo: { title: 'Cookiebeleid (concept)', description: 'Cookiebeleid en cookievoorkeuren van YorSocials.', noIndex: true },
+    seo: { title: 'Cookiebeleid (concept)', description: 'Cookiebeleid van YorSocials.', noIndex: true },
     status: 'draft',
   },
 ];

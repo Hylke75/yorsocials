@@ -5,15 +5,23 @@ import { CTASection } from '@/components/CTASection';
 import { EmptyState } from '@/components/EmptyState';
 import { HeroEditorial } from '@/components/HeroEditorial';
 import { getFaqs, getPages } from '@/content/repository';
+import { cmsMetadata, renderCmsPage } from '@/cms/render';
 import { buildMetadata } from '@/lib/seo';
 
 const content = getPages().faq;
 
-export const metadata: Metadata = buildMetadata({ ...content.seo, path: '/faq' });
+const localMetadata: Metadata = buildMetadata({ ...content.seo, path: '/faq' });
+
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata('/faq', localMetadata);
+}
 
 // FAQPage structured data wordt bewust niet toegevoegd: Google toont FAQ-rich results
 // sinds 2023 alleen nog voor gezaghebbende overheids- en zorgsites.
-export default function FaqPage() {
+export default async function FaqPage() {
+  const cmsView = await renderCmsPage('/faq');
+  if (cmsView) return cmsView;
+
   const faqs = getFaqs();
   const categories = [...new Set(faqs.map((f) => f.category))];
   const { hero } = content;

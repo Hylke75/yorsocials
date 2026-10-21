@@ -11,14 +11,22 @@ import { Notice } from '@/components/Notice';
 import { SectionHeading } from '@/components/SectionHeading';
 import { getGlobalContent, getPages, getSiteSettings } from '@/content/repository';
 import { getContentMode } from '@/lib/env';
+import { cmsMetadata, renderCmsPage } from '@/cms/render';
 import { buildMetadata } from '@/lib/seo';
 import styles from './page.module.css';
 
 const content = getPages().contact;
 
-export const metadata: Metadata = buildMetadata({ ...content.seo, path: '/contact' });
+const localMetadata: Metadata = buildMetadata({ ...content.seo, path: '/contact' });
 
-export default function ContactPage() {
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata('/contact', localMetadata);
+}
+
+export default async function ContactPage() {
+  const cmsView = await renderCmsPage('/contact');
+  if (cmsView) return cmsView;
+
   const site = getSiteSettings();
   const hasDirect = Boolean(site.email || site.phone);
   const { hero, intro, booking } = content;

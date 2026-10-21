@@ -13,12 +13,6 @@ for (const route of ALL_ROUTES) {
   });
 }
 
-test('consentbanner is toegankelijk', async ({ page, context }) => {
-  await context.clearCookies();
-  await page.goto('/');
-  const results = await new AxeBuilder({ page }).include('[data-testid="consent-banner"]').withTags(['wcag2a', 'wcag2aa']).analyze();
-  expect(results.violations).toEqual([]);
-});
 
 test('respecteert prefers-reduced-motion (ticker staat stil)', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });

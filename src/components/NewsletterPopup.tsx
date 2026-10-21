@@ -21,7 +21,6 @@ import {
 import type { GlobalContent } from '@/content/types';
 import { AccentText } from './AccentText';
 import { Button } from './Button';
-import { useConsent } from './consent/ConsentProvider';
 import { ErrorState } from './ErrorState';
 import { Icon } from './Icon';
 import styles from './NewsletterPopup.module.css';
@@ -34,15 +33,14 @@ function remember(value: 'dismissed' | 'subscribed', maxAge: number) {
 }
 
 /**
- * Nieuwsbrief-pop-up: verschijnt 3 seconden na het laden, pas nadat de cookiekeuze is gemaakt
- * (zodat de twee niet over elkaar heen vallen), en daarna niet opnieuw zodra iemand sluit of zich aanmeldt.
+ * Nieuwsbrief-pop-up: verschijnt 3 seconden na het laden en daarna niet opnieuw zodra iemand sluit of
+ * zich aanmeldt.
  * Native <dialog>: focus-trap, Escape en focusherstel regelt de browser.
  *
  * Aanmeldingen gaan vanuit de browser rechtstreeks naar Mailento (double opt-in: de bezoeker
  * krijgt eerst een bevestigingsmail).
  */
 export function NewsletterPopup({ endpoint, slug, content: t }: { endpoint: string; slug: string; content: GlobalContent['newsletter'] }) {
-  const { consent } = useConsent();
   const pathname = usePathname();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const openedAt = useRef(0);
@@ -51,14 +49,13 @@ export function NewsletterPopup({ endpoint, slug, content: t }: { endpoint: stri
   const [errors, setErrors] = useState<NewsletterErrors>({});
   const [status, setStatus] = useState<Status>({ kind: 'idle' });
 
-  const consentDecided = consent !== undefined && consent !== null;
 
   useEffect(() => {
     rememberUtm(window.location.search);
   }, []);
 
   useEffect(() => {
-    if (!consentDecided || scheduled.current) return;
+    if (scheduled.current) return;
     if (!shouldShowNewsletter(pathname, document.cookie)) return;
     scheduled.current = true;
     const timer = window.setTimeout(() => {
@@ -73,7 +70,7 @@ export function NewsletterPopup({ endpoint, slug, content: t }: { endpoint: stri
       window.clearTimeout(timer);
       scheduled.current = false;
     };
-  }, [consentDecided, pathname]);
+  }, [pathname]);
 
   useEffect(() => {
     const d = dialogRef.current;

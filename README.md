@@ -23,7 +23,7 @@ npm run dev                  # http://localhost:3000
 | `npm run build` / `npm start` | Productiebuild en -server |
 | `npm run typecheck` | TypeScript (strict) |
 | `npm run lint` | ESLint (Next core-web-vitals + TypeScript) |
-| `npm test` | Unit-tests (Vitest): validatie, filterlogica, routing, consent, contentintegriteit |
+| `npm test` | Unit-tests (Vitest): validatie, filterlogica, routing, CMS-parser, webhook, contentintegriteit |
 | `npm run test:e2e` | E2E (Playwright, desktop + mobiel, incl. axe WCAG-checks). Vereist eerst `npm run build` |
 | `npm run screenshots` | Screenshots op 375/768/1440 px naar `docs/screenshots/` |
 | `npm run content:export` | Exporteert seedcontent als CMS-documenten (`content-export/seed.ndjson`) |
@@ -48,12 +48,12 @@ Zet `production` pas na expliciet akkoord van de opdrachtgever (functioneel ontw
 src/
   app/                    Routes (App Router) + sitemap, robots, OG-afbeeldingen, /api/contact
   components/             Losse componenten met typed props (+ .module.css)
-    consent/              ConsentProvider, ConsentBanner, ConsentDialog, ConsentPreferences
   content/
     types.ts              Contentmodel (= CMS-schema, functioneel ontwerp §6)
     repository.ts         Enige toegang tot content; filtert op status/contentmodus
     data/                 Seedcontent (diensten, cases, artikelen, FAQ, site-instellingen, media)
-  lib/                    Validatie, casefilter, rate limiting, consent, analytics, SEO, e-mail/CRM-levering
+  cms/                    Link & Lead-CMS: contracttypes, defensieve parser, fetch (ISR 60 s), blokkenrenderer, chrome
+  lib/                    Validatie, casefilter, rate limiting, analytics (cookieloos), SEO, webhook, e-mail/CRM-levering
   styles/tokens.css       Design tokens (kleur, typografie, spacing, radii, elevation, breakpoints)
   fonts/                  Space Grotesk + DM Sans (woff2, SIL OFL)
 public/brand/             Aangeleverd logo + contrastvariant voor donkere achtergrond
@@ -79,9 +79,9 @@ tests/unit, tests/e2e     Vitest- en Playwright-tests
 - **Contactformulier.** Client- én servervalidatie met dezelfde regels, honeypot + minimale invultijd,
   rate limiting, origin-check, maximale body-grootte, HTML-escaping en logging zonder persoonsgegevens.
   Zonder geconfigureerde bestemming antwoordt de API eerlijk met 503 (“niet verzonden”) — nooit een nep-succes.
-- **Consent.** Geen analytics vóór opt-in. Accepteren en weigeren zijn even prominent, keuze is wijzigbaar via de
-  footer en `/cookies`, met versie + tijdstip in een first-party cookie. Intrekken verwijdert GA-cookies.
-- **Nieuwsbrief-pop-up.** Verschijnt 3 seconden na het laden (pas nádat de cookiekeuze is gemaakt), niet op
+- **Cookieloos.** Er is geen cookiemelding: de site plaatst alleen een functionele cookie (nieuwsbrief-pop-up
+  gesloten) en gebruikt optioneel Plausible (zonder cookies) via `NEXT_PUBLIC_PLAUSIBLE_DOMAIN`.
+- **Nieuwsbrief-pop-up.** Verschijnt 3 seconden na het laden, niet op
   `/privacy` en `/cookies`, en wordt na sluiten 30 dagen / na aanmelden een jaar niet meer getoond. Aanmeldingen gaan vanuit
   de browser rechtstreeks naar Mailento (`siteSettings.newsletter`: endpoint + slug `yorsocials-nieuwsbrief`), met
   honeypot, invultijd (`duur_ms`) en utm-herkomst. Mailento stuurt een bevestigingsmail (double opt-in).
@@ -93,7 +93,7 @@ tests/unit, tests/e2e     Vitest- en Playwright-tests
 - [Ontbrekende content en open beslissingen](docs/ONTBREKENDE_CONTENT.md)
 - [Route-overzicht](docs/ROUTES.md)
 - [Contentmodel, CMS-koppeling en migratie](docs/CMS.md)
-- [Verzoek aan de CMS-bouwer](docs/CMS-VERZOEK.md)
+- [Verzoek aan de CMS-bouwer](docs/CMS-VERZOEK.md) en [blokken + veldenschema's](docs/CMS-BLOKKEN.md)
 - [Deployment en omgevingsvariabelen](docs/DEPLOYMENT.md)
 - [Testresultaten](docs/TESTRESULTATEN.md)
 - Screenshots: [`docs/screenshots/`](docs/screenshots/) — vergelijk met [`design/referenties/`](design/referenties/)

@@ -9,13 +9,21 @@ import { EmptyState } from '@/components/EmptyState';
 import { HeroEditorial } from '@/components/HeroEditorial';
 import { Notice } from '@/components/Notice';
 import { getCases, getPages, getSectors } from '@/content/repository';
+import { cmsMetadata, renderCmsPage } from '@/cms/render';
 import { buildMetadata } from '@/lib/seo';
 
 const content = getPages().cases;
 
-export const metadata: Metadata = buildMetadata({ ...content.seo, path: '/cases' });
+const localMetadata: Metadata = buildMetadata({ ...content.seo, path: '/cases' });
 
-export default function CasesPage() {
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata('/cases', localMetadata);
+}
+
+export default async function CasesPage() {
+  const cmsView = await renderCmsPage('/cases');
+  if (cmsView) return cmsView;
+
   const cases = getCases();
   const items = cases.map((c) => ({ slug: c.slug, sector: c.sector, card: <CaseCard item={c} /> }));
   const cta = <BookingCTA placement="cases-leeg" variant="secondary" />;
