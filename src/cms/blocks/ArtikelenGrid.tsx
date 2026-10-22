@@ -1,9 +1,10 @@
 import Link from 'next/link';
+import { ArticleCard } from '@/components/ArticleCard';
 import { Icon } from '@/components/Icon';
 import { MediaImage } from '@/components/MediaImage';
 import { SectionHeading } from '@/components/SectionHeading';
 import cardStyles from '@/components/Card.module.css';
-import { getGlobalContent } from '@/content/repository';
+import { getArticles, getGlobalContent } from '@/content/repository';
 import { formatDate } from '@/lib/format';
 import { getCmsContent } from '../client';
 import { parseArticles } from '../parse';
@@ -18,7 +19,23 @@ export async function ArtikelenGridBlock({ block, index }: BlockProps) {
   const rubriek = text(c, 'filter_rubriek');
   const all = parseArticles((await getCmsContent())?.records.artikelen);
   const articles = (rubriek ? all.filter((a) => slugify(a.rubriek) === slugify(rubriek)) : all).slice(0, num(c, 'maximaal', 99));
-  if (!articles.length) return null;
+  if (!articles.length) {
+    // Zolang het CMS (nog) geen artikelen levert, toont het blok de ingebouwde collectie.
+    const local = getArticles()
+      .filter((a) => !rubriek || slugify(a.category) === slugify(rubriek))
+      .slice(0, num(c, 'maximaal', 99));
+    if (!local.length) return null;
+    return (
+      <BlockSection bg={block.bg} labelledBy={text(c, 'titel') ? id : undefined}>
+        {text(c, 'titel') && <SectionHeading id={id} eyebrow={text(c, 'eyebrow')} heading={text(c, 'titel')} />}
+        <div className="grid grid--3">
+          {local.map((a) => (
+            <ArticleCard key={a.slug} article={a} />
+          ))}
+        </div>
+      </BlockSection>
+    );
+  }
   const more = getGlobalContent().cardLinks.article;
   return (
     <BlockSection bg={block.bg} labelledBy={text(c, 'titel') ? id : undefined}>

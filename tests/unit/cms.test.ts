@@ -77,4 +77,9 @@ describe('webhook-handtekening', () => {
     expect(verifySignature(body, 'abc', secret)).toBe(false);
     expect(verifySignature(`${body} `, sig, secret)).toBe(false);
   });
+
+  it('leest het merk ook uit config.merk (huidige CMS-versie)', () => {
+    const c = parseCmsContent({ ok: true, site: { naam: 'YorSocials', config: { merk: { tagline: 'Uit config' } } }, paginas: [] });
+    expect(c?.site.merk?.tagline).toBe('Uit config');
+  });
 });

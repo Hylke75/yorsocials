@@ -1,6 +1,8 @@
 import { MediaImage } from '@/components/MediaImage';
 import { SectionHeading } from '@/components/SectionHeading';
 import cardStyles from '@/components/Card.module.css';
+import { TeamCard } from '@/components/TeamCard';
+import { getTeam } from '@/content/repository';
 import { getCmsContent } from '../client';
 import { parseTeamMembers } from '../parse';
 import { cmsAsset, num, text } from './fields';
@@ -12,7 +14,21 @@ export async function MensenBlock({ block, index }: BlockProps) {
   const c = block.content;
   const id = `blok-${index}`;
   const members = parseTeamMembers((await getCmsContent())?.records.teamleden).slice(0, num(c, 'maximaal', 99));
-  if (!members.length) return null;
+  if (!members.length) {
+    // Zolang het CMS (nog) geen teamleden levert, toont het blok het ingebouwde team (alleen met toestemming).
+    const local = getTeam().slice(0, num(c, 'maximaal', 99));
+    if (!local.length) return null;
+    return (
+      <BlockSection bg={block.bg} labelledBy={text(c, 'titel') ? id : undefined}>
+        {text(c, 'titel') && <SectionHeading id={id} eyebrow="" heading={text(c, 'titel')} description={text(c, 'intro') || undefined} />}
+        <div className="grid grid--3">
+          {local.map((m) => (
+            <TeamCard key={m.name} member={m} />
+          ))}
+        </div>
+      </BlockSection>
+    );
+  }
   return (
     <BlockSection bg={block.bg} labelledBy={text(c, 'titel') ? id : undefined}>
       {text(c, 'titel') && <SectionHeading id={id} eyebrow="" heading={text(c, 'titel')} description={text(c, 'intro') || undefined} />}

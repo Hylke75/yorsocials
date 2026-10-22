@@ -56,6 +56,9 @@ const nextConfig: NextConfig = {
       { source: '/services/:slug', destination: '/diensten/:slug', permanent: true },
       { source: '/privacy', destination: '/juridisch/privacy', permanent: true },
       { source: '/cookies', destination: '/juridisch/cookies', permanent: true },
+      // Beheer gebeurt in het Link & Lead-CMS; /admin is het makkelijk te onthouden adres daarvoor.
+      { source: '/admin', destination: 'https://cms.linkandlead.nl/admin', permanent: false },
+      { source: '/admin/:path*', destination: 'https://cms.linkandlead.nl/admin/:path*', permanent: false },
     ];
   },
   async headers() {

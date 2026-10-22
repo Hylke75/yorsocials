@@ -61,6 +61,10 @@ Onbekende of verouderde types (`linkkaarten`, `leadcta`, `galerij`, `nieuwsbrief
 
 ## Ingebouwde inhoud (terugval)
 
+Wat het CMS (nog) niet levert, vult de site aan met de ingebouwde inhoud: menu en footer (de huidige
+CMS-versie levert nog geen `navigatie`), cases, artikelen en team (nog geen `records`) en de
+nieuwsbrief-pop-up (als er in het CMS geen pop-up actief staat). Zodra het CMS ze levert, nemen ze het over.
+
 Zonder `CMS_TOKEN`, of voor een pagina die in het CMS (nog) geen blokken heeft, toont de site de ingebouwde
 inhoud uit `src/content/data/`. Daardoor staat de site nooit leeg, ook niet tijdens de overstap.
 

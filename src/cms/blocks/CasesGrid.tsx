@@ -1,10 +1,12 @@
 import { Suspense } from 'react';
 import { ButtonLink } from '@/components/Button';
+import { CaseCard as LocalCaseCard } from '@/components/CaseCard';
 import { CaseFilter } from '@/components/CaseFilter';
 import { MediaImage } from '@/components/MediaImage';
 import { SectionHeading } from '@/components/SectionHeading';
 import cardStyles from '@/components/Card.module.css';
-import { getPages } from '@/content/repository';
+import { Notice } from '@/components/Notice';
+import { getCases, getPages, getSectorLabel } from '@/content/repository';
 import { getCmsContent } from '../client';
 import { parseCases } from '../parse';
 import type { CmsCase } from '../types';
@@ -59,11 +61,17 @@ export async function CasesGridBlock({ block, index }: BlockProps) {
   const c = block.content;
   const id = `blok-${index}`;
   const fixedSector = text(c, 'filter_sector');
-  const all = parseCases((await getCmsContent())?.records.cases);
-  const cases = (fixedSector ? all.filter((x) => slugify(x.sector) === slugify(fixedSector)) : all).slice(0, num(c, 'maximaal', 99));
-  if (!cases.length) return null;
-  const sectorLabels = [...new Set(cases.map((x) => x.sector).filter(Boolean))];
-  const items = cases.map((x) => ({ slug: x.id, sector: slugify(x.sector), card: <CaseCard item={x} /> }));
+  const max = num(c, 'maximaal', 99);
+  const matches = (sector: string) => !fixedSector || slugify(sector) === slugify(fixedSector);
+  const cmsCases = parseCases((await getCmsContent())?.records.cases).filter((x) => matches(x.sector));
+  // Zolang het CMS (nog) geen cases levert, toont het blok de ingebouwde collectie.
+  const local = cmsCases.length ? [] : getCases().filter((x) => matches(getSectorLabel(x.sector)) || matches(x.sector));
+  const items = cmsCases.length
+    ? cmsCases.slice(0, max).map((x) => ({ slug: x.id, sector: slugify(x.sector), label: x.sector, card: <CaseCard item={x} /> }))
+    : local.slice(0, max).map((x) => ({ slug: x.slug, sector: slugify(getSectorLabel(x.sector)), label: getSectorLabel(x.sector), card: <LocalCaseCard item={x} /> }));
+  if (!items.length) return null;
+  const sectorLabels = [...new Set(items.map((x) => x.label).filter(Boolean))];
+  const showDemoNotice = local.slice(0, max).some((x) => x.status === 'demo');
   const p = getPages().cases;
   const grid = (
     <ul className="grid grid--2" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
@@ -77,6 +85,11 @@ export async function CasesGridBlock({ block, index }: BlockProps) {
   return (
     <BlockSection bg={block.bg} labelledBy={text(c, 'titel') ? id : undefined}>
       {text(c, 'titel') && <SectionHeading id={id} eyebrow={text(c, 'eyebrow')} heading={text(c, 'titel')} />}
+      {showDemoNotice && (
+        <Notice tone="demo">
+          <p>{p.demoNotice}</p>
+        </Notice>
+      )}
       {fixedSector || sectorLabels.length < 2 ? (
         grid
       ) : (

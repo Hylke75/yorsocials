@@ -100,6 +100,8 @@ function parseRedirect(v: unknown): CmsRedirect | null {
   return { van: normalizeSlug(van), naar, status };
 }
 
+const nonEmpty = (v: unknown) => (isObj(v) && Object.keys(v).length > 0 ? v : undefined);
+
 function parseSite(v: unknown): CmsSite {
   const o = obj(v);
   return {
@@ -107,7 +109,8 @@ function parseSite(v: unknown): CmsSite {
     domein: str(o.domein),
     locale: str(o.locale, 'nl'),
     design_tokens: obj(o.design_tokens),
-    merk: parseBrand(o.merk),
+    // De huidige CMS-versie levert het merk als `config.merk`; het contract noemt `merk`.
+    merk: parseBrand(o.merk ?? nonEmpty(obj(o.config).merk)),
     navigatie: parseNavigation(o.navigatie),
     redirects: arr(o.redirects)
       .map(parseRedirect)

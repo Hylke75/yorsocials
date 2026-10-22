@@ -54,9 +54,11 @@ export const viewport: Viewport = {
 };
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
-  // Pop-ups beheert de redactie in het CMS; zonder CMS-verbinding geldt de lokale nieuwsbrief-pop-up.
+  // Pop-ups beheert de redactie in het CMS; staat daar (nog) niets actief, dan geldt de ingebouwde
+  // nieuwsbrief-pop-up.
   const cms = await getCmsContent();
-  const popups = (cms ? popupsFromCms(cms.popups) : [localNewsletterPopup(globalContent.newsletter)]).filter((p) => p.kind !== 'nieuwsbrief' || site.newsletter);
+  const cmsPopups = cms ? popupsFromCms(cms.popups) : [];
+  const popups = (cmsPopups.length ? cmsPopups : [localNewsletterPopup(globalContent.newsletter)]).filter((p) => p.kind !== 'nieuwsbrief' || site.newsletter);
   return (
     <html lang="nl" className={`${spaceGrotesk.variable} ${dmSans.variable}`}>
       <body>
