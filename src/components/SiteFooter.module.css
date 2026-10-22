@@ -1,0 +1,100 @@
+.footer {
+  background: var(--color-bg-deep);
+  padding: 56px 0 28px;
+  border-top: 1px solid var(--color-border);
+}
+
+.top {
+  display: grid;
+  /* Merkkolom + een variabel aantal linkkolommen (uit het CMS) + CTA. */
+  grid-template-columns: minmax(0, 1.4fr) repeat(auto-fit, minmax(160px, 1fr));
+  gap: 40px;
+  padding-bottom: 44px;
+}
+
+.tagline {
+  color: var(--color-text-muted);
+  margin: 16px 0 0;
+}
+
+.heading {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+  color: var(--color-brand-sage-light);
+  margin: 0 0 12px;
+}
+
+.links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.links a,
+.linkButton {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  color: var(--color-text-soft);
+  font-size: 14px;
+}
+
+.linkButton {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+}
+
+.links a:hover,
+.linkButton:hover {
+  color: var(--color-accent);
+}
+
+.bottom {
+  border-top: 1px solid var(--color-border);
+  padding-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  color: #9ca9a1;
+  font-size: 13px;
+}
+
+.bottom p {
+  margin: 0;
+}
+
+@media (max-width: 1199px) {
+  .top {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 740px) {
+  .top {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+}
+
+.credit {
+  color: var(--color-text-soft);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.credit:hover {
+  color: var(--color-accent);
+}
+
+.plain {
+  color: var(--color-text-muted);
+  font-size: 14px;
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+}

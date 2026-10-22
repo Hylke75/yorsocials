@@ -1,0 +1,199 @@
+.dialog {
+  width: min(520px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  padding: 0;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-card);
+  background:
+    radial-gradient(circle at 0% 0%, #4c775766, transparent 45%),
+    var(--color-panel);
+  color: var(--color-text);
+  box-shadow: var(--shadow-float);
+}
+
+.dialog::backdrop {
+  background: #000b;
+}
+
+.dialog[open] {
+  animation: enter 220ms var(--ease);
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+.inner {
+  position: relative;
+  padding: 36px 32px 30px;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: grid;
+  place-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  background: none;
+  border: 0;
+  border-radius: 10px;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.close:hover {
+  color: var(--color-accent);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(30px, 6vw, 40px);
+  line-height: 1;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+  margin: 14px 0 14px;
+}
+
+.text {
+  color: var(--color-text-soft);
+  line-height: 1.6;
+  margin: 0 0 22px;
+}
+
+.label {
+  display: block;
+  font-size: 14px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.input {
+  width: 100%;
+  min-height: 48px;
+  background: #0b1110;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-input);
+  color: var(--color-text);
+  padding: 13px 15px;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px #04c8f240;
+}
+
+.input[aria-invalid='true'] {
+  border-color: var(--color-error);
+}
+
+.check {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-top: 16px;
+}
+
+.check input {
+  width: 22px;
+  height: 22px;
+  margin: 1px 0 0;
+  flex: none;
+  accent-color: var(--color-accent);
+}
+
+.check a {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+.error {
+  color: var(--color-error);
+  font-size: 14px;
+  margin: 8px 0 0;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.decline {
+  background: none;
+  border: 0;
+  color: var(--color-text-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  min-height: 44px;
+  padding: 0 8px;
+  font-size: 14px;
+}
+
+.decline:hover {
+  color: var(--color-text);
+}
+
+.status {
+  margin: 0 0 18px;
+}
+
+.honeypot {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.optional {
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+/* Niet-blokkerende vormen uit het CMS: hoekkaart (slidein) en balk. */
+.slidein,
+.bar {
+  position: fixed;
+  z-index: 60;
+  margin: 0;
+}
+
+.slidein {
+  inset: auto 16px 16px auto;
+  width: min(420px, calc(100vw - 32px));
+}
+
+.slidein.top {
+  inset: 16px 16px auto auto;
+}
+
+.bar {
+  inset: auto 16px 16px 16px;
+  width: auto;
+  max-width: none;
+}
+
+.bar.top {
+  inset: 16px 16px auto 16px;
+}
+
+.slidein .title,
+.bar .title {
+  font-size: clamp(24px, 4vw, 30px);
+}
+
+.privacy {
+  margin: 12px 0 0;
+  color: var(--color-text-muted);
+  font-size: 13px;
+}

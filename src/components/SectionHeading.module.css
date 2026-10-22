@@ -1,0 +1,38 @@
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--space-6);
+  margin-bottom: 38px;
+}
+
+.head h2 {
+  max-width: 800px;
+  margin-bottom: 0;
+}
+
+.description {
+  max-width: 420px;
+  line-height: 1.65;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.center {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.center .eyebrowWrap {
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 740px) {
+  .head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+}

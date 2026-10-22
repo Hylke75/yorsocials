@@ -1,0 +1,36 @@
+.notice {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--color-text-soft);
+  background: var(--color-panel-alt);
+  border-left: 3px solid var(--color-accent);
+  padding: 14px 18px;
+  margin: var(--space-3) 0;
+  border-radius: 6px;
+  max-width: 760px;
+}
+
+.notice svg {
+  flex: none;
+  margin-top: 2px;
+  color: var(--color-accent);
+}
+
+.demo {
+  border-left-color: var(--color-demo);
+}
+
+.demo svg {
+  color: var(--color-demo);
+}
+
+.notice p {
+  margin: 0;
+}
+
+.notice p + p {
+  margin-top: 6px;
+}

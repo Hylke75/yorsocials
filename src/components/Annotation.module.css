@@ -1,0 +1,43 @@
+.annotation {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 19px;
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+  transform: rotate(-6deg);
+  transform-origin: left center;
+}
+
+.swoosh {
+  color: var(--color-accent);
+  width: 100%;
+  min-width: 120px;
+  height: 14px;
+}
+
+.arrow {
+  color: var(--color-accent);
+  width: 34px;
+  height: 34px;
+  margin-left: 30%;
+}
+
+.circle {
+  position: relative;
+  padding: 14px 26px;
+}
+
+.ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--color-accent);
+  overflow: visible;
+}

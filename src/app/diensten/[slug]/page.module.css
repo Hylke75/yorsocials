@@ -1,0 +1,25 @@
+.problems {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.problems li {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 20px 22px;
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  background: var(--color-panel);
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.problems svg {
+  flex: none;
+  color: var(--color-accent);
+  margin-top: 2px;
+}

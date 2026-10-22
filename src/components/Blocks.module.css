@@ -1,0 +1,228 @@
+/* ValuesGrid */
+.value {
+  padding: 28px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  background: var(--color-panel);
+}
+
+.value p {
+  color: var(--color-text-muted);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.valueIcon {
+  color: var(--color-accent);
+  margin-bottom: 18px;
+}
+
+/* ProcessTimeline */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(var(--steps, 5), minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+
+.step {
+  position: relative;
+  border: 1px solid var(--color-border);
+  background: var(--color-panel);
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.stepImage {
+  height: 120px;
+}
+
+.stepImage img {
+  filter: saturate(0.7) brightness(0.8);
+}
+
+.stepBody {
+  padding: 22px;
+}
+
+.stepNum {
+  display: inline-grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--color-brand-sage);
+  color: var(--color-brand-sage-light);
+  font-weight: 800;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+.step h3 {
+  font-size: 18px;
+  margin: 0 0 8px;
+}
+
+.step p {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* CTASection */
+.cta {
+  position: relative;
+  padding-block: 88px;
+  background:
+    radial-gradient(circle at 5% 30%, #4c7757aa, transparent 32%),
+    #0d1412;
+  border-bottom: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+.ctaInner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: var(--space-6);
+  align-items: center;
+}
+
+.ctaInner .h2 {
+  margin-bottom: 0;
+}
+
+.ctaAnnotation {
+  position: absolute;
+  right: max(24px, calc((100vw - var(--max-width)) / 2 - 40px));
+  top: 28px;
+}
+
+/* CaseResults / StatBlock */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+
+.stat {
+  border: 1px solid var(--color-border);
+  padding: 18px 20px;
+  border-radius: 12px;
+  background: var(--color-panel);
+  display: flex;
+  flex-direction: column;
+}
+
+.stat dt {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  order: 2;
+}
+
+.statValue {
+  order: 1;
+  margin: 0;
+  color: var(--color-brand-sage-light);
+  font-size: 28px;
+  font-weight: 800;
+  font-family: var(--font-display);
+  letter-spacing: -0.03em;
+}
+
+.statSource {
+  order: 3;
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+/* PortfolioGallery */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr));
+  gap: var(--grid-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.galleryItem {
+  border-radius: var(--radius-media);
+  overflow: hidden;
+}
+
+.galleryItem img {
+  aspect-ratio: 4 / 3;
+  filter: saturate(0.8);
+}
+
+/* Featured image */
+.feature {
+  border-radius: var(--radius-media);
+  overflow: hidden;
+  height: 460px;
+}
+
+.feature img {
+  filter: saturate(0.78);
+}
+
+/* Bullets */
+.bullets {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 24px;
+  padding: 0;
+  margin: 24px 0;
+  list-style: none;
+}
+
+.bullets li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.bullets svg {
+  color: var(--color-brand-sage-light);
+  flex: none;
+  margin-top: 3px;
+}
+
+@media (max-width: 1199px) {
+  .steps {
+    grid-template-columns: repeat(min(var(--steps, 5), 3), minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 740px) {
+  .steps,
+  .gallery,
+  .bullets {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ctaInner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-3);
+  }
+
+  .ctaAnnotation {
+    display: none;
+  }
+
+  .cta {
+    padding-block: 60px;
+  }
+
+  .feature {
+    height: 300px;
+  }
+}

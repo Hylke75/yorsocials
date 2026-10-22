@@ -1,0 +1,142 @@
+/* Gedeelde kaartbasis: volledige kaart klikbaar via een "stretched link" in de titel. */
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 300px;
+  overflow: hidden;
+  border: 1px solid #34433d;
+  border-radius: var(--radius-card);
+  background: linear-gradient(145deg, #1a2622, #0c1210);
+  box-shadow: var(--shadow-card);
+  transition:
+    transform var(--duration) var(--ease),
+    border-color var(--duration) var(--ease);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: #4b5f56;
+}
+
+.card:focus-within {
+  box-shadow: var(--focus-ring);
+}
+
+.photo {
+  height: 210px;
+  flex: none;
+}
+
+.photo img {
+  filter: saturate(0.78);
+}
+
+.body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 24px;
+}
+
+.body p {
+  color: #b7c3bd;
+  line-height: 1.55;
+  margin-bottom: 0;
+}
+
+.title {
+  font-size: var(--text-h3);
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin: 0 0 10px;
+}
+
+.link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+}
+
+.link:focus-visible {
+  box-shadow: none;
+}
+
+.more {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 18px;
+  color: var(--color-accent);
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.num {
+  color: var(--color-brand-sage-light);
+  font-weight: 900;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+}
+
+.tag {
+  display: inline-block;
+  border: 1px solid #71847a;
+  border-radius: var(--radius-pill);
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 800;
+  background: #101a17;
+}
+
+.icon {
+  color: var(--color-accent);
+  margin-bottom: 16px;
+}
+
+/* Servicekaart: beeld als achtergrond met verloop */
+.service {
+  min-height: 400px;
+  justify-content: flex-end;
+}
+
+.serviceBg {
+  position: absolute;
+  inset: 0;
+  opacity: 0.4;
+}
+
+.service::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, #070d0d 8%, #0b1111c4 58%, #0b111100);
+  pointer-events: none;
+}
+
+.service .body {
+  justify-content: flex-end;
+  flex: 0 0 auto;
+}
+
+.service .body .num {
+  margin-bottom: 14px;
+}
+
+@media (max-width: 740px) {
+  .service {
+    min-height: 340px;
+  }
+}
