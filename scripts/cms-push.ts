@@ -5,6 +5,7 @@
  *
  *   CMS_TOKEN=cms_... npm run cms:push              # echt pushen
  *   npm run cms:push -- --dry-run                   # alleen content-export/cms-blauwdruk.json schrijven
+ *   npm run cms:push -- --only=/juridisch/privacy   # alleen deze pagina('s) bijwerken (komma-gescheiden)
  *
  * Optioneel: CMS_URL (standaard https://linkandlead.nl), SITE_URL (basis voor beeld-URL's,
  * standaard https://yorsocials.vercel.app).
@@ -16,7 +17,18 @@ async function main() {
   const dryRun = process.argv.includes('--dry-run');
   const cmsUrl = (process.env.CMS_URL || 'https://linkandlead.nl').replace(/\/+$/, '');
   const siteUrl = process.env.SITE_URL || 'https://yorsocials.vercel.app';
-  const blueprint = buildBlueprint(siteUrl);
+  const only = process.argv.find((a) => a.startsWith('--only='))?.slice('--only='.length).split(',').filter(Boolean);
+  const full = buildBlueprint(siteUrl);
+  // Bij --only blijft de volgorde (sort_order) gelijk aan die in de volledige blauwdruk.
+  const blueprint = {
+    paginas: full.paginas
+      .map((p, i) => ({ ...p, sort_order: i }))
+      .filter((p) => !only || only.includes(p.slug)),
+  };
+  if (only && blueprint.paginas.length !== only.length) {
+    console.error(`Onbekende pagina in --only: ${only.filter((s) => !blueprint.paginas.some((p) => p.slug === s)).join(', ')}`);
+    process.exit(1);
+  }
   const blocks = blueprint.paginas.reduce((n, p) => n + p.blokken.length, 0);
 
   mkdirSync('content-export', { recursive: true });

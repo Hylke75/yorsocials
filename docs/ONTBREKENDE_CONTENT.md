@@ -30,7 +30,7 @@ Overzicht van alles wat nog door YorSocials (of een bevoegde partij) moet worden
 
 | Onderdeel | Status | Blokkerend |
 |---|---|---|
-| Privacyverklaring | Conceptstructuur, gemarkeerd als niet definitief, `noindex`. Tekst laten vaststellen op basis van werkelijke verwerkingen, leveranciers en bewaartermijnen. | **Ja** |
+| Privacyverklaring | Volledig uitgeschreven (versie 1.0, 22 oktober 2026) op basis van de werkelijke verwerkingen: contactformulier (CMS van Link & Lead), nieuwsbrief (Mailento, double opt-in), hosting (Vercel), Supabase. Nog aanvullen: officiële bedrijfsnaam, KvK-nummer en adres van YorSocials; bewaartermijnen laten bevestigen door YorSocials. | Aanvullen bedrijfsgegevens |
 | Cookiebeleid | Conceptstructuur; werkelijke cookies (consentcookie, evt. GA4) staan beschreven. Laten toetsen. | **Ja** |
 | Verwerkersovereenkomsten | Met hosting, e-mail/CRM- en analyticsleverancier. | **Ja** |
 
