@@ -31,8 +31,10 @@ function onFailure(event: Record<string, unknown>): CmsContent | null {
  * ingebouwde inhoud toont.
  */
 export const getCmsContent = cache(async (): Promise<CmsContent | null> => {
-  const token = process.env.CMS_TOKEN;
+  const token = process.env.CMS_TOKEN?.trim();
   if (!token) return null;
+  // Een token bevat nooit witruimte; zo'n waarde is een plakfout in de omgevingsvariabele.
+  if (/\s/.test(token)) return onFailure({ event: 'invalid_token', hint: 'CMS_TOKEN bevat witruimte of meerdere regels' });
   let res: Response;
   try {
     res = await fetch(`${cmsBaseUrl()}/api/cms/content`, {
@@ -41,7 +43,9 @@ export const getCmsContent = cache(async (): Promise<CmsContent | null> => {
       signal: AbortSignal.timeout(8000),
     });
   } catch (err) {
-    return onFailure({ event: 'fetch_error', message: err instanceof Error ? err.message : 'unknown' });
+    // Foutmeldingen kunnen de Authorization-header citeren: het token nooit in de logs zetten.
+    const message = err instanceof Error ? err.message.split(token).join('[token]') : 'unknown';
+    return onFailure({ event: 'fetch_error', message });
   }
   if (!res.ok) return onFailure({ event: 'fetch_failed', status: res.status });
   const parsed = parseCmsContent(await res.json().catch(() => null));
